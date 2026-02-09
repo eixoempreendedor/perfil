@@ -3,59 +3,320 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DISC (baseado no modelo) — Assessment Web</title>
+  <meta name="description" content="Assessment DISC (baseado no modelo) com resultado imediato e opção de relatório bônus personalizado por segmento." />
+  <meta name="theme-color" content="#2a3cff" />
+  <title>DISC (baseado no modelo) — Assessment</title>
+
   <style>
-    :root { --bg:#0b0c10; --card:#12141a; --muted:#a7b0c0; --text:#eef2ff; --line:#23283a; --brand:#2a3cff; }
-    * { box-sizing: border-box; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
-    body { margin:0; background:linear-gradient(180deg, #0b0c10, #07080b); color:var(--text); }
-    a { color: var(--brand); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .wrap { max-width: 960px; margin: 0 auto; padding: 22px; }
-    .card { background: rgba(18,20,26,.92); border:1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: 0 12px 40px rgba(0,0,0,.35); min-height: 120px; }
-    h1 { margin: 0 0 6px; font-size: 22px; }
-    h2 { margin: 0 0 6px; font-size: 18px; }
-    p { margin: 8px 0; color: var(--muted); line-height: 1.45; }
-    .hr { height:1px; background: var(--line); margin: 14px 0; }
-    .row { display:flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-    .col { flex: 1; min-width: 220px; }
-    .tag { display:inline-flex; align-items:center; gap:8px; padding: 6px 10px; border-radius: 999px; border:1px solid var(--line); background:#0f1117; color: var(--muted); font-size: 12px; }
-    .btn {
-      background:#1b2030; border:1px solid #2a3350; color:var(--text);
-      padding: 12px 14px; border-radius: 12px; cursor:pointer;
-      transition: transform .05s ease, border-color .2s ease, background .2s ease;
+    :root{
+      --bg0:#07080b;
+      --bg1:#0b0c10;
+      --card: rgba(18,20,26,.92);
+      --muted:#a7b0c0;
+      --text:#eef2ff;
+      --line:#23283a;
+      --brand:#2a3cff;
+      --brand2:#5b6bff;
+      --good:#34d399;
+      --bad:#ffb3b3;
+      --shadow: 0 18px 55px rgba(0,0,0,.42);
+      --shadow2: 0 10px 28px rgba(0,0,0,.32);
+      --r1:18px;
+      --r2:14px;
+      --r3:12px;
+      --tap: 52px;
     }
-    .btn:hover { border-color:#3a4a7a; background:#212946; }
-    .btn:active { transform: scale(.99); }
-    .btn.primary { background:var(--brand); border-color:var(--brand); }
-    .btn.primary:hover { background:#394bff; border-color:#394bff; }
-    .btn.ghost { background: transparent; border-color: #2a3350; }
-    .btn[disabled] { opacity:.45; cursor:not-allowed; }
-    .progress { width:100%; height: 10px; background:#0f1117; border:1px solid var(--line); border-radius: 999px; overflow:hidden; }
-    .progress > div { height:100%; background: var(--brand); width:0%; transition: width .2s ease; }
-    .qtitle { margin: 14px 0 10px; font-size: 16px; color: #e9edff; }
-    .grid2 { display:grid; grid-template-columns: 1fr; gap: 10px; }
-    @media (min-width: 760px){ .grid2 { grid-template-columns: 1fr 1fr; } }
-    .opt { width: 100%; text-align:left; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    .small { font-size: 12px; color: var(--muted); }
-    .warn { border: 1px dashed #3a4a7a; padding: 10px 12px; border-radius: 12px; background: rgba(42,60,255,.08); }
-    input, select {
-      background:#0f1117; color: var(--text); border:1px solid var(--line);
-      padding: 10px 12px; border-radius: 12px; width: 100%;
+
+    *{ box-sizing:border-box; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 500px at 15% -10%, rgba(42,60,255,.25), transparent 60%),
+        radial-gradient(900px 500px at 85% 0%, rgba(91,107,255,.18), transparent 65%),
+        linear-gradient(180deg, var(--bg1), var(--bg0));
     }
-    label { font-size: 12px; color: var(--muted); display:block; margin-bottom: 6px; }
-    ul { margin: 8px 0 0; color:#cfd6ea; }
-    .bars { display:grid; gap: 10px; }
-    .bar { display:grid; grid-template-columns: 44px 1fr 58px; gap: 10px; align-items:center; }
-    .meter { height: 10px; background:#0f1117; border:1px solid var(--line); border-radius: 999px; overflow:hidden; }
-    .meter > div { height:100%; background: var(--brand); width:0%; transition: width .3s ease; }
-    .err { color:#ffb3b3; font-size: 12px; margin-top: 6px; }
-    .ok { color:#b7ffcb; font-size: 12px; margin-top: 6px; }
-    .hidden { display:none; }
+
+    a{ color: var(--brand2); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .wrap{ max-width: 980px; margin: 0 auto; padding: 22px; padding-bottom: 110px; }
+
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap: 14px;
+      margin-bottom: 14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      user-select:none;
+    }
+    .dot{
+      width: 12px; height: 12px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: 0 0 0 6px rgba(42,60,255,.15);
+    }
+    .brand-title{
+      display:flex; flex-direction:column; line-height:1.1;
+    }
+    .brand-title b{ font-size: 14px; letter-spacing: .2px; }
+    .brand-title span{ font-size: 12px; color: var(--muted); }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 12px; border-radius: 999px;
+      border:1px solid rgba(35,40,58,.9);
+      background: rgba(15,17,23,.7);
+      color: var(--muted);
+      font-size: 12px;
+      backdrop-filter: blur(8px);
+    }
+
+    .card{
+      background: var(--card);
+      border:1px solid rgba(35,40,58,.85);
+      border-radius: var(--r1);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      min-height: 140px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(700px 250px at 20% 0%, rgba(42,60,255,.18), transparent 55%);
+      pointer-events:none;
+    }
+    .card > *{ position: relative; }
+
+    h1{ margin:0 0 6px; font-size: clamp(18px, 2.4vw, 24px); letter-spacing: .2px; }
+    h2{ margin:0 0 6px; font-size: clamp(16px, 2.0vw, 18px); }
+    p{ margin: 8px 0; color: var(--muted); line-height: 1.5; }
+    .small{ font-size: 12px; color: var(--muted); }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+    .hr{ height:1px; background: rgba(35,40,58,.9); margin: 14px 0; }
+
+    .warn{
+      border: 1px dashed rgba(91,107,255,.75);
+      padding: 12px 12px;
+      border-radius: var(--r2);
+      background: rgba(42,60,255,.08);
+    }
+
+    /* Progress */
+    .progress{
+      width:100%;
+      height: 10px;
+      background: rgba(15,17,23,.9);
+      border:1px solid rgba(35,40,58,.9);
+      border-radius: 999px;
+      overflow:hidden;
+    }
+    .progress > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--brand), var(--brand2));
+      transition: width .25s ease;
+    }
+
+    /* Inputs */
+    label{ font-size: 12px; color: var(--muted); display:block; margin-bottom: 6px; }
+    input, select{
+      width:100%;
+      min-height: var(--tap);
+      padding: 12px 12px;
+      border-radius: var(--r3);
+      border:1px solid rgba(35,40,58,.9);
+      background: rgba(15,17,23,.92);
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .05s ease;
+    }
+    input:focus, select:focus{
+      border-color: rgba(91,107,255,.9);
+      box-shadow: 0 0 0 4px rgba(42,60,255,.18);
+    }
+
+    .row{ display:flex; gap: 12px; flex-wrap: wrap; align-items: stretch; }
+    .col{ flex: 1; min-width: 220px; }
+
+    /* Buttons */
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      min-height: var(--tap);
+      padding: 12px 14px;
+      border-radius: var(--r3);
+      border: 1px solid rgba(42,51,80,.95);
+      background: rgba(27,32,48,.85);
+      color: var(--text);
+      cursor: pointer;
+      user-select:none;
+      transition: transform .06s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+      box-shadow: var(--shadow2);
+      width: 100%;
+    }
+    .btn:hover{
+      border-color: rgba(91,107,255,.7);
+      background: rgba(33,41,70,.95);
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn:focus-visible{
+      outline:none;
+      box-shadow: 0 0 0 4px rgba(42,60,255,.22), var(--shadow2);
+      border-color: rgba(91,107,255,.95);
+    }
+    .btn[disabled]{ opacity:.45; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    .btn.primary{
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: 0 18px 42px rgba(42,60,255,.22);
+    }
+    .btn.primary:hover{ filter: brightness(1.03); }
+    .btn.ghost{
+      background: rgba(0,0,0,0);
+      border-color: rgba(42,51,80,.95);
+      box-shadow:none;
+    }
+
+    /* Choices (UX-friendly) */
+    .choices{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 760px){
+      .choices{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .choice{
+      text-align:left;
+      padding: 14px 14px;
+      border-radius: var(--r2);
+      border: 1px solid rgba(35,40,58,.95);
+      background: rgba(15,17,23,.65);
+      box-shadow: 0 12px 28px rgba(0,0,0,.25);
+      min-height: 84px;
+      position: relative;
+      overflow: hidden;
+    }
+    .choice:hover{
+      border-color: rgba(91,107,255,.65);
+      background: rgba(15,17,23,.88);
+    }
+    .choice.selected{
+      border-color: rgba(91,107,255,.95);
+      background: radial-gradient(700px 220px at 20% 0%, rgba(42,60,255,.16), rgba(15,17,23,.92) 60%);
+      box-shadow: 0 16px 38px rgba(42,60,255,.12);
+    }
+    .choice .meta{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom: 10px;
+    }
+    .kbd{
+      font-size: 11px;
+      color: rgba(167,176,192,.9);
+      border:1px solid rgba(35,40,58,.9);
+      background: rgba(0,0,0,.18);
+      border-radius: 8px;
+      padding: 4px 8px;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(35,40,58,.9);
+      background: rgba(0,0,0,.18);
+      color: var(--muted);
+    }
+
+    /* Bottom action bar (mobile UX) */
+    .actionbar{
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      padding: 12px 16px;
+      background: rgba(7,8,11,.7);
+      border-top: 1px solid rgba(35,40,58,.85);
+      backdrop-filter: blur(12px);
+      z-index: 50;
+    }
+    .actionbar .inner{
+      max-width: 980px; margin:0 auto;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 10px;
+      align-items:center;
+    }
+    .actionbar.hidden{ display:none; }
+
+    /* Result bars */
+    .bars{ display:grid; gap: 10px; margin-top: 6px; }
+    .bar{ display:grid; grid-template-columns: 44px 1fr 58px; gap: 10px; align-items:center; }
+    .meter{
+      height: 10px;
+      background: rgba(15,17,23,.9);
+      border:1px solid rgba(35,40,58,.9);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .meter > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--brand), var(--brand2));
+      transition: width .35s ease;
+    }
+
+    .ok{ color: #b7ffcb; font-size: 12px; margin-top: 6px; }
+    .err{ color: var(--bad); font-size: 12px; margin-top: 6px; }
+
+    .hidden{ display:none; }
+
+    /* Toast */
+    .toast{
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(15,17,23,.92);
+      border: 1px solid rgba(35,40,58,.9);
+      color: var(--text);
+      box-shadow: var(--shadow2);
+      z-index: 60;
+      max-width: min(620px, calc(100% - 28px));
+      display:none;
+    }
+    .toast.show{ display:block; animation: pop .18s ease; }
+    @keyframes pop{
+      from{ transform: translateX(-50%) translateY(-6px); opacity: .4; }
+      to{ transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important; scroll-behavior: auto !important; }
+    }
   </style>
 </head>
+
 <body>
   <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="dot"></div>
+        <div class="brand-title">
+          <b>DISC (baseado no modelo)</b>
+          <span>Resultado imediato • Relatório bônus por segmento</span>
+        </div>
+      </div>
+      <div class="pill">⚡ Grátis • 2–3 min</div>
+    </div>
+
     <div class="card" id="app"></div>
 
     <p class="small" style="margin-top:12px;">
@@ -63,12 +324,22 @@
     </p>
   </div>
 
+  <div class="toast" id="toast"></div>
+
+  <!-- Bottom action bar for quiz -->
+  <div class="actionbar hidden" id="actionbar">
+    <div class="inner">
+      <button class="btn ghost" id="btnPrev" type="button">← Voltar</button>
+      <button class="btn ghost" id="btnNext" type="button">Avançar →</button>
+      <button class="btn primary" id="btnFinish" type="button">Ver meu resultado</button>
+    </div>
+  </div>
+
 <script>
-  // ✅ Seu Apps Script (Google Sheet endpoint)
+  // ✅ Seu Apps Script (endpoint)
   const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbx0eEtWFPzx7kTzPMCjbePc9bSeJE2bExXZtr7J0oKd4CKSL-6jANX3pn94pfr7dzkb/exec";
   const QUIZ_VERSION = "disc-web-v1";
 
-  // Dropdown de segmentos (você pode editar a lista)
   const SEGMENTS = [
     "Restaurante / Food Service",
     "Cafeteria / Padaria",
@@ -123,21 +394,20 @@
   ];
 
   const DIM_LABEL = { D:"Dominância", I:"Influência", S:"Estabilidade", C:"Conscienciosidade" };
-
   const DIM_DESC = {
-    D: { headline:"Rápido, direto, orientado a resultado",
+    D:{ headline:"Rápido, direto, orientado a resultado",
       strengths:["decide e destrava","foco em meta","coragem para enfrentar conflito"],
       risks:["impaciência","pode atropelar pessoas","pular etapas importantes"],
       tips:["defina 1 meta por semana","combine expectativa por escrito","treine escuta antes de cobrar"] },
-    I: { headline:"Comunicativo, persuasivo, energiza pessoas",
+    I:{ headline:"Comunicativo, persuasivo, energiza pessoas",
       strengths:["conecta e influencia","vende ideia com facilidade","cria movimento no time"],
       risks:["dispersão","prometer demais","falta de rotina"],
       tips:["tenha 3 prioridades por dia","use checklists curtos","feche ‘próxima ação’ em toda conversa"] },
-    S: { headline:"Constante, confiável, cria estabilidade",
+    S:{ headline:"Constante, confiável, cria estabilidade",
       strengths:["segura a operação","leal ao time","mantém ritmo sustentável"],
       risks:["evitar conflito","demorar a mudar","aceitar demais para manter paz"],
       tips:["marque conversas difíceis com data","peça clareza de papel/limite","faça 1 melhoria por semana"] },
-    C: { headline:"Analítico, detalhista, orientado a qualidade",
+    C:{ headline:"Analítico, detalhista, orientado a qualidade",
       strengths:["padrão e excelência","decisão com fatos","reduz risco"],
       risks:["perfeccionismo","demorar a decidir","controle excessivo"],
       tips:["use ‘bom o suficiente’ + prazo","defina critério de decisão","faça revisão rápida em vez de reescrever tudo"] },
@@ -161,6 +431,18 @@
     return e;
   }
 
+  function toast(msg){
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(()=> t.classList.remove("show"), 2300);
+  }
+
+  function scrollTopSoft(){
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   function countAppearances(){
     const ap = {D:0,I:0,S:0,C:0};
     for(const q of QUESTIONS){ ap[q.a.k]++; ap[q.b.k]++; }
@@ -180,6 +462,7 @@
       consent:false, website:""
     },
     leadSubmitted: false,
+    isSubmitting: false,
     leadStatus: { type:"", msg:"" }
   };
 
@@ -207,172 +490,30 @@
     return sel || "";
   }
 
-  function render(){
-    const root = document.getElementById("app");
-    root.innerHTML = "";
+  // Bottom action bar wiring
+  const actionbar = document.getElementById("actionbar");
+  const btnPrev = document.getElementById("btnPrev");
+  const btnNext = document.getElementById("btnNext");
+  const btnFinish = document.getElementById("btnFinish");
+  btnPrev.addEventListener("click", ()=>prev());
+  btnNext.addEventListener("click", ()=>next());
+  btnFinish.addEventListener("click", ()=>finish());
 
-    if(state.step==="intro"){
-      root.appendChild(el("h1",{},["DISC (baseado no modelo) — Assessment"]));
-      root.appendChild(el("p",{},[
-        "Responda como você costuma agir no trabalho. No final você vê o resultado na hora e pode pedir um relatório bônus personalizado pro seu segmento."
-      ]));
+  function setActionbarVisible(visible){
+    actionbar.classList.toggle("hidden", !visible);
+  }
+  function syncActionbar(){
+    if (state.step !== "quiz") { setActionbarVisible(false); return; }
+    setActionbarVisible(true);
 
-      root.appendChild(el("div",{class:"hr"}));
+    const total = QUESTIONS.length;
+    const canPrev = state.idx > 0;
+    const canNext = state.idx < total-1;
+    const allAnswered = state.answers.every(Boolean);
 
-      root.appendChild(el("div",{class:"warn"},[
-        el("div",{class:"tag"},["⚠️ Aviso rápido"]),
-        el("p",{},["Perguntas originais. Resultado é mapa, não sentença."])
-      ]));
-
-      root.appendChild(el("div",{style:"margin-top:14px; display:flex; gap:10px; flex-wrap:wrap"},[
-        el("button",{class:"btn primary", onclick: startQuiz},["Começar agora"])
-      ]));
-    }
-
-    if(state.step==="quiz"){
-      const total = QUESTIONS.length;
-      const done = state.answers.filter(Boolean).length;
-      const pctDone = Math.round((done/total)*100);
-
-      root.appendChild(el("div",{class:"row", style:"justify-content:space-between; align-items:center"},[
-        el("div",{},[
-          el("h1",{},["Pergunta ", String(state.idx+1), " de ", String(total)]),
-          el("div",{class:"tag"},[`${done}/${total} respondidas`])
-        ]),
-        el("div",{style:"min-width:220px; flex:1"},[
-          el("div",{class:"progress"},[
-            el("div",{style:`width:${pctDone}%`})
-          ])
-        ])
-      ]));
-
-      root.appendChild(el("div",{class:"hr"}));
-
-      const q = QUESTIONS[state.idx];
-      const choice = state.answers[state.idx];
-
-      root.appendChild(el("div",{class:"qtitle"},["Escolha a frase que mais parece com você:"]));
-
-      root.appendChild(el("div",{class:"grid2"},[
-        el("button",{class:"btn opt", onclick: ()=>pick("a")},[(choice==="a" ? "✅ " : "A) "), q.a.t]),
-        el("button",{class:"btn opt", onclick: ()=>pick("b")},[(choice==="b" ? "✅ " : "B) "), q.b.t])
-      ]));
-
-      root.appendChild(el("div",{class:"hr"}));
-
-      const canPrev = state.idx>0;
-      const canNext = state.idx<total-1;
-      const allAnswered = state.answers.every(Boolean);
-
-      root.appendChild(el("div",{style:"display:flex; gap:10px; flex-wrap:wrap; justify-content:space-between"},[
-        el("div",{style:"display:flex; gap:10px; flex-wrap:wrap"},[
-          el("button",{class:"btn ghost", disabled: !canPrev, onclick: prev},["← Voltar"]),
-          el("button",{class:"btn ghost", disabled: !canNext, onclick: next},["Avançar →"]),
-        ]),
-        el("button",{class:"btn primary", disabled: !allAnswered, onclick: finish},["Ver meu resultado"])
-      ]));
-    }
-
-    if(state.step==="result"){
-      const r = compute();
-      const d = DIM_DESC[r.primary];
-
-      root.appendChild(el("h1",{},["Seu resultado"]));
-      root.appendChild(el("p",{},["Tendências de comportamento. Use para ajustar decisão, liderança e comunicação."]));
-
-      root.appendChild(el("div",{class:"hr"}));
-
-      root.appendChild(el("div",{class:"tag"},[
-        "Perfil mais provável: ",
-        el("span",{class:"mono"},[`${r.primary}/${r.secondary}`])
-      ]));
-
-      root.appendChild(el("p",{},[`Primário: ${r.primary} (${DIM_LABEL[r.primary]}) — ${DIM_DESC[r.primary].headline}.`]));
-      root.appendChild(el("p",{},[`Secundário: ${r.secondary} (${DIM_LABEL[r.secondary]}) — ${DIM_DESC[r.secondary].headline}.`]));
-
-      root.appendChild(el("div",{class:"hr"}));
-
-      const bars = el("div",{class:"bars"});
-      ["D","I","S","C"].forEach(k=>{
-        bars.appendChild(el("div",{class:"bar"},[
-          el("div",{class:"mono"},[k]),
-          el("div",{class:"meter"},[ el("div",{style:`width:${r.pct[k]}%`}) ]),
-          el("div",{class:"small"},[`${r.pct[k]}%`])
-        ]));
-      });
-      root.appendChild(bars);
-
-      root.appendChild(el("div",{class:"hr"}));
-
-      root.appendChild(el("h2",{},[`Como usar isso a seu favor (${r.primary})`]));
-      root.appendChild(el("p",{class:"small"},["Pontos fortes:"]));
-      root.appendChild(el("ul",{}, d.strengths.map(x=>el("li",{},[x]))));
-      root.appendChild(el("p",{class:"small", style:"margin-top:12px"},["Riscos típicos:"]));
-      root.appendChild(el("ul",{}, d.risks.map(x=>el("li",{},[x]))));
-      root.appendChild(el("p",{class:"small", style:"margin-top:12px"},["Ajustes práticos:"]));
-      root.appendChild(el("ul",{}, d.tips.map(x=>el("li",{},[x]))));
-
-      root.appendChild(el("div",{class:"hr"}));
-
-      root.appendChild(el("h2",{},["Relatório bônus personalizado (pro seu segmento)"]));
-      root.appendChild(el("p",{},["Preencha empresa e segmento. Eu monto um relatório com orientações práticas e te envio depois."]));
-
-      // form
-      const formChildren = [
-        el("div",{class:"col"},[
-          el("label",{},["Seu nome"]),
-          el("input",{id:"nome", placeholder:"Ex.: Maria", value: state.lead.nome})
-        ]),
-        el("div",{class:"col"},[
-          el("label",{},["E-mail"]),
-          el("input",{id:"email", placeholder:"voce@empresa.com", value: state.lead.email})
-        ]),
-        el("div",{class:"col"},[
-          el("label",{},["WhatsApp"]),
-          el("input",{id:"whatsapp", placeholder:"(xx) xxxxx-xxxx", value: state.lead.whatsapp})
-        ]),
-        el("div",{class:"col"},[
-          el("label",{},["Nome da empresa"]),
-          el("input",{id:"empresa", placeholder:"Ex.: Café do Centro", value: state.lead.empresa})
-        ]),
-        el("div",{class:"col"},[
-          el("label",{},["Segmento de atuação"]),
-          buildSegmentSelect()
-        ]),
-      ];
-
-      root.appendChild(el("div",{class:"row"}, formChildren));
-
-      // Campo "Outro" (aparece conforme seleção)
-      root.appendChild(el("div",{class:"row", id:"segmentoOutroRow", style: (state.lead.segmento_select === "Outro (digitar)" ? "" : "display:none")},[
-        el("div",{class:"col"},[
-          el("label",{},["Qual segmento? (digite)"]),
-          el("input",{id:"segmento_outro", placeholder:"Ex.: Distribuidora / Clínica veterinária / Loja de festa…", value: state.lead.segmento_outro})
-        ])
-      ]));
-
-      // honeypot
-      root.appendChild(el("input",{id:"website", class:"hidden", autocomplete:"off", value: state.lead.website}));
-
-      root.appendChild(el("div",{style:"margin-top:10px"},[
-        el("label",{style:"display:flex; gap:10px; align-items:flex-start; cursor:pointer"},[
-          el("input",{type:"checkbox", id:"consent", checked: state.lead.consent, style:"width:auto; margin-top:3px"}),
-          el("span",{class:"small"},["Concordo em enviar meus dados para receber o relatório bônus. Posso pedir remoção quando quiser."])
-        ])
-      ]));
-
-      if (state.leadStatus.msg) {
-        root.appendChild(el("div",{class: state.leadStatus.type === "err" ? "err" : "ok"},[state.leadStatus.msg]));
-      }
-
-      root.appendChild(el("div",{style:"margin-top:12px; display:flex; gap:10px; flex-wrap:wrap"},[
-        el("button",{class:"btn ghost", onclick: restart},["Refazer"]),
-        el("button",{class:"btn", onclick: copySummary},["Copiar resumo"]),
-        el("button",{class:"btn primary", disabled: state.leadSubmitted, onclick: submitLead},[
-          state.leadSubmitted ? "Enviado ✅" : "Quero meu relatório bônus"
-        ])
-      ]));
-    }
+    btnPrev.disabled = !canPrev;
+    btnNext.disabled = !canNext;
+    btnFinish.disabled = !allAnswered;
   }
 
   function buildSegmentSelect(){
@@ -385,109 +526,15 @@
   function onSegmentChange(){
     const v = document.getElementById("segmento_select")?.value || "";
     state.lead.segmento_select = v;
-    // mostra/esconde campo "Outro"
     const row = document.getElementById("segmentoOutroRow");
     if (row) row.style.display = (v === "Outro (digitar)") ? "" : "none";
   }
 
-  function startQuiz(){ state.step = "quiz"; state.idx = 0; render(); }
-  function pick(which){ state.answers[state.idx] = which; if(state.idx < QUESTIONS.length-1) state.idx++; render(); }
-  function prev(){ state.idx = Math.max(0, state.idx-1); render(); }
-  function next(){ state.idx = Math.min(QUESTIONS.length-1, state.idx+1); render(); }
-  function finish(){ state.step = "result"; render(); }
+  function render(){
+    const root = document.getElementById("app");
+    root.innerHTML = "";
 
-  function restart(){
-    state.step = "intro";
-    state.idx = 0;
-    state.answers = Array(QUESTIONS.length).fill(null);
-    state.leadSubmitted = false;
-    state.leadStatus = { type:"", msg:"" };
-    render();
-  }
-
-  function copySummary(){
-    const r = compute();
-    const text =
-`DISC (baseado no modelo):
-- Primário: ${r.primary} (${DIM_LABEL[r.primary]}) — ${DIM_DESC[r.primary].headline}
-- Secundário: ${r.secondary} (${DIM_LABEL[r.secondary]}) — ${DIM_DESC[r.secondary].headline}
-- Pontuações: D ${r.pct.D}% | I ${r.pct.I}% | S ${r.pct.S}% | C ${r.pct.C}%`;
-    navigator.clipboard.writeText(text).then(()=>alert("Resumo copiado."));
-  }
-
-  function readLeadInputs(){
-    state.lead.nome = (document.getElementById("nome")?.value || "").trim();
-    state.lead.email = (document.getElementById("email")?.value || "").trim();
-    state.lead.whatsapp = (document.getElementById("whatsapp")?.value || "").trim();
-    state.lead.empresa = (document.getElementById("empresa")?.value || "").trim();
-    state.lead.segmento_select = (document.getElementById("segmento_select")?.value || "").trim();
-    state.lead.segmento_outro = (document.getElementById("segmento_outro")?.value || "").trim();
-    state.lead.website = (document.getElementById("website")?.value || "").trim();
-    state.lead.consent = !!document.getElementById("consent")?.checked;
-  }
-
-  function validateLead(){
-    if (!SUBMIT_URL || !SUBMIT_URL.startsWith("https://")) return "Endpoint do Apps Script inválido (SUBMIT_URL).";
-    if (!state.lead.consent) return "Marque o consentimento para receber o relatório bônus.";
-    if (!state.lead.empresa) return "Coloque o nome da sua empresa (pra eu personalizar o relatório).";
-
-    const segFinal = getFinalSegment();
-    if (!state.lead.segmento_select) return "Selecione o seu segmento.";
-    if (state.lead.segmento_select === "Outro (digitar)" && !segFinal) return "Digite o seu segmento (opção Outro).";
-
-    if (!state.lead.email && !state.lead.whatsapp) return "Preencha E-mail ou WhatsApp pra eu te enviar o relatório bônus.";
-    if (state.lead.email && !state.lead.email.includes("@")) return "Seu e-mail parece inválido. Confere aí.";
-    return "";
-  }
-
-  async function submitLead(){
-    readLeadInputs();
-
-    const err = validateLead();
-    if (err) { state.leadStatus = { type:"err", msg: err }; render(); return; }
-
-    const r = compute();
-    const payload = {
-      nome: state.lead.nome,
-      email: state.lead.email,
-      whatsapp: state.lead.whatsapp,
-      empresa: state.lead.empresa,
-      
-      segmento_select: state.lead.segmento_select,
-      segmento_outro: state.lead.segmento_outro,
-      segmento: getFinalSegment(),
-      
-      consent: state.lead.consent,
-      website: state.lead.website, // honeypot
-      primary: r.primary,
-      secondary: r.secondary,
-      pct: r.pct,
-      answers: state.answers,
-      pageUrl: location.href,
-      referrer: document.referrer || "",
-      userAgent: navigator.userAgent || "",
-      quizVersion: QUIZ_VERSION
-    };
-
-    try {
-      await fetch(SUBMIT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
-
-      state.leadSubmitted = true;
-      state.leadStatus = { type:"ok", msg: "Fechado! Recebi. Vou te mandar o relatório bônus personalizado em breve." };
-      render();
-    } catch (e) {
-      state.leadStatus = { type:"err", msg: "Erro ao enviar. Tente novamente." };
-      render();
-    }
-  }
-
-  render();
-</script>
-</body>
-</html>
-
+    if(state.step === "intro"){
+      root.appendChild(el("h1",{},["DISC (baseado no modelo) — Assessment"]));
+      root.appendChild(el("p",{},[
+        "Responda como
