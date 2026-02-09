@@ -527,10 +527,24 @@
     });
 
     const pct = {};
-    for (const k of Object.keys(raw)) {
-      const max = APPEAR[k];
-      pct[k] = max ? Math.round((raw[k] / max) * 100) : 0;
-    }
+    const axes = Object.keys(raw);
+    const base = {};
+    const frac = [];
+    let sumBase = 0;
+
+    axes.forEach((k)=>{
+      const exact = QUESTIONS.length ? (raw[k] / QUESTIONS.length) * 100 : 0;
+      const floored = Math.floor(exact);
+      base[k] = floored;
+      sumBase += floored;
+      frac.push({ k, d: exact - floored });
+    });
+
+    let rest = 100 - sumBase;
+    frac.sort((a,b)=> b.d - a.d);
+    frac.forEach((item, idx)=>{
+      pct[item.k] = base[item.k] + (idx < rest ? 1 : 0);
+    });
 
     const order = Object.keys(pct).sort((x,y)=> pct[y]-pct[x]);
     return { raw, pct, order, primary: order[0], secondary: order[1] };
@@ -656,7 +670,7 @@
       const d = AXIS_DESC[r.primary];
 
       root.appendChild(el("h1",{},["Seu Perfil (na prática)"]));
-      root.appendChild(el("p",{},["Isso explica seu jeito de decidir, liderar e cobrar. Use as dicas abaixo pra ganhar resultado com menos desgaste."]));
+      root.appendChild(el("p",{},["Esses percentuais mostram como seu perfil se distribui entre 4 estilos. Não é laudo."]));
 
       root.appendChild(el("div",{class:"hr"}));
 
@@ -683,6 +697,7 @@
         ]));
       });
       root.appendChild(bars);
+      root.appendChild(el("p",{class:"small"},[`Distribuição do perfil: D ${r.pct.D}% | I ${r.pct.I}% | S ${r.pct.S}% | C ${r.pct.C}%`]));
 
       root.appendChild(el("div",{class:"hr"}));
 
@@ -800,7 +815,7 @@
 `Perfil do Dono:
 - Primário: ${AXIS_LABEL[r.primary]} (${r.primary}) — ${AXIS_DESC[r.primary].headline}
 - Secundário: ${AXIS_LABEL[r.secondary]} (${r.secondary}) — ${AXIS_DESC[r.secondary].headline}
-- Pontuações: D ${r.pct.D}% | I ${r.pct.I}% | S ${r.pct.S}% | C ${r.pct.C}%`;
+- Distribuição do perfil: D ${r.pct.D}% | I ${r.pct.I}% | S ${r.pct.S}% | C ${r.pct.C}%`;
 
     navigator.clipboard.writeText(text)
       .then(()=> toast("Resumo copiado ✅"))
