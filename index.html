@@ -452,8 +452,11 @@
       email: state.lead.email,
       whatsapp: state.lead.whatsapp,
       empresa: state.lead.empresa,
-      // manda um campo "segmento" já final (select ou outro digitado)
+      
+      segmento_select: state.lead.segmento_select,
+      segmento_outro: state.lead.segmento_outro,
       segmento: getFinalSegment(),
+      
       consent: state.lead.consent,
       website: state.lead.website, // honeypot
       primary: r.primary,
@@ -487,3 +490,4 @@
 </script>
 </body>
 </html>
+
