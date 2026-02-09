@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DISC (baseado no modelo) — Assessment Web</title>
+  <style>
+    :root { --bg:#0b0c10; --card:#12141a; --muted:#a7b0c0; --text:#eef2ff; --line:#23283a; --brand:#2a3cff; }
+    * { box-sizing: border-box; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    body { margin:0; background:linear-gradient(180deg, #0b0c10, #07080b); color:var(--text); }
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 22px; }
+    .card { background: rgba(18,20,26,.92); border:1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: 0 12px 40px rgba(0,0,0,.35); }
+    h1 { margin: 0 0 6px; font-size: 22px; }
+    h2 { margin: 0 0 6px; font-size: 18px; }
+    p { margin: 8px 0; color: var(--muted); line-height: 1.45; }
+    .hr { height:1px; background: var(--line); margin: 14px 0; }
+    .row { display:flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .col { flex: 1; min-width: 220px; }
+    .tag { display:inline-flex; align-items:center; gap:8px; padding: 6px 10px; border-radius: 999px; border:1px solid var(--line); background:#0f1117; color: var(--muted); font-size: 12px; }
+    .btn {
+      background:#1b2030; border:1px solid #2a3350; color:var(--text);
+      padding: 12px 14px; border-radius: 12px; cursor:pointer;
+      transition: transform .05s ease, border-color .2s ease, background .2s ease;
+    }
+    .btn:hover { border-color:#3a4a7a; background:#212946; }
+    .btn:active { transform: scale(.99); }
+    .btn.primary { background:var(--brand); border-color:var(--brand); }
+    .btn.primary:hover { background:#394bff; border-color:#394bff; }
+    .btn.ghost { background: transparent; border-color: #2a3350; }
+    .btn:disabled { opacity:.45; cursor:not-allowed; }
+    .progress { width:100%; height: 10px; background:#0f1117; border:1px solid var(--line); border-radius: 999px; overflow:hidden; }
+    .progress > div { height:100%; background: var(--brand); width:0%; transition: width .2s ease; }
+    .qtitle { margin: 14px 0 10px; font-size: 16px; color: #e9edff; }
+    .grid2 { display:grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 760px){ .grid2 { grid-template-columns: 1fr 1fr; } }
+    .opt { width: 100%; text-align:left; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .small { font-size: 12px; color: var(--muted); }
+    .warn { border: 1px dashed #3a4a7a; padding: 10px 12px; border-radius: 12px; background: rgba(42,60,255,.08); }
+    input {
+      background:#0f1117; color: var(--text); border:1px solid var(--line);
+      padding: 10px 12px; border-radius: 12px; width: 100%;
+    }
+    label { font-size: 12px; color: var(--muted); display:block; margin-bottom: 6px; }
+    ul { margin: 8px 0 0; color:#cfd6ea; }
+    .bars { display:grid; gap: 10px; }
+    .bar { display:grid; grid-template-columns: 44px 1fr 58px; gap: 10px; align-items:center; }
+    .meter { height: 10px; background:#0f1117; border:1px solid var(--line); border-radius: 999px; overflow:hidden; }
+    .meter > div { height:100%; background: var(--brand); width:0%; transition: width .3s ease; }
+    .err { color:#ffb3b3; font-size: 12px; margin-top: 6px; }
+    .ok { color:#b7ffcb; font-size: 12px; margin-top: 6px; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="app"></div>
+
+    <p class="small" style="margin-top:12px;">
+      Este assessment é <b>baseado no modelo D/I/S/C</b> com perguntas originais. Não é teste clínico e não deve ser usado como critério único de contratação/decisão.
+    </p>
+  </div>
+
+<script>
+  /** =========================
+   *  CONFIG (COLE SUA URL AQUI)
+   *  ========================= */
+  const SUBMIT_URL = https://script.google.com/macros/s/AKfycbyFcNMd-KMicHT_9-eWsfsx1XxhIx-1-BxZr6HLI-i0UQ6SaiHRF_rZM0tktcKt4SuY/exec; // ex: https://script.google.com/macros/s/XXXXX/exec
+  const QUIZ_VERSION = "disc-web-v1";
+
+  /** ==========
+   *  QUESTIONÁRIO (perguntas originais)
+   *  Cada questão tem 2 opções; cada opção soma 1 ponto em um fator (D/I/S/C).
+   *  ========== */
+  const QUESTIONS = [
+    { a:{t:"Eu gosto de decidir rápido e destravar o jogo.", k:"D"}, b:{t:"Eu prefiro analisar bem antes de decidir.", k:"C"} },
+    { a:{t:"Eu puxo conversa fácil e animo o ambiente.", k:"I"}, b:{t:"Eu sou mais reservado e constante.", k:"S"} },
+    { a:{t:"Se tem meta, eu vou pra cima e cobro.", k:"D"}, b:{t:"Se tem meta, eu organizo o caminho e os detalhes.", k:"C"} },
+    { a:{t:"Eu ganho energia falando com pessoas e vendendo ideia.", k:"I"}, b:{t:"Eu ganho energia mantendo rotina e estabilidade.", k:"S"} },
+
+    { a:{t:"Conflito, eu encaro na hora.", k:"D"}, b:{t:"Conflito, eu prefiro resolver com calma.", k:"S"} },
+    { a:{t:"Eu improviso bem e me viro no caos.", k:"I"}, b:{t:"Eu sigo padrão e garanto qualidade.", k:"C"} },
+    { a:{t:"Eu priorizo velocidade.", k:"D"}, b:{t:"Eu priorizo precisão.", k:"C"} },
+    { a:{t:"Eu priorizo relacionamento.", k:"I"}, b:{t:"Eu priorizo previsibilidade.", k:"S"} },
+
+    { a:{t:"Eu começo e depois ajusto no caminho.", k:"D"}, b:{t:"Eu ajusto antes e depois começo.", k:"C"} },
+    { a:{t:"Eu gosto de estar no centro das conversas.", k:"I"}, b:{t:"Eu gosto de apoiar e manter o time firme.", k:"S"} },
+    { a:{t:"Eu corto o que não funciona sem dó.", k:"D"}, b:{t:"Eu prefiro testar e medir antes de cortar.", k:"C"} },
+    { a:{t:"Eu convenço no carisma e na energia.", k:"I"}, b:{t:"Eu convenço pela consistência e confiança.", k:"S"} },
+
+    { a:{t:"Meu ritmo natural é acelerado.", k:"D"}, b:{t:"Meu ritmo natural é cadenciado.", k:"S"} },
+    { a:{t:"Eu sou expansivo, faço network sem esforço.", k:"I"}, b:{t:"Eu sou cuidadoso com regras e padrões.", k:"C"} },
+    { a:{t:"Se travou, eu tomo a frente.", k:"D"}, b:{t:"Se travou, eu documento e organizo.", k:"C"} },
+    { a:{t:"Eu topo mudar a rota fácil.", k:"I"}, b:{t:"Eu prefiro mudanças graduais.", k:"S"} },
+
+    { a:{t:"Eu tolero risco se o ganho for alto.", k:"D"}, b:{t:"Eu reduzco risco com controle e checagem.", k:"C"} },
+    { a:{t:"Eu me conecto rápido e faço alianças.", k:"I"}, b:{t:"Eu sou leal e mantenho compromisso.", k:"S"} },
+    { a:{t:"Eu falo direto, sem rodeio.", k:"D"}, b:{t:"Eu falo com tato para não gerar atrito.", k:"S"} },
+    { a:{t:"Eu começo conversas difíceis com leveza.", k:"I"}, b:{t:"Eu começo conversas difíceis com fatos.", k:"C"} },
+
+    { a:{t:"Eu me incomodo com lentidão.", k:"D"}, b:{t:"Eu me incomodo com bagunça.", k:"C"} },
+    { a:{t:"Eu me incomodo com frieza.", k:"I"}, b:{t:"Eu me incomodo com instabilidade.", k:"S"} },
+    { a:{t:"Eu funciono bem com autonomia total.", k:"D"}, b:{t:"Eu funciono bem com processo claro.", k:"C"} },
+    { a:{t:"Eu funciono bem com liberdade e pessoas por perto.", k:"I"}, b:{t:"Eu funciono bem com rotina e previsibilidade.", k:"S"} },
+  ];
+
+  const DIM_LABEL = { D:"Dominância", I:"Influência", S:"Estabilidade", C:"Conscienciosidade" };
+
+  const DIM_DESC = {
+    D: {
+      headline: "Rápido, direto, orientado a resultado",
+      strengths: ["decide e destrava", "foco em meta", "coragem para enfrentar conflito"],
+      risks: ["impaciência", "pode atropelar pessoas", "pular etapas importantes"],
+      tips: ["defina 1 meta por semana", "combine expectativa por escrito", "treine escuta antes de cobrar"]
+    },
+    I: {
+      headline: "Comunicativo, persuasivo, energiza pessoas",
+      strengths: ["conecta e influencia", "vende ideia com facilidade", "cria movimento no time"],
+      risks: ["dispersão", "prometer demais", "falta de rotina"],
+      tips: ["tenha 3 prioridades por dia", "use checklists curtos", "feche ‘próxima ação’ em toda conversa"]
+    },
+    S: {
+      headline: "Constante, confiável, cria estabilidade",
+      strengths: ["segura a operação", "leal ao time", "mantém ritmo sustentável"],
+      risks: ["evitar conflito", "demorar a mudar", "aceitar demais para manter paz"],
+      tips: ["marque conversas difíceis com data", "peça clareza de papel/limite", "faça 1 melhoria por semana"]
+    },
+    C: {
+      headline: "Analítico, detalhista, orientado a qualidade",
+      strengths: ["padrão e excelência", "decisão com fatos", "reduz risco"],
+      risks: ["perfeccionismo", "demorar a decidir", "controle excessivo"],
+      tips: ["use ‘bom o suficiente’ + prazo", "defina critério de decisão", "faça revisão rápida em vez de reescrever tudo"]
+    },
+  };
+
+  function el(tag, attrs={}, children=[]){
+    const e = document.createElement(tag);
+    Object.entries(attrs).forEach(([k,v])=>{
+      if(k==="class") e.className = v;
+      else if(k==="html") e.innerHTML = v;
+      else if(k.startsWith("on") && typeof v === "function") e.addEventListener(k.slice(2), v);
+      else e.setAttribute(k, v);
+    });
+    (Array.isArray(children)?children:[children]).forEach(c=>{
+      if(c===null || c===undefined) return;
+      if(typeof c === "string") e.appendChild(document.createTextNode(c));
+      else e.appendChild(c);
+    });
+    return e;
+  }
+
+  function countAppearances(){
+    const ap = {D:0,I:0,S:0,C:0};
+    for(const q of QUESTIONS){ ap[q.a.k]++; ap[q.b.k]++; }
+    return ap;
+  }
+  const APPEAR = countAppearances();
+
+  const state = {
+    step: "intro",  // intro | quiz | result
+    idx: 0,
+    answers: Array(QUESTIONS.length).fill(null),
+    lead: { nome:"", email:"", whatsapp:"", consent:false, website:"" },
+    leadSubmitted: false,
+    leadStatus: { type:"", msg:"" } // type: err|ok
+  };
+
+  function compute(){
+    const raw = {D:0,I:0,S:0,C:0};
+    QUESTIONS.forEach((q,i)=>{
+      const ans = state.answers[i];
+      if(ans==="a") raw[q.a.k] += 1;
+      if(ans==="b") raw[q.b.k] += 1;
+    });
+
+    const pct = {};
+    Object.keys(raw).forEach(k=>{
+      const max = APPEAR[k];
+      pct[k] = max ? Math.round((raw[k] / max) * 100) : 0;
+    });
+
+    const order = Object.keys(pct).sort((x,y)=> pct[y]-pct[x]);
+    const primary = order[0];
+    const secondary = order[1];
+
+    return { raw, pct, order, primary, secondary };
+  }
+
+  function render(){
+    const root = document.getElementById("app");
+    root.innerHTML = "";
+
+    if(state.step==="intro"){
+      root.appendChild(el("h1",{},["DISC (baseado no modelo) — Assessment"]));
+      root.appendChild(el("p",{},[
+        "Responda como você costuma agir no trabalho. No final você vê o resultado na hora e, se quiser, pede o relatório bônus."
+      ]));
+
+      root.appendChild(el("div",{class:"hr"}));
+
+      root.appendChild(el("div",{class:"warn"},[
+        el("div",{class:"tag"},["⚠️ Aviso rápido"]),
+        el("p",{},[
+          "Perguntas originais. Resultado é um mapa, não sentença. Use para ajuste de comunicação, rotina e liderança."
+        ])
+      ]));
+
+      root.appendChild(el("div",{style:"margin-top:14px; display:flex; gap:10px; flex-wrap:wrap"},[
+        el("button",{class:"btn primary", onclick: startQuiz},["Começar agora"])
+      ]));
+    }
+
+    if(state.step==="quiz"){
+      const total = QUESTIONS.length;
+      const done = state.answers.filter(Boolean).length;
+      const pctDone = Math.round((done/total)*100);
+
+      root.appendChild(el("div",{class:"row", style:"justify-content:space-between; align-items:center"},[
+        el("div",{},[
+          el("h1",{},["Pergunta ", String(state.idx+1), " de ", String(total)]),
+          el("div",{class:"tag"},[`${done}/${total} respondidas`])
+        ]),
+        el("div",{style:"min-width:220px; flex:1"},[
+          el("div",{class:"progress"},[
+            el("div",{style:`width:${pctDone}%`})
+          ])
+        ])
+      ]));
+
+      root.appendChild(el("div",{class:"hr"}));
+
+      const q = QUESTIONS[state.idx];
+      const choice = state.answers[state.idx];
+
+      root.appendChild(el("div",{class:"qtitle"},["Escolha a frase que mais parece com você:"]));
+
+      const optA = el("button",{class:"btn opt", onclick: ()=>pick("a")},[
+        (choice==="a" ? "✅ " : "A) "), q.a.t
+      ]);
+      const optB = el("button",{class:"btn opt", onclick: ()=>pick("b")},[
+        (choice==="b" ? "✅ " : "B) "), q.b.t
+      ]);
+      root.appendChild(el("div",{class:"grid2"},[optA, optB]));
+
+      root.appendChild(el("div",{class:"hr"}));
+
+      const canPrev = state.idx>0;
+      const canNext = state.idx<total-1;
+      const allAnswered = state.answers.every(Boolean);
+
+      root.appendChild(el("div",{style:"display:flex; gap:10px; flex-wrap:wrap; justify-content:space-between"},[
+        el("div",{style:"display:flex; gap:10px; flex-wrap:wrap"},[
+          el("button",{class:"btn ghost", disabled: !canPrev, onclick: prev},["← Voltar"]),
+          el("button",{class:"btn ghost", disabled: !canNext, onclick: next},["Avançar →"]),
+        ]),
+        el("button",{class:"btn primary", disabled: !allAnswered, onclick: finish},["Ver meu resultado"])
+      ]));
+    }
+
+    if(state.step==="result"){
+      const r = compute();
+      const d = DIM_DESC[r.primary];
+
+      root.appendChild(el("h1",{},["Seu resultado"]));
+      root.appendChild(el("p",{},[
+        "Tendências de comportamento (não é rótulo). Use isso para ajustar como você decide, lidera e se comunica."
+      ]));
+
+      root.appendChild(el("div",{class:"hr"}));
+
+      root.appendChild(el("div",{class:"tag"},[
+        "Perfil mais provável: ",
+        el("span",{class:"mono"},[`${r.primary}/${r.secondary}`])
+      ]));
+
+      root.appendChild(el("p",{},[
+        `Primário: ${r.primary} (${DIM_LABEL[r.primary]}) — ${DIM_DESC[r.primary].headline}.`
+      ]));
+      root.appendChild(el("p",{},[
+        `Secundário: ${r.secondary} (${DIM_LABEL[r.secondary]}) — ${DIM_DESC[r.secondary].headline}.`
+      ]));
+
+      root.appendChild(el("div",{class:"hr"}));
+
+      const bars = el("div",{class:"bars"});
+      ["D","I","S","C"].forEach(k=>{
+        bars.appendChild(el("div",{class:"bar"},[
+          el("div",{class:"mono"},[k]),
+          el("div",{class:"meter"},[ el("div",{style:`width:${r.pct[k]}%`}) ]),
+          el("div",{class:"small"},[`${r.pct[k]}%`])
+        ]));
+      });
+      root.appendChild(bars);
+
+      root.appendChild(el("div",{class:"hr"}));
+
+      root.appendChild(el("h2",{},[`Como usar isso a seu favor (${r.primary})`]));
+      root.appendChild(el("p",{class:"small"},["Pontos fortes:"]));
+      root.appendChild(el("ul",{}, d.strengths.map(x=>el("li",{},[x]))));
+      root.appendChild(el("p",{class:"small", style:"margin-top:12px"},["Riscos típicos:"]));
+      root.appendChild(el("ul",{}, d.risks.map(x=>el("li",{},[x]))));
+      root.appendChild(el("p",{class:"small", style:"margin-top:12px"},["Ajustes práticos (sem frescura):"]));
+      root.appendChild(el("ul",{}, d.tips.map(x=>el("li",{},[x]))));
+
+      root.appendChild(el("div",{class:"hr"}));
+
+      // FORM de relatório bônus
+      root.appendChild(el("h2",{},["Quer o relatório bônus?"]));
+      root.appendChild(el("p",{},[
+        "Deixa seu contato que eu te envio o relatório bônus com orientações práticas (depois)."
+      ]));
+
+      const form = el("div",{class:"row"},[
+        el("div",{class:"col"},[
+          el("label",{},["Nome"]),
+          el("input",{id:"nome", placeholder:"Ex.: Luis", value: state.lead.nome})
+        ]),
+        el("div",{class:"col"},[
+          el("label",{},["E-mail"]),
+          el("input",{id:"email", placeholder:"voce@empresa.com", value: state.lead.email})
+        ]),
+        el("div",{class:"col"},[
+          el("label",{},["WhatsApp"]),
+          el("input",{id:"whatsapp", placeholder:"(xx) xxxxx-xxxx", value: state.lead.whatsapp})
+        ]),
+      ]);
+      root.appendChild(form);
+
+      // honeypot escondido
+      const honey = el("input",{id:"website", class:"hidden", autocomplete:"off", value: state.lead.website});
+      root.appendChild(honey);
+
+      const consentWrap = el("div",{style:"margin-top:10px"},[
+        el("label",{style:"display:flex; gap:10px; align-items:flex-start; cursor:'pointer'"},
+          [
+            el("input",{type:"checkbox", id:"consent", style:"width:auto; margin-top:3px", checked: state.lead.consent ? "checked" : null}),
+            el("span",{class:"small"},[
+              "Concordo em enviar meus dados para receber o relatório bônus. Posso pedir remoção quando quiser."
+            ])
+          ]
+        )
+      ]);
+      root.appendChild(consentWrap);
+
+      if (state.leadStatus.msg) {
+        root.appendChild(el("div",{class: state.leadStatus.type === "err" ? "err" : "ok"},[state.leadStatus.msg]));
+      }
+
+      root.appendChild(el("div",{style:"margin-top:12px; display:flex; gap:10px; flex-wrap:wrap"},[
+        el("button",{class:"btn ghost", onclick: restart},["Refazer"]),
+        el("button",{class:"btn", onclick: copySummary},["Copiar resumo"]),
+        el("button",{class:"btn primary", disabled: state.leadSubmitted, onclick: submitLead},[
+          state.leadSubmitted ? "Enviado ✅" : "Quero meu relatório bônus"
+        ])
+      ]));
+
+      root.appendChild(el("div",{class:"hr"}));
+      root.appendChild(el("p",{class:"small"},[
+        "Privacidade: eu uso seus dados apenas para enviar o relatório bônus e conversar se fizer sentido. Nada de spam."
+      ]));
+    }
+  }
+
+  function startQuiz(){
+    state.step = "quiz";
+    state.idx = 0;
+    render();
+  }
+  function pick(which){
+    state.answers[state.idx] = which;
+    if(state.idx < QUESTIONS.length-1) state.idx++;
+    render();
+  }
+  function prev(){ state.idx = Math.max(0, state.idx-1); render(); }
+  function next(){ state.idx = Math.min(QUESTIONS.length-1, state.idx+1); render(); }
+
+  function finish(){
+    state.step = "result";
+    render();
+  }
+
+  function restart(){
+    state.step = "intro";
+    state.idx = 0;
+    state.answers = Array(QUESTIONS.length).fill(null);
+    state.leadSubmitted = false;
+    state.leadStatus = { type:"", msg:"" };
+    render();
+  }
+
+  function copySummary(){
+    const r = compute();
+    const text =
+`DISC (baseado no modelo):
+- Primário: ${r.primary} (${DIM_LABEL[r.primary]}) — ${DIM_DESC[r.primary].headline}
+- Secundário: ${r.secondary} (${DIM_LABEL[r.secondary]}) — ${DIM_DESC[r.secondary].headline}
+- Pontuações: D ${r.pct.D}% | I ${r.pct.I}% | S ${r.pct.S}% | C ${r.pct.C}%`;
+    navigator.clipboard.writeText(text).then(()=>alert("Resumo copiado."));
+  }
+
+  function readLeadInputs(){
+    const nome = document.getElementById("nome")?.value?.trim() || "";
+    const email = document.getElementById("email")?.value?.trim() || "";
+    const whatsapp = document.getElementById("whatsapp")?.value?.trim() || "";
+    const website = document.getElementById("website")?.value?.trim() || "";
+    const consent = !!document.getElementById("consent")?.checked;
+
+    state.lead = { nome, email, whatsapp, consent, website };
+  }
+
+  function validateLead(){
+    if (!SUBMIT_URL || SUBMIT_URL.includes("COLE_AQUI")) {
+      return "Você ainda não colou a URL do Apps Script no HTML (SUBMIT_URL).";
+    }
+    if (!state.lead.consent) {
+      return "Marque a caixinha de consentimento para receber o relatório bônus.";
+    }
+    if (!state.lead.email && !state.lead.whatsapp) {
+      return "Preencha pelo menos E-mail ou WhatsApp para eu conseguir te enviar o relatório bônus.";
+    }
+    if (state.lead.email && !state.lead.email.includes("@")) {
+      return "Seu e-mail parece inválido. Confere aí.";
+    }
+    return "";
+  }
+
+  async function submitLead(){
+    readLeadInputs();
+
+    const err = validateLead();
+    if (err) {
+      state.leadStatus = { type:"err", msg: err };
+      render();
+      return;
+    }
+
+    const r = compute();
+    const payload = {
+      nome: state.lead.nome,
+      email: state.lead.email,
+      whatsapp: state.lead.whatsapp,
+      consent: state.lead.consent,
+      website: state.lead.website, // honeypot
+      primary: r.primary,
+      secondary: r.secondary,
+      pct: r.pct,
+      answers: state.answers,
+      pageUrl: location.href,
+      referrer: document.referrer || "",
+      userAgent: navigator.userAgent || "",
+      quizVersion: QUIZ_VERSION
+    };
+
+    // Fire-and-forget (evita dor de cabeça com CORS)
+    try {
+      await fetch(SUBMIT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+
+      state.leadSubmitted = true;
+      state.leadStatus = { type:"ok", msg: "Fechado! Recebi. Vou te mandar o relatório bônus em breve." };
+      render();
+
+    } catch (e) {
+      state.leadStatus = { type:"err", msg: "Deu erro ao enviar. Tente de novo ou confira a URL do Apps Script." };
+      render();
+    }
+  }
+
+  render();
+</script>
+</body>
+</html>
