@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Perfil do Dono — questionário de perfil com resultado imediato e opção de relatório bônus personalizado por segmento." />
+  <meta name="description" content="Perfil do Dono — questionário de perfil com resultado imediato e opção de relatório personalizado por segmento." />
   <meta name="theme-color" content="#2E7D32" />
   <title>Perfil do Dono — Questionário</title>
 
@@ -96,6 +96,8 @@
 
     h1{ margin:0 0 6px; font-size: clamp(18px, 2.4vw, 24px); letter-spacing: .2px; }
     h2{ margin:0 0 6px; font-size: clamp(16px, 2.0vw, 18px); }
+    .quiz-question-title{ font-size: clamp(16px, 4.8vw, 22px); }
+    .choice-text{ color:#eef2ff; line-height:1.4; font-size: clamp(20px, 5.2vw, 24px); font-weight: 500; }
     p{ margin: 8px 0; color: var(--muted); line-height: 1.5; }
     .small{ font-size: 12px; color: var(--muted); }
     .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
@@ -204,7 +206,7 @@
       text-align:left;
       padding: 14px 14px;
       border-radius: var(--r2);
-      border: 1px solid rgba(35,40,58,.95);
+      border: 1px solid rgba(55,62,88,.98);
       background: rgba(15,17,23,.65);
       box-shadow: 0 12px 28px rgba(0,0,0,.25);
       min-height: 84px;
@@ -216,10 +218,13 @@
       background: rgba(15,17,23,.88);
     }
     .choice.selected{
-      border-color: rgba(46,125,50,.95);
+      border-color: rgba(67,160,71,.98);
+      border-width: 2px;
       background: radial-gradient(700px 220px at 20% 0%, rgba(46,125,50,.16), rgba(15,17,23,.92) 60%);
       box-shadow: 0 16px 38px rgba(46,125,50,.12);
     }
+    .quiz-header-line{ display:flex; align-items:center; gap:10px; flex-wrap:nowrap; }
+    .quiz-prompt{ margin-bottom:10px; color:#e9edff; font-size: clamp(14px, 3.8vw, 16px); white-space: nowrap; }
     .choice .meta{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       margin-bottom: 10px;
@@ -260,6 +265,9 @@
       align-items:center;
     }
     .actionbar.hidden{ display:none; }
+
+    .inline-nav{ display:flex; gap:10px; width:100%; }
+    .inline-nav .btn{ flex:1; width:auto; min-width:0; }
 
     /* ✅ FIX: quebra no mobile (vira 2 linhas) */
     @media (max-width: 520px){
@@ -330,7 +338,7 @@
         <div class="dot"></div>
         <div class="brand-title">
           <b>Perfil do Dono</b>
-          <span>Resultado imediato • Relatório bônus por segmento</span>
+          <span>Resultado imediato • Relatório personalizado por segmento</span>
         </div>
       </div>
       <div class="pill">⚡ Grátis • 2–3 min</div>
@@ -554,7 +562,7 @@
     if(state.step === "intro"){
       root.appendChild(el("h1",{},["Perfil do Dono — Questionário"]));
       root.appendChild(el("p",{},[
-        "Responda como você costuma agir no trabalho. No final você vê seu perfil na hora e pode pedir um relatório bônus personalizado pro seu segmento."
+        "Responda como você costuma agir no trabalho. No final você vê seu perfil na hora e pode pedir um relatório personalizado por segmento."
       ]));
 
       root.appendChild(el("div",{class:"hr"}));
@@ -575,10 +583,9 @@
       const pctDone = Math.round((done/total)*100);
 
       root.appendChild(el("div",{style:"display:flex; align-items:flex-start; justify-content:space-between; gap: 12px; flex-wrap: wrap;"},[
-        el("div",{},[
-          el("h1",{},[`Pergunta ${state.idx+1} de ${total}`]),
+        el("div",{class:"quiz-header-line"},[
+          el("h1",{class:"quiz-question-title"},[`Pergunta ${state.idx+1} de ${total}`]),
           el("div",{class:"pill"},[`Respondidas: ${done}/${total}`]),
-          el("p",{class:"small", style:"margin-top:8px;"},["Dica: teclado 1 ou 2."])
         ]),
         el("div",{style:"min-width:260px; flex:1; max-width: 420px;"},[
           el("div",{class:"progress", "aria-label":"Progresso"},[
@@ -592,7 +599,7 @@
       const q = QUESTIONS[state.idx];
       const choice = state.answers[state.idx];
 
-      root.appendChild(el("div",{style:"margin-bottom:10px; color:#e9edff; font-size: 16px;"},[
+      root.appendChild(el("div",{class:"quiz-prompt"},[
         "Escolha a frase que mais parece com você:"
       ]));
 
@@ -603,7 +610,7 @@
     onclick: ()=>pick(key),
     "aria-pressed": choice===key
   },[
-    el("div",{style:"color:#eef2ff; line-height:1.35; font-size: 15px;"},[text])
+    el("div",{class:"choice-text"},[text])
   ]);
 };
 
@@ -620,9 +627,9 @@
       const allAnswered = state.answers.every(Boolean);
 
       root.appendChild(el("div",{style:"display:flex; gap:10px; flex-wrap:wrap; justify-content:space-between; align-items:center;"},[
-        el("div",{style:"display:flex; gap:10px; flex-wrap:wrap; min-width: 220px;"},[
-          el("button",{class:"btn ghost", type:"button", disabled: !canPrev, onclick: prev},["← Voltar"]),
-          el("button",{class:"btn ghost", type:"button", disabled: !canNext, onclick: next},["Avançar →"]),
+        el("div",{class:"inline-nav", style:"min-width: 220px;"},[
+          el("button",{class:"btn ghost", type:"button", style:"width:auto;", disabled: !canPrev, onclick: prev},["← Voltar"]),
+          el("button",{class:"btn ghost", type:"button", style:"width:auto;", disabled: !canNext, onclick: next},["Avançar →"]),
         ]),
         el("div",{style:"min-width: 260px; max-width: 340px; width:100%;"},[
           el("button",{class:"btn primary", type:"button", disabled: !allAnswered, onclick: finish},["Ver meu perfil"])
@@ -679,7 +686,7 @@
 
       root.appendChild(el("div",{class:"hr"}));
 
-      root.appendChild(el("h2",{},["Relatório bônus personalizado (pro seu segmento)"]));
+      root.appendChild(el("h2",{},["Relatório personalizado por segmento"]));
       root.appendChild(el("p",{},["Preencha empresa e segmento. Eu monto um relatório com orientações práticas e te envio depois."]));
 
       root.appendChild(el("div",{class:"row"},[
@@ -718,7 +725,7 @@
       root.appendChild(el("div",{style:"margin-top:10px"},[
         el("label",{style:"display:flex; gap:10px; align-items:flex-start; cursor:pointer"},[
           el("input",{type:"checkbox", id:"consent", checked: state.lead.consent, style:"width:auto; margin-top:3px"}),
-          el("span",{class:"small"},["Concordo em enviar meus dados para receber o relatório bônus. Posso pedir remoção quando quiser."])
+          el("span",{class:"small"},["Concordo em enviar meus dados para receber o relatório personalizado por segmento. Posso pedir remoção quando quiser."])
         ])
       ]));
 
@@ -730,7 +737,7 @@
         el("button",{class:"btn ghost", type:"button", onclick: restart},["Refazer"]),
         el("button",{class:"btn", type:"button", onclick: copySummary},["Copiar resumo"]),
         el("button",{class:"btn primary", type:"button", disabled: state.leadSubmitted || state.isSubmitting, onclick: submitLead},[
-          state.leadSubmitted ? "Enviado ✅" : (state.isSubmitting ? "Enviando…" : "Quero meu relatório bônus")
+          state.leadSubmitted ? "Enviado ✅" : (state.isSubmitting ? "Enviando…" : "Quero meu relatório personalizado")
         ])
       ]));
     }
@@ -805,7 +812,7 @@
 
   function validateLead(){
     if (!SUBMIT_URL || !SUBMIT_URL.startsWith("https://")) return "Endpoint do Apps Script inválido (SUBMIT_URL).";
-    if (!state.lead.consent) return "Marque o consentimento para receber o relatório bônus.";
+    if (!state.lead.consent) return "Marque o consentimento para receber o relatório personalizado por segmento.";
     if (!state.lead.empresa) return "Coloque o nome da sua empresa.";
     if (!state.lead.segmento_select) return "Selecione o seu segmento.";
     if (state.lead.segmento_select === "Outro (digitar)" && !getFinalSegment()) return "Digite o seu segmento (opção Outro).";
@@ -863,7 +870,7 @@
       });
 
       state.leadSubmitted = true;
-      state.leadStatus = { type:"ok", msg: "Recebido ✅ Vou te enviar o relatório bônus personalizado em breve." };
+      state.leadStatus = { type:"ok", msg: "Recebido ✅ Vou te enviar o relatório personalizado por segmento em breve." };
       state.isSubmitting = false;
       render();
       toast("Recebido ✅");
@@ -899,5 +906,4 @@
 </script>
 </body>
 </html>
-
 
