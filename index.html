@@ -144,6 +144,20 @@
       border-color: rgba(67,160,71,.9);
       box-shadow: 0 0 0 4px rgba(46,125,50,.18);
     }
+    .consent-label{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      cursor:pointer;
+      margin-bottom:0;
+    }
+    .consent-checkbox{
+      width:auto;
+      min-height:auto;
+      margin:0;
+      padding:0;
+      flex:0 0 auto;
+    }
 
     .row{ display:flex; gap: 12px; flex-wrap: wrap; align-items: stretch; }
     .col{ flex: 1; min-width: 220px; }
@@ -704,8 +718,8 @@
       root.appendChild(el("input",{id:"website", class:"hidden", autocomplete:"off", value: state.lead.website}));
 
       root.appendChild(el("div",{style:"margin-top:10px"},[
-        el("label",{style:"display:flex; gap:10px; align-items:flex-start; cursor:pointer"},[
-          el("input",{type:"checkbox", id:"consent", checked: state.lead.consent, style:"width:auto; margin-top:3px"}),
+        el("label",{class:"consent-label"},[
+          el("input",{type:"checkbox", id:"consent", checked: state.lead.consent, class:"consent-checkbox"}),
           el("span",{class:"small"},["Concordo em enviar meus dados para receber o relatório personalizado por segmento. Posso pedir remoção quando quiser."])
         ])
       ]));
@@ -715,8 +729,6 @@
       }
 
       root.appendChild(el("div",{style:"margin-top:12px; display:grid; grid-template-columns: 1fr; gap:10px;"},[
-        el("button",{class:"btn ghost", type:"button", onclick: restart},["Refazer"]),
-        el("button",{class:"btn", type:"button", onclick: copySummary},["Copiar resumo"]),
         el("button",{class:"btn primary", type:"button", disabled: state.leadSubmitted || state.isSubmitting, onclick: submitLead},[
           state.leadSubmitted ? "Enviado ✅" : (state.isSubmitting ? "Enviando…" : "Quero meu relatório personalizado")
         ])
@@ -887,4 +899,3 @@
 </script>
 </body>
 </html>
-
