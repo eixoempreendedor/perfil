@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Assessment DISC (baseado no modelo) com resultado imediato e opção de relatório bônus personalizado por segmento." />
+  <meta name="description" content="Perfil do Dono — questionário de comportamento com resultado imediato e opção de relatório bônus personalizado por segmento." />
   <meta name="theme-color" content="#2E7D32" />
-  <title>DISC (baseado no modelo) — Assessment</title>
+  <title>Perfil do Dono — Questionário</title>
 
   <style>
     :root{
@@ -185,8 +185,6 @@
       border-color: rgba(42,51,80,.95);
       box-shadow:none;
     }
-
-    /* ✅ upgrade opcional (ghost + selected mais verdes) */
     .btn.ghost:hover{
       border-color: rgba(46,125,50,.85);
       box-shadow: 0 0 0 4px rgba(46,125,50,.16);
@@ -319,7 +317,7 @@
       <div class="brand">
         <div class="dot"></div>
         <div class="brand-title">
-          <b>DISC (baseado no modelo)</b>
+          <b>Perfil do Dono</b>
           <span>Resultado imediato • Relatório bônus por segmento</span>
         </div>
       </div>
@@ -329,7 +327,7 @@
     <div class="card" id="app"></div>
 
     <p class="small" style="margin-top:12px;">
-      Este assessment é <b>baseado no modelo D/I/S/C</b> com perguntas originais. Não é teste clínico e não deve ser usado como critério único de contratação/decisão.
+      Este questionário mede tendências de comportamento no trabalho. Não é teste clínico e não deve ser usado como critério único de contratação/decisão.
     </p>
   </div>
 
@@ -344,9 +342,11 @@
   </div>
 
 <script>
+  // Endpoint do Apps Script
   const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbx0eEtWFPzx7kTzPMCjbePc9bSeJE2bExXZtr7J0oKd4CKSL-6jANX3pn94pfr7dzkb/exec";
-  const QUIZ_VERSION = "disc-web-v1";
+  const QUIZ_VERSION = "perfil-do-dono-v1";
 
+  // Segmentos (dropdown)
   const SEGMENTS = [
     "Restaurante / Food Service",
     "Cafeteria / Padaria",
@@ -368,6 +368,7 @@
     "Outro (digitar)"
   ];
 
+  // Perguntas (modelo D/I/S/C por trás, sem expor)
   const QUESTIONS = [
     { a:{t:"Eu gosto de decidir rápido e destravar o jogo.", k:"D"}, b:{t:"Eu prefiro analisar bem antes de decidir.", k:"C"} },
     { a:{t:"Eu puxo conversa fácil e animo o ambiente.", k:"I"}, b:{t:"Eu sou mais reservado e constante.", k:"S"} },
@@ -400,21 +401,23 @@
     { a:{t:"Eu funciono bem com liberdade e pessoas por perto.", k:"I"}, b:{t:"Eu funciono bem com rotina e previsibilidade.", k:"S"} },
   ];
 
-  const DIM_LABEL = { D:"Dominância", I:"Influência", S:"Estabilidade", C:"Conscienciosidade" };
-  const DIM_DESC = {
-    D:{ headline:"Rápido, direto, orientado a resultado",
+  // Rótulos "internos" (não expor no título)
+  const AXIS_LABEL = { D:"Direto", I:"Comunicador", S:"Constante", C:"Analítico" };
+
+  const AXIS_DESC = {
+    D:{ headline:"Direto e destravador",
       strengths:["decide e destrava","foco em meta","coragem para enfrentar conflito"],
       risks:["impaciência","pode atropelar pessoas","pular etapas importantes"],
       tips:["defina 1 meta por semana","combine expectativa por escrito","treine escuta antes de cobrar"] },
-    I:{ headline:"Comunicativo, persuasivo, energiza pessoas",
+    I:{ headline:"Comunicador e mobilizador",
       strengths:["conecta e influencia","vende ideia com facilidade","cria movimento no time"],
       risks:["dispersão","prometer demais","falta de rotina"],
       tips:["tenha 3 prioridades por dia","use checklists curtos","feche ‘próxima ação’ em toda conversa"] },
-    S:{ headline:"Constante, confiável, cria estabilidade",
+    S:{ headline:"Constante e confiável",
       strengths:["segura a operação","leal ao time","mantém ritmo sustentável"],
       risks:["evitar conflito","demorar a mudar","aceitar demais para manter paz"],
       tips:["marque conversas difíceis com data","peça clareza de papel/limite","faça 1 melhoria por semana"] },
-    C:{ headline:"Analítico, detalhista, orientado a qualidade",
+    C:{ headline:"Analítico e orientado a qualidade",
       strengths:["padrão e excelência","decisão com fatos","reduz risco"],
       risks:["perfeccionismo","demorar a decidir","controle excessivo"],
       tips:["use ‘bom o suficiente’ + prazo","defina critério de decisão","faça revisão rápida em vez de reescrever tudo"] },
@@ -541,16 +544,16 @@
     root.innerHTML = "";
 
     if(state.step === "intro"){
-      root.appendChild(el("h1",{},["DISC (baseado no modelo) — Assessment"]));
+      root.appendChild(el("h1",{},["Perfil do Dono — Questionário"]));
       root.appendChild(el("p",{},[
-        "Responda como você costuma agir no trabalho. No final você vê o resultado na hora e pode pedir um relatório bônus personalizado pro seu segmento."
+        "Responda como você costuma agir no trabalho. No final você vê seu perfil na hora e pode pedir um relatório bônus personalizado pro seu segmento."
       ]));
 
       root.appendChild(el("div",{class:"hr"}));
 
       root.appendChild(el("div",{class:"warn"},[
         el("div",{class:"pill", style:"display:inline-flex; margin-bottom:8px;"},["⚠️ Aviso rápido"]),
-        el("p",{},["Perguntas originais. Resultado é mapa, não sentença."])
+        el("p",{},["Isso é um mapa de comportamento (não é laudo). Use pra melhorar liderança, decisão e rotina."])
       ]));
 
       root.appendChild(el("div",{style:"margin-top:14px; display:grid; grid-template-columns: 1fr; gap:10px; max-width: 420px;"},[
@@ -617,7 +620,7 @@
           el("button",{class:"btn ghost", type:"button", disabled: !canNext, onclick: next},["Avançar →"]),
         ]),
         el("div",{style:"min-width: 260px; max-width: 340px; width:100%;"},[
-          el("button",{class:"btn primary", type:"button", disabled: !allAnswered, onclick: finish},["Ver meu resultado"])
+          el("button",{class:"btn primary", type:"button", disabled: !allAnswered, onclick: finish},["Ver meu perfil"])
         ])
       ]));
 
@@ -628,20 +631,24 @@
       setActionbarVisible(false);
 
       const r = compute();
-      const d = DIM_DESC[r.primary];
+      const d = AXIS_DESC[r.primary];
 
-      root.appendChild(el("h1",{},["Seu resultado"]));
-      root.appendChild(el("p",{},["Tendências de comportamento. Use para ajustar decisão, liderança e comunicação."]));
+      root.appendChild(el("h1",{},["Seu Perfil do Dono"]));
+      root.appendChild(el("p",{},["Isso mostra tendências de comportamento no trabalho. Use pra ajustar decisão, liderança e rotina."]));
 
       root.appendChild(el("div",{class:"hr"}));
 
       root.appendChild(el("div",{class:"pill"},[
-        "Perfil mais provável: ",
+        "Seu perfil mais provável: ",
         el("span",{class:"mono"},[`${r.primary}/${r.secondary}`])
       ]));
 
-      root.appendChild(el("p",{},[`Primário: ${r.primary} (${DIM_LABEL[r.primary]}) — ${DIM_DESC[r.primary].headline}.`]));
-      root.appendChild(el("p",{},[`Secundário: ${r.secondary} (${DIM_LABEL[r.secondary]}) — ${DIM_DESC[r.secondary].headline}.`]));
+      root.appendChild(el("p",{},[
+        `Primário: ${AXIS_LABEL[r.primary]} — ${AXIS_DESC[r.primary].headline}.`
+      ]));
+      root.appendChild(el("p",{},[
+        `Secundário: ${AXIS_LABEL[r.secondary]} — ${AXIS_DESC[r.secondary].headline}.`
+      ]));
 
       root.appendChild(el("div",{class:"hr"}));
 
@@ -657,7 +664,7 @@
 
       root.appendChild(el("div",{class:"hr"}));
 
-      root.appendChild(el("h2",{},[`Como usar isso a seu favor (${r.primary})`]));
+      root.appendChild(el("h2",{},[`Como usar isso a seu favor (${AXIS_LABEL[r.primary]})`]));
       root.appendChild(el("p",{class:"small"},["Pontos fortes:"]));
       root.appendChild(el("ul",{}, d.strengths.map(x=>el("li",{},[x]))));
       root.appendChild(el("p",{class:"small", style:"margin-top:12px"},["Riscos típicos:"]));
@@ -769,9 +776,9 @@
   function copySummary(){
     const r = compute();
     const text =
-`DISC (baseado no modelo):
-- Primário: ${r.primary} (${DIM_LABEL[r.primary]}) — ${DIM_DESC[r.primary].headline}
-- Secundário: ${r.secondary} (${DIM_LABEL[r.secondary]}) — ${DIM_DESC[r.secondary].headline}
+`Perfil do Dono:
+- Primário: ${AXIS_LABEL[r.primary]} (${r.primary}) — ${AXIS_DESC[r.primary].headline}
+- Secundário: ${AXIS_LABEL[r.secondary]} (${r.secondary}) — ${AXIS_DESC[r.secondary].headline}
 - Pontuações: D ${r.pct.D}% | I ${r.pct.I}% | S ${r.pct.S}% | C ${r.pct.C}%`;
 
     navigator.clipboard.writeText(text)
