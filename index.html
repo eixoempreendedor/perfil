@@ -39,7 +39,7 @@
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
     .small { font-size: 12px; color: var(--muted); }
     .warn { border: 1px dashed #3a4a7a; padding: 10px 12px; border-radius: 12px; background: rgba(42,60,255,.08); }
-    input {
+    input, select {
       background:#0f1117; color: var(--text); border:1px solid var(--line);
       padding: 10px 12px; border-radius: 12px; width: 100%;
     }
@@ -57,10 +57,6 @@
 <body>
   <div class="wrap">
     <div class="card" id="app"></div>
-<script>
-  document.getElementById('app').innerHTML =
-    "<h1>JS rodou ✅</h1><p style='color:#a7b0c0'>Se você está vendo isso, o problema está no script principal (ele está com erro de sintaxe ou foi colado incompleto).</p>";
-</script>
 
     <p class="small" style="margin-top:12px;">
       Este assessment é <b>baseado no modelo D/I/S/C</b> com perguntas originais. Não é teste clínico e não deve ser usado como critério único de contratação/decisão.
@@ -68,9 +64,31 @@
   </div>
 
 <script>
-  // ✅ COLE SUA URL DO APPS SCRIPT AQUI (entre aspas)
-  const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbyFcNMd-KMicHT_9-eWsfsx1XxhIx-1-BxZr6HLI-i0UQ6SaiHRF_rZM0tktcKt4SuY/exec";
+  // ✅ Seu Apps Script (Google Sheet endpoint)
+  const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbx0eEtWFPzx7kTzPMCjbePc9bSeJE2bExXZtr7J0oKd4CKSL-6jANX3pn94pfr7dzkb/exec";
   const QUIZ_VERSION = "disc-web-v1";
+
+  // Dropdown de segmentos (você pode editar a lista)
+  const SEGMENTS = [
+    "Restaurante / Food Service",
+    "Cafeteria / Padaria",
+    "Varejo (loja física)",
+    "E-commerce",
+    "Beleza (salão, estética, barbearia)",
+    "Saúde (clínica, consultório)",
+    "Odonto",
+    "Pet (clínica/petshop)",
+    "Academia / Fitness",
+    "Imobiliária / Corretagem",
+    "Construção / Arquitetura / Engenharia",
+    "Contabilidade / Jurídico / Serviços profissionais",
+    "Indústria",
+    "Agro",
+    "Escola / Educação",
+    "Hotelaria / Turismo",
+    "Oficina / Auto",
+    "Outro (digitar)"
+  ];
 
   const QUESTIONS = [
     { a:{t:"Eu gosto de decidir rápido e destravar o jogo.", k:"D"}, b:{t:"Eu prefiro analisar bem antes de decidir.", k:"C"} },
@@ -107,30 +125,22 @@
   const DIM_LABEL = { D:"Dominância", I:"Influência", S:"Estabilidade", C:"Conscienciosidade" };
 
   const DIM_DESC = {
-    D: {
-      headline: "Rápido, direto, orientado a resultado",
-      strengths: ["decide e destrava", "foco em meta", "coragem para enfrentar conflito"],
-      risks: ["impaciência", "pode atropelar pessoas", "pular etapas importantes"],
-      tips: ["defina 1 meta por semana", "combine expectativa por escrito", "treine escuta antes de cobrar"]
-    },
-    I: {
-      headline: "Comunicativo, persuasivo, energiza pessoas",
-      strengths: ["conecta e influencia", "vende ideia com facilidade", "cria movimento no time"],
-      risks: ["dispersão", "prometer demais", "falta de rotina"],
-      tips: ["tenha 3 prioridades por dia", "use checklists curtos", "feche ‘próxima ação’ em toda conversa"]
-    },
-    S: {
-      headline: "Constante, confiável, cria estabilidade",
-      strengths: ["segura a operação", "leal ao time", "mantém ritmo sustentável"],
-      risks: ["evitar conflito", "demorar a mudar", "aceitar demais para manter paz"],
-      tips: ["marque conversas difíceis com data", "peça clareza de papel/limite", "faça 1 melhoria por semana"]
-    },
-    C: {
-      headline: "Analítico, detalhista, orientado a qualidade",
-      strengths: ["padrão e excelência", "decisão com fatos", "reduz risco"],
-      risks: ["perfeccionismo", "demorar a decidir", "controle excessivo"],
-      tips: ["use ‘bom o suficiente’ + prazo", "defina critério de decisão", "faça revisão rápida em vez de reescrever tudo"]
-    },
+    D: { headline:"Rápido, direto, orientado a resultado",
+      strengths:["decide e destrava","foco em meta","coragem para enfrentar conflito"],
+      risks:["impaciência","pode atropelar pessoas","pular etapas importantes"],
+      tips:["defina 1 meta por semana","combine expectativa por escrito","treine escuta antes de cobrar"] },
+    I: { headline:"Comunicativo, persuasivo, energiza pessoas",
+      strengths:["conecta e influencia","vende ideia com facilidade","cria movimento no time"],
+      risks:["dispersão","prometer demais","falta de rotina"],
+      tips:["tenha 3 prioridades por dia","use checklists curtos","feche ‘próxima ação’ em toda conversa"] },
+    S: { headline:"Constante, confiável, cria estabilidade",
+      strengths:["segura a operação","leal ao time","mantém ritmo sustentável"],
+      risks:["evitar conflito","demorar a mudar","aceitar demais para manter paz"],
+      tips:["marque conversas difíceis com data","peça clareza de papel/limite","faça 1 melhoria por semana"] },
+    C: { headline:"Analítico, detalhista, orientado a qualidade",
+      strengths:["padrão e excelência","decisão com fatos","reduz risco"],
+      risks:["perfeccionismo","demorar a decidir","controle excessivo"],
+      tips:["use ‘bom o suficiente’ + prazo","defina critério de decisão","faça revisão rápida em vez de reescrever tudo"] },
   };
 
   function el(tag, attrs={}, children=[]){
@@ -139,17 +149,10 @@
       if (k === "class") { e.className = v; continue; }
       if (k === "html") { e.innerHTML = v; continue; }
       if (k.startsWith("on") && typeof v === "function") { e.addEventListener(k.slice(2), v); continue; }
-
-      // ✅ boolean attributes corretos (disabled/checked etc.)
-      if (typeof v === "boolean") {
-        if (v) e.setAttribute(k, "");
-        continue;
-      }
+      if (typeof v === "boolean") { if (v) e.setAttribute(k, ""); continue; }
       if (v === null || v === undefined) continue;
-
       e.setAttribute(k, v);
     }
-
     (Array.isArray(children)?children:[children]).forEach(c=>{
       if(c===null || c===undefined) return;
       if(typeof c === "string") e.appendChild(document.createTextNode(c));
@@ -169,7 +172,13 @@
     step: "intro",
     idx: 0,
     answers: Array(QUESTIONS.length).fill(null),
-    lead: { nome:"", email:"", whatsapp:"", consent:false, website:"" },
+    lead: {
+      nome:"", email:"", whatsapp:"",
+      empresa:"",
+      segmento_select:"",
+      segmento_outro:"",
+      consent:false, website:""
+    },
     leadSubmitted: false,
     leadStatus: { type:"", msg:"" }
   };
@@ -192,26 +201,20 @@
     return { raw, pct, order, primary: order[0], secondary: order[1] };
   }
 
-  function safeRenderError(err){
-    const root = document.getElementById("app");
-    if (!root) return;
-    root.innerHTML = `
-      <h1>Ops… deu um erro no script</h1>
-      <p>Abre o DevTools (F12) → Console pra ver o erro. Normalmente é URL colada errada ou arquivo incompleto.</p>
-      <p class="small">Erro: <span class="mono">${String(err).replaceAll("<","&lt;").replaceAll(">","&gt;")}</span></p>
-    `;
-    console.error(err);
+  function getFinalSegment(){
+    const sel = state.lead.segmento_select;
+    if (sel === "Outro (digitar)") return (state.lead.segmento_outro || "").trim();
+    return sel || "";
   }
 
   function render(){
     const root = document.getElementById("app");
-    if(!root) throw new Error("Não achei a div com id='app'. Confira se existe: <div class='card' id='app'></div>");
     root.innerHTML = "";
 
     if(state.step==="intro"){
       root.appendChild(el("h1",{},["DISC (baseado no modelo) — Assessment"]));
       root.appendChild(el("p",{},[
-        "Responda como você costuma agir no trabalho. No final você vê o resultado na hora e, se quiser, pede o relatório bônus."
+        "Responda como você costuma agir no trabalho. No final você vê o resultado na hora e pode pedir um relatório bônus personalizado pro seu segmento."
       ]));
 
       root.appendChild(el("div",{class:"hr"}));
@@ -311,13 +314,14 @@
 
       root.appendChild(el("div",{class:"hr"}));
 
-      root.appendChild(el("h2",{},["Quer o relatório bônus?"]));
-      root.appendChild(el("p",{},["Deixa seu contato que eu te envio o relatório bônus depois."]));
+      root.appendChild(el("h2",{},["Relatório bônus personalizado (pro seu segmento)"]));
+      root.appendChild(el("p",{},["Preencha empresa e segmento. Eu monto um relatório com orientações práticas e te envio depois."]));
 
-      root.appendChild(el("div",{class:"row"},[
+      // form
+      const formChildren = [
         el("div",{class:"col"},[
-          el("label",{},["Nome"]),
-          el("input",{id:"nome", placeholder:"Ex.: Luis", value: state.lead.nome})
+          el("label",{},["Seu nome"]),
+          el("input",{id:"nome", placeholder:"Ex.: Maria", value: state.lead.nome})
         ]),
         el("div",{class:"col"},[
           el("label",{},["E-mail"]),
@@ -327,8 +331,27 @@
           el("label",{},["WhatsApp"]),
           el("input",{id:"whatsapp", placeholder:"(xx) xxxxx-xxxx", value: state.lead.whatsapp})
         ]),
+        el("div",{class:"col"},[
+          el("label",{},["Nome da empresa"]),
+          el("input",{id:"empresa", placeholder:"Ex.: Café do Centro", value: state.lead.empresa})
+        ]),
+        el("div",{class:"col"},[
+          el("label",{},["Segmento de atuação"]),
+          buildSegmentSelect()
+        ]),
+      ];
+
+      root.appendChild(el("div",{class:"row"}, formChildren));
+
+      // Campo "Outro" (aparece conforme seleção)
+      root.appendChild(el("div",{class:"row", id:"segmentoOutroRow", style: (state.lead.segmento_select === "Outro (digitar)" ? "" : "display:none")},[
+        el("div",{class:"col"},[
+          el("label",{},["Qual segmento? (digite)"]),
+          el("input",{id:"segmento_outro", placeholder:"Ex.: Distribuidora / Clínica veterinária / Loja de festa…", value: state.lead.segmento_outro})
+        ])
       ]));
 
+      // honeypot
       root.appendChild(el("input",{id:"website", class:"hidden", autocomplete:"off", value: state.lead.website}));
 
       root.appendChild(el("div",{style:"margin-top:10px"},[
@@ -350,6 +373,21 @@
         ])
       ]));
     }
+  }
+
+  function buildSegmentSelect(){
+    const sel = el("select", { id:"segmento_select", onchange: onSegmentChange }, []);
+    sel.appendChild(el("option", { value:"" }, ["Selecione…"]));
+    SEGMENTS.forEach(s => sel.appendChild(el("option", { value:s, selected: state.lead.segmento_select === s }, [s])));
+    return sel;
+  }
+
+  function onSegmentChange(){
+    const v = document.getElementById("segmento_select")?.value || "";
+    state.lead.segmento_select = v;
+    // mostra/esconde campo "Outro"
+    const row = document.getElementById("segmentoOutroRow");
+    if (row) row.style.display = (v === "Outro (digitar)") ? "" : "none";
   }
 
   function startQuiz(){ state.step = "quiz"; state.idx = 0; render(); }
@@ -381,13 +419,22 @@
     state.lead.nome = (document.getElementById("nome")?.value || "").trim();
     state.lead.email = (document.getElementById("email")?.value || "").trim();
     state.lead.whatsapp = (document.getElementById("whatsapp")?.value || "").trim();
+    state.lead.empresa = (document.getElementById("empresa")?.value || "").trim();
+    state.lead.segmento_select = (document.getElementById("segmento_select")?.value || "").trim();
+    state.lead.segmento_outro = (document.getElementById("segmento_outro")?.value || "").trim();
     state.lead.website = (document.getElementById("website")?.value || "").trim();
     state.lead.consent = !!document.getElementById("consent")?.checked;
   }
 
   function validateLead(){
-    if (!SUBMIT_URL || SUBMIT_URL.includes("COLE_AQUI")) return "Cole a URL do Apps Script na variável SUBMIT_URL.";
+    if (!SUBMIT_URL || !SUBMIT_URL.startsWith("https://")) return "Endpoint do Apps Script inválido (SUBMIT_URL).";
     if (!state.lead.consent) return "Marque o consentimento para receber o relatório bônus.";
+    if (!state.lead.empresa) return "Coloque o nome da sua empresa (pra eu personalizar o relatório).";
+
+    const segFinal = getFinalSegment();
+    if (!state.lead.segmento_select) return "Selecione o seu segmento.";
+    if (state.lead.segmento_select === "Outro (digitar)" && !segFinal) return "Digite o seu segmento (opção Outro).";
+
     if (!state.lead.email && !state.lead.whatsapp) return "Preencha E-mail ou WhatsApp pra eu te enviar o relatório bônus.";
     if (state.lead.email && !state.lead.email.includes("@")) return "Seu e-mail parece inválido. Confere aí.";
     return "";
@@ -395,6 +442,7 @@
 
   async function submitLead(){
     readLeadInputs();
+
     const err = validateLead();
     if (err) { state.leadStatus = { type:"err", msg: err }; render(); return; }
 
@@ -403,6 +451,9 @@
       nome: state.lead.nome,
       email: state.lead.email,
       whatsapp: state.lead.whatsapp,
+      empresa: state.lead.empresa,
+      // manda um campo "segmento" já final (select ou outro digitado)
+      segmento: getFinalSegment(),
       consent: state.lead.consent,
       website: state.lead.website, // honeypot
       primary: r.primary,
@@ -422,20 +473,17 @@
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload)
       });
+
       state.leadSubmitted = true;
-      state.leadStatus = { type:"ok", msg: "Fechado! Recebi. Vou te mandar o relatório bônus em breve." };
+      state.leadStatus = { type:"ok", msg: "Fechado! Recebi. Vou te mandar o relatório bônus personalizado em breve." };
       render();
     } catch (e) {
-      state.leadStatus = { type:"err", msg: "Erro ao enviar. Confira a URL do Apps Script." };
+      state.leadStatus = { type:"err", msg: "Erro ao enviar. Tente novamente." };
       render();
     }
   }
 
-  try { render(); } catch (e) { safeRenderError(e); }
+  render();
 </script>
 </body>
 </html>
-
-
-
-
