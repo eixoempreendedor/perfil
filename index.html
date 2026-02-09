@@ -586,20 +586,20 @@
     root.innerHTML = "";
 
     if(state.step === "intro"){
-      root.appendChild(el("h1",{},["Perfil do Dono — Questionário"]));
+      root.appendChild(el("h1",{},["Descubra seu Perfil de Liderança (em 3 minutos)"]));
       root.appendChild(el("p",{},[
-        "Responda como você costuma agir no trabalho. No final você vê seu perfil na hora e pode pedir um relatório personalizado por segmento."
+        "Responda 24 escolhas rápidas. No final, você recebe seu perfil na hora + um plano curto por segmento (empresa + segmento)."
       ]));
 
       root.appendChild(el("div",{class:"hr"}));
 
       root.appendChild(el("div",{class:"warn"},[
-        el("div",{class:"pill", style:"display:inline-flex; margin-bottom:8px;"},["⚠️ Aviso rápido"]),
-        el("p",{},["Isso é um mapa de comportamento (não é laudo). Use pra melhorar liderança, decisão e rotina."])
+        el("div",{class:"pill", style:"display:inline-flex; margin-bottom:8px;"},["Uso recomendado"]),
+        el("p",{},["Use pra ajustar decisão, rotina e liderança. Não é diagnóstico clínico e não substitui avaliação profissional."])
       ]));
 
       root.appendChild(el("div",{style:"margin-top:14px; display:grid; grid-template-columns: 1fr; gap:10px; max-width: 420px;"},[
-        el("button",{class:"btn primary", type:"button", onclick: startQuiz},["Começar agora"])
+        el("button",{class:"btn primary", type:"button", onclick: startQuiz},["Ver meu perfil (grátis)"])
       ]));
     }
 
@@ -626,7 +626,7 @@
       const choice = state.answers[state.idx];
 
       root.appendChild(el("div",{class:"quiz-prompt"},[
-        "Escolha a frase que mais parece com você:"
+        "Escolha a frase que você faz “no automático” na maior parte do tempo."
       ]));
 
       const makeChoice = (key, text) => {
@@ -655,8 +655,8 @@
       const r = compute();
       const d = AXIS_DESC[r.primary];
 
-      root.appendChild(el("h1",{},["Seu Perfil do Dono"]));
-      root.appendChild(el("p",{},["Isso mostra tendências de comportamento no trabalho. Use pra ajustar decisão, liderança e rotina."]));
+      root.appendChild(el("h1",{},["Seu Perfil (na prática)"]));
+      root.appendChild(el("p",{},["Isso explica seu jeito de decidir, liderar e cobrar. Use as dicas abaixo pra ganhar resultado com menos desgaste."]));
 
       root.appendChild(el("div",{class:"hr"}));
 
@@ -696,8 +696,8 @@
 
       root.appendChild(el("div",{class:"hr"}));
 
-      root.appendChild(el("h2",{},["Relatório personalizado por segmento"]));
-      root.appendChild(el("p",{},["Preencha empresa e segmento. Eu monto um relatório com orientações práticas e te envio depois."]));
+      root.appendChild(el("h2",{},["Plano do seu segmento (feito pra sua empresa)"]));
+      root.appendChild(el("p",{},["Preencha empresa e segmento. Eu te mando um plano direto com 3–5 ajustes práticos pra aplicar já (sem enrolação)."]));
 
       root.appendChild(el("div",{class:"row"},[
         el("div",{class:"col"},[
@@ -735,7 +735,7 @@
       root.appendChild(el("div",{style:"margin-top:10px"},[
         el("label",{class:"consent-label"},[
           el("input",{type:"checkbox", id:"consent", checked: state.lead.consent, class:"consent-checkbox"}),
-          el("span",{class:"small"},["Concordo em enviar meus dados para receber o relatório personalizado por segmento. Posso pedir remoção quando quiser."])
+          el("span",{class:"small"},["Ok. Você pode pedir remoção dos dados quando quiser."])
         ])
       ]));
 
@@ -745,7 +745,7 @@
 
       root.appendChild(el("div",{style:"margin-top:12px; display:grid; grid-template-columns: 1fr; gap:10px;"},[
         el("button",{class:"btn primary", type:"button", disabled: state.leadSubmitted || state.isSubmitting, onclick: submitLead},[
-          state.leadSubmitted ? "Enviado ✅" : (state.isSubmitting ? "Enviando…" : "Quero meu relatório personalizado")
+          state.leadSubmitted ? "Enviado ✅" : (state.isSubmitting ? "Enviando…" : "Quero meu plano por segmento")
         ])
       ]));
     }
@@ -878,7 +878,7 @@
       });
 
       state.leadSubmitted = true;
-      state.leadStatus = { type:"ok", msg: "Recebido ✅ Vou te enviar o relatório personalizado por segmento em breve." };
+      state.leadStatus = { type:"ok", msg: "Recebido ✅ Vou te mandar um plano curto e direto pra sua empresa." };
       state.isSubmitting = false;
       render();
       toast("Recebido ✅");
