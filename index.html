@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Perfil do Dono — questionário de comportamento com resultado imediato e opção de relatório bônus personalizado por segmento." />
+  <meta name="description" content="Perfil do Dono — questionário de perfil com resultado imediato e opção de relatório bônus personalizado por segmento." />
   <meta name="theme-color" content="#2E7D32" />
   <title>Perfil do Dono — Questionário</title>
 
@@ -578,7 +578,7 @@
         el("div",{},[
           el("h1",{},[`Pergunta ${state.idx+1} de ${total}`]),
           el("div",{class:"pill"},[`Respondidas: ${done}/${total}`]),
-          el("p",{class:"small", style:"margin-top:8px;"},["Dica: use teclado (1/2 ou A/B)."])
+          el("p",{class:"small", style:"margin-top:8px;"},["Dica: teclado 1 ou 2."])
         ]),
         el("div",{style:"min-width:260px; flex:1; max-width: 420px;"},[
           el("div",{class:"progress", "aria-label":"Progresso"},[
@@ -596,24 +596,21 @@
         "Escolha a frase que mais parece com você:"
       ]));
 
-      const makeChoice = (key, text, kbd) => {
-        return el("button",{
-          class:`btn choice ${choice===key ? "selected" : ""}`,
-          type:"button",
-          onclick: ()=>pick(key),
-          "aria-pressed": choice===key
-        },[
-          el("div",{class:"meta"},[
-            el("span",{class:"badge"},[ key==="a" ? "Opção A" : "Opção B" ]),
-            el("span",{class:"kbd"},[kbd])
-          ]),
-          el("div",{style:"color:#eef2ff; line-height:1.35; font-size: 14px;"},[text])
-        ]);
-      };
+      const makeChoice = (key, text) => {
+  return el("button",{
+    class:`btn choice ${choice===key ? "selected" : ""}`,
+    type:"button",
+    onclick: ()=>pick(key),
+    "aria-pressed": choice===key
+  },[
+    el("div",{style:"color:#eef2ff; line-height:1.35; font-size: 15px;"},[text])
+  ]);
+};
+
 
       root.appendChild(el("div",{class:"choices"},[
-        makeChoice("a", q.a.t, "1 / A"),
-        makeChoice("b", q.b.t, "2 / B"),
+        makeChoice("a", q.a.t),
+        makeChoice("b", q.b.t),
       ]));
 
       root.appendChild(el("div",{class:"hr"}));
@@ -902,3 +899,4 @@
 </script>
 </body>
 </html>
+
