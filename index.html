@@ -17,8 +17,8 @@
       --line:#23283a;
 
       /* ✅ Verde Curti */
-      --brand:#2E7D32;   /* verde principal */
-      --brand2:#43A047;  /* verde mais claro pro gradiente */
+      --brand:#2E7D32;
+      --brand2:#43A047;
 
       --good:#34d399;
       --bad:#ffb3b3;
@@ -44,7 +44,7 @@
     a{ color: var(--brand2); text-decoration: none; }
     a:hover{ text-decoration: underline; }
 
-    .wrap{ max-width: 980px; margin: 0 auto; padding: 22px; padding-bottom: 110px; }
+    .wrap{ max-width: 980px; margin: 0 auto; padding: 22px; padding-bottom: 120px; }
 
     .topbar{
       display:flex; align-items:center; justify-content:space-between; gap: 14px;
@@ -261,6 +261,18 @@
     }
     .actionbar.hidden{ display:none; }
 
+    /* ✅ FIX: quebra no mobile (vira 2 linhas) */
+    @media (max-width: 520px){
+      .wrap{ padding-bottom: 160px; } /* espaço extra pra actionbar maior */
+      .actionbar .inner{
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+      #btnFinish{
+        grid-column: 1 / -1; /* botão principal full width */
+      }
+    }
+
     /* Result bars */
     .bars{ display:grid; gap: 10px; margin-top: 6px; }
     .bar{ display:grid; grid-template-columns: 44px 1fr 58px; gap: 10px; align-items:center; }
@@ -337,16 +349,14 @@
     <div class="inner">
       <button class="btn ghost" id="btnPrev" type="button">← Voltar</button>
       <button class="btn ghost" id="btnNext" type="button">Avançar →</button>
-      <button class="btn primary" id="btnFinish" type="button">Ver meu resultado</button>
+      <button class="btn primary" id="btnFinish" type="button">Ver meu perfil</button>
     </div>
   </div>
 
 <script>
-  // Endpoint do Apps Script
   const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbx0eEtWFPzx7kTzPMCjbePc9bSeJE2bExXZtr7J0oKd4CKSL-6jANX3pn94pfr7dzkb/exec";
   const QUIZ_VERSION = "perfil-do-dono-v1";
 
-  // Segmentos (dropdown)
   const SEGMENTS = [
     "Restaurante / Food Service",
     "Cafeteria / Padaria",
@@ -368,7 +378,6 @@
     "Outro (digitar)"
   ];
 
-  // Perguntas (modelo D/I/S/C por trás, sem expor)
   const QUESTIONS = [
     { a:{t:"Eu gosto de decidir rápido e destravar o jogo.", k:"D"}, b:{t:"Eu prefiro analisar bem antes de decidir.", k:"C"} },
     { a:{t:"Eu puxo conversa fácil e animo o ambiente.", k:"I"}, b:{t:"Eu sou mais reservado e constante.", k:"S"} },
@@ -401,14 +410,13 @@
     { a:{t:"Eu funciono bem com liberdade e pessoas por perto.", k:"I"}, b:{t:"Eu funciono bem com rotina e previsibilidade.", k:"S"} },
   ];
 
-  // Rótulos "internos" (não expor no título)
   const AXIS_LABEL = { D:"Direto", I:"Comunicador", S:"Constante", C:"Analítico" };
 
   const AXIS_DESC = {
     D:{ headline:"Direto e destravador",
       strengths:["decide e destrava","foco em meta","coragem para enfrentar conflito"],
       risks:["impaciência","pode atropelar pessoas","pular etapas importantes"],
-      tips:["defina 1 meta por semana","combine expectativa por escrito","treine escuta antes de cobrar"] },
+      tips:["defina 1 meta por semana","deixe a expectativa por escrito","treine escuta antes de cobrar"] }, /* ✅ removeu "combine" */
     I:{ headline:"Comunicador e mobilizador",
       strengths:["conecta e influencia","vende ideia com facilidade","cria movimento no time"],
       risks:["dispersão","prometer demais","falta de rotina"],
@@ -707,6 +715,7 @@
         ])
       ]));
 
+      // honeypot
       root.appendChild(el("input",{id:"website", class:"hidden", autocomplete:"off", value: state.lead.website}));
 
       root.appendChild(el("div",{style:"margin-top:10px"},[
