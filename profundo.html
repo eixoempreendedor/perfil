@@ -268,6 +268,8 @@ function buildReportHTML(r){
   const id=state.id, perfil=`${FATOR[r.primary].nome} ${FATOR[r.secondary].nome}`;
   const VERDE="#0F3D3A",AMBAR="#C78F2C",VERM="#b4452f",CINZA="#7c8a85";
   const cor=g=> g<=0?VERDE : (g<=20?AMBAR:VERM);
+  const dEnc=encodeURIComponent(btoa(encodeURIComponent(JSON.stringify({c:r.comb,m:[...state.f3mais],id:{cliente:id.cliente,empresa:id.empresa}}))));
+  const urlCli="https://eixoempreendedor.github.io/perfil/relatorio-cliente.html?d="+dEnc;
   // estimativa por traço: nível do fator, rebaixado se o dono marcou "MAIS"
   const tr=TRACOS.map((t,i)=>{ const base=r.comb[t.f]; const marc=state.f3mais.has(i); const voce=marc?Math.max(0,base-30):base; const ideal=IDEAL_TRACO[t.n]||IDEAL[t.f]; return {t,i,voce,ideal,gap:ideal-voce,marc}; }).sort((a,b)=>b.gap-a.gap);
   let fat=""; FATOR_ORDER.forEach(f=>{ fat+=`<tr><td style="padding:5px 6px;font-weight:bold;color:${VERDE};white-space:nowrap">${FATOR[f].nome} (${f})</td><td style="padding:5px 6px">${barComp(r.comb[f],IDEAL[f],VERDE)}</td><td style="padding:5px 6px;color:${CINZA};font-size:12px;white-space:nowrap">${r.comb[f]} / ${IDEAL[f]}</td></tr>`; });
@@ -279,6 +281,7 @@ function buildReportHTML(r){
   <h2 style="color:${VERDE};margin:0 0 6px">Perfil Empreendedor Eixo — Relatório</h2>
   <p style="margin:0"><b>Cliente:</b> ${id.cliente||"—"} &nbsp;|&nbsp; <b>Empresa:</b> ${id.empresa||"—"} &nbsp;|&nbsp; <b>Data:</b> ${hoje()}</p>
   <p style="margin:10px 0"><b>Perfil:</b> ${perfil} (${r.primary}/${r.secondary})</p>
+  <p style="margin:12px 0;padding:10px 12px;background:#f3f8f6;border-radius:8px"><b>📄 Relatório do cliente (radar + ações práticas, pra imprimir e entregar):</b><br><a href="${urlCli}" style="color:#0F3D3A">Abrir o relatório do cliente</a></p>
   <h3 style="color:${VERDE};margin:16px 0 4px">Mapa de fatores (você × dono ideal)</h3>
   <table style="border-collapse:collapse;width:100%">${fat}</table>
   <h3 style="color:${VERDE};margin:18px 0 2px">Comportamentos × perfil do dono ideal</h3>

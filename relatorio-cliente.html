@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Seu Perfil Empreendedor Eixo</title>
+<style>
+  :root{ --verde:#0F3D3A; --off:#F3EFE8; --ambar:#C78F2C; --tinta:#1d2522; --cinza:#7c8a85; --linha:#e3ddd1; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--off); color:var(--tinta); font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif; line-height:1.5; }
+  .wrap{ max-width:760px; margin:0 auto; padding:24px 18px 60px; }
+  .top{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .top .b{ width:10px; height:36px; background:var(--ambar); border-radius:3px; }
+  .top h1{ font-size:19px; margin:0; color:var(--verde); }
+  .top span{ display:block; font-size:12px; color:var(--cinza); }
+  .card{ background:#fff; border:1px solid var(--linha); border-radius:14px; padding:22px; margin-bottom:16px; }
+  h2{ color:var(--verde); font-size:18px; margin:0 0 8px; }
+  h3{ color:var(--verde); font-size:15px; margin:16px 0 6px; }
+  p{ margin:8px 0; }
+  .muted{ color:var(--cinza); font-size:13px; }
+  .legend{ display:flex; gap:18px; justify-content:center; font-size:13px; margin-top:6px; }
+  .legend i{ display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:middle; margin-right:5px; }
+  .forca{ background:#e7f0ec; border-radius:10px; padding:10px 14px; margin:8px 0; }
+  .dev{ border:1px solid var(--linha); border-left:4px solid var(--ambar); border-radius:10px; padding:14px 16px; margin:12px 0; }
+  .dev h3{ margin:0 0 4px; color:var(--tinta); }
+  .dev .por{ color:var(--cinza); font-size:13px; margin:0 0 8px; }
+  .acoes{ margin:0; padding-left:18px; } .acoes li{ margin:5px 0; }
+  .btn{ border:1px solid var(--verde); background:var(--verde); color:#fff; border-radius:10px; padding:12px 18px; font-size:15px; cursor:pointer; font-weight:600; }
+  .foot{ text-align:center; font-size:12px; color:var(--cinza); margin-top:14px; }
+  @media print{ .noprint{ display:none!important; } body{ background:#fff; } .card{ break-inside:avoid; border-color:#ccc; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="b"></div><div><h1>Seu Perfil Empreendedor</h1><span>Eixo Empreendedor</span></div></div>
+  <div id="app"></div>
+  <div class="foot">Luiz Curti · Eixo Empreendedor · eixoempreendedor.com.br</div>
+</div>
+<script>
+const FATOR={ D:{nome:"Direto",txt:"Você decide rápido, encara o que precisa e foca no resultado."}, I:{nome:"Comunicador",txt:"Você conecta, vende a ideia e mobiliza as pessoas ao seu redor."}, S:{nome:"Constante",txt:"Você sustenta a operação, é leal e mantém o ritmo do dia a dia."}, C:{nome:"Analítico",txt:"Você preza pelo dado, pelo padrão e pela qualidade do que entrega."} };
+const ORDER=["D","I","S","C"];
+const IDEAL={ D:82, I:70, S:69, C:83 };
+const IDEAL_TRACO={"Comando e firmeza":85,"Senso de urgência":85,"Ousadia (risco calculado)":80,"Independência":75,"Objetividade":85,"Dinamismo":80,"Entusiasmo e motivação":75,"Persuasão":80,"Carisma":65,"Sociabilidade":65,"Extroversão":60,"Empatia":75,"Persistência":90,"Estabilidade":60,"Paciência":60,"Conciliação":55,"Flexibilidade com mudanças":80,"Detalhismo":75,"Disciplina":90,"Organização e controle":85,"Planejamento":90,"Concentração e precisão":75,"Prudência":75,"Racionalidade":85};
+// [nome, fator, porquê curto]
+const T=[
+  ["Comando e firmeza","D","pra equipe ter direção clara"],["Senso de urgência","D","pra resolver o que trava o caixa na hora"],["Ousadia (risco calculado)","D","pra decidir risco com número, sem travar"],["Independência","D","pra não depender de aprovação o tempo todo"],["Objetividade","D","pra ir direto ao resultado"],["Dinamismo","D","pra puxar o ritmo do negócio"],
+  ["Entusiasmo e motivação","I","pra engajar o time na meta"],["Persuasão","I","pra fechar e convencer melhor"],["Carisma","I","pra criar bom clima e relação"],["Sociabilidade","I","pra abrir portas e fazer rede"],["Extroversão","I","pra se expor e aparecer"],["Empatia","I","pra ouvir antes de cobrar"],
+  ["Persistência","S","pra terminar o que começa"],["Estabilidade","S","pra dar previsibilidade ao time"],["Paciência","S","pra dar tempo ao que rende devagar"],["Conciliação","S","pra resolver conflito sem briga"],["Flexibilidade com mudanças","S","pra ver oportunidade na mudança"],
+  ["Detalhismo","C","pra não deixar passar erro"],["Disciplina","C","pra manter o hábito que dá resultado"],["Organização e controle","C","pra ter os números na mão"],["Planejamento","C","pra agir com plano, não no escuro"],["Concentração e precisão","C","pra entregar sem retrabalho"],["Prudência","C","pra decidir com informação"],["Racionalidade","C","pra decidir pelo número, não pela emoção"],
+];
+const ACOES={
+  "Comando e firmeza":["Numa decisão por semana, decida você e comunique em 1 frase clara.","Quando o time hesitar, diga 'a decisão é essa, e por isso' em vez de adiar."],
+  "Senso de urgência":["Toda manhã, escolha 1 coisa que mexe no caixa e faça antes do almoço.","Crie a regra: o que trava resultado se resolve no mesmo dia."],
+  "Ousadia (risco calculado)":["Antes de uma decisão de risco, escreva o ganho possível × a perda máxima e decida pelo número.","Faça 1 aposta pequena por mês pra treinar o risco controlado."],
+  "Independência":["Tome 1 decisão sozinho por semana, sem pedir validação.","Liste 3 decisões que você empurra pros outros e reassuma 1."],
+  "Objetividade":["Comece reuniões dizendo o resultado esperado em 1 frase.","Corte 1 produto ou tarefa sem retorno por mês."],
+  "Dinamismo":["Defina 3 prioridades do dia e ataque na ordem.","Pegue a tarefa mais travada e dê o 1º passo hoje."],
+  "Entusiasmo e motivação":["Abra a semana com o time relembrando a meta e 1 vitória.","Reconheça em público 1 esforço da equipe por semana."],
+  "Persuasão":["Antes de negociar, anote o benefício pro outro lado.","Treine pedir o fechamento na conversa: 'bora fazer?'."],
+  "Carisma":["Cumprimente cada pessoa do time pelo nome todo dia.","Em dia tenso, traga 1 frase que alivia o clima."],
+  "Sociabilidade":["Marque 1 conversa nova por semana (fornecedor, parceiro).","Reative 1 contato antigo por mês."],
+  "Extroversão":["Puxe você a conversa numa situação que normalmente evitaria.","Grave 1 vídeo curto se apresentando ou da empresa."],
+  "Empatia":["Antes de cobrar, pergunte 'como você tá?' e escute.","Repita o que o outro disse antes de responder."],
+  "Persistência":["Escolha 1 meta e revise o progresso toda segunda, sem largar.","Ao bater obstáculo, defina o próximo passo em vez de parar."],
+  "Estabilidade":["Crie 1 rotina fixa de início de dia pra dar previsibilidade ao time.","Em crise, respire e comunique o plano com calma."],
+  "Paciência":["Dê tempo a 1 processo que rende devagar, sem forçar.","Antes de reagir, conte até 10 e responda depois."],
+  "Conciliação":["Numa divergência, ache 1 ponto de acordo antes de decidir.","Ceda no pequeno pra ganhar no que importa."],
+  "Flexibilidade com mudanças":["Quando o cenário mudar, liste a oportunidade que ele abre.","Teste 1 jeito novo de fazer algo por mês."],
+  "Detalhismo":["Crie 1 checklist de conferência antes de entregar.","Revise os 3 pontos que mais geram erro."],
+  "Disciplina":["Lance o DRG toda segunda, sem exceção — vira hábito.","Escolha 1 hábito e cumpra 21 dias seguidos."],
+  "Organização e controle":["Centralize seus números numa tela só (a Bússola).","Defina 1 lugar certo pra cada informação-chave."],
+  "Planejamento":["Planeje a semana na sexta: 3 prioridades + prazos.","Compare o planejado × o realizado toda semana."],
+  "Concentração e precisão":["Bloqueie 1h sem interrupção pra a tarefa que exige foco.","Termine 1 coisa antes de começar outra."],
+  "Prudência":["Antes de decidir, busque o 1 dado que falta.","Liste a consequência antes de se comprometer."],
+  "Racionalidade":["Decida olhando o número, não o humor do dia.","Pergunte 'como eu sei disso?' pra separar fato de achismo."],
+};
+
+function el(t,a,k){ const e=document.createElement(t); a=a||{}; for(const x in a){ const v=a[x]; if(x==="class")e.className=v; else if(x==="html")e.innerHTML=v; else if(x.slice(0,2)==="on"&&typeof v==="function")e.addEventListener(x.slice(2),v); else if(typeof v==="boolean"){ if(v)e.setAttribute(x,""); } else if(v!=null)e.setAttribute(x,v); } (k||[]).forEach(c=>{ if(c==null)return; e.appendChild(typeof c==="string"?document.createTextNode(c):c); }); return e; }
+
+function getData(){ try{ const p=new URLSearchParams(location.search).get("d"); if(!p)return null; return JSON.parse(decodeURIComponent(atob(decodeURIComponent(p)))); }catch(e){ return null; } }
+
+function radarSVG(comb){
+  const cx=150,cy=150,R=110;
+  const ang={D:-90,I:0,S:90,C:180};
+  const pt=(f,val)=>{ const a=ang[f]*Math.PI/180; const r=R*(val/100); return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; };
+  const poly=(getVal,fill,stroke)=>{ const p=ORDER.map(f=>pt(f,getVal(f)).map(n=>n.toFixed(1)).join(",")).join(" "); return `<polygon points="${p}" fill="${fill}" stroke="${stroke}" stroke-width="2"/>`; };
+  let grid=""; [25,50,75,100].forEach(g=>{ const p=ORDER.map(f=>pt(f,g).map(n=>n.toFixed(1)).join(",")).join(" "); grid+=`<polygon points="${p}" fill="none" stroke="#e3ddd1" stroke-width="1"/>`; });
+  let axes=""; ORDER.forEach(f=>{ const [x,y]=pt(f,100); axes+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#e3ddd1" stroke-width="1"/>`; const [lx,ly]=pt(f,118); axes+=`<text x="${lx.toFixed(1)}" y="${(ly+4).toFixed(1)}" font-size="12" font-weight="bold" fill="#0F3D3A" text-anchor="middle">${FATOR[f].nome}</text>`; });
+  const ideal=poly(f=>IDEAL[f],"rgba(199,143,44,.12)","#C78F2C");
+  const voce=poly(f=>comb[f],"rgba(15,61,58,.28)","#0F3D3A");
+  return `<svg viewBox="0 0 300 300" width="100%" style="max-width:340px;display:block;margin:0 auto">${grid}${axes}${ideal}${voce}</svg>`;
+}
+
+function render(){
+  const $=document.getElementById("app");
+  const d=getData();
+  if(!d){ $.appendChild(el("div",{class:"card"},[ el("h2",{},["Relatório não encontrado"]), el("p",{class:"muted"},["Abra este relatório pelo link gerado na avaliação (ele carrega os dados pela URL)."]) ])); return; }
+  const comb=d.c, marc=new Set(d.m||[]), id=d.id||{};
+  const ord=ORDER.slice().sort((a,b)=>comb[b]-comb[a]); const primary=ord[0];
+  // traços
+  const tr=T.map((t,i)=>{ const f=t[1]; const m=marc.has(i); const voce=m?Math.max(0,comb[f]-30):comb[f]; const ideal=IDEAL_TRACO[t[0]]||IDEAL[f]; return {n:t[0],f,por:t[2],voce,ideal,gap:ideal-voce,m}; });
+  const fortes=tr.slice().sort((a,b)=>b.voce-a.voce).slice(0,4);
+  const devs=tr.slice().filter(x=>x.gap>0).sort((a,b)=>b.gap-a.gap).slice(0,6);
+
+  // Abertura
+  $.appendChild(el("div",{class:"card"},[
+    el("h2",{},[`Olá${id.cliente?(", "+id.cliente):""}!`]),
+    el("p",{},["Esse é o seu Perfil Empreendedor — um retrato de como você decide, lidera e age no dia a dia, e onde dá pra crescer. ", el("b",{},["Não tem certo ou errado:"]), " tem o seu jeito e o próximo passo."]),
+    el("p",{},[ el("b",{},[`Seu perfil é ${FATOR[primary].nome}.`]), " ", FATOR[primary].txt ]),
+  ]));
+  // Radar
+  $.appendChild(el("div",{class:"card"},[
+    el("h2",{},["O seu mapa"]),
+    el("div",{html:radarSVG(comb)}),
+    el("div",{class:"legend"},[ el("span",{html:'<i style="background:#0F3D3A"></i>Você'}), el("span",{html:'<i style="background:#C78F2C"></i>Perfil do dono que cresce'}) ]),
+    el("p",{class:"muted",style:"text-align:center;margin-top:8px"},["Onde a área verde está dentro da âmbar, é onde dá pra desenvolver."]),
+  ]));
+  // Forças
+  const cf=el("div",{class:"card"}); cf.appendChild(el("h2",{},["Suas forças"]));
+  cf.appendChild(el("p",{class:"muted"},["O que você já faz bem — continue usando isso a seu favor."]));
+  fortes.forEach(x=> cf.appendChild(el("div",{class:"forca"},[ el("b",{},[x.n]), " — ", x.por, "." ])));
+  $.appendChild(cf);
+  // Desenvolver + ações
+  const cd=el("div",{class:"card"}); cd.appendChild(el("h2",{},["O que trabalhar — e como"]));
+  cd.appendChild(el("p",{class:"muted"},["Escolha 1 ou 2 pra começar. Pequenos passos, toda semana."]));
+  devs.forEach(x=>{
+    const box=el("div",{class:"dev"},[ el("h3",{},[x.n]), el("p",{class:"por"},[`Por que importa: ${x.por}.`]) ]);
+    const ul=el("ul",{class:"acoes"}); (ACOES[x.n]||["Converse com seu consultor sobre como treinar isso."]).forEach(a=> ul.appendChild(el("li",{},[a])));
+    box.appendChild(ul); cd.appendChild(box);
+  });
+  $.appendChild(cd);
+  // Fechamento
+  $.appendChild(el("div",{class:"card"},[
+    el("h2",{},["Por onde começar"]),
+    el("p",{},["Não precisa mudar tudo de uma vez. Escolha ", el("b",{},["um comportamento"]), " que mais te chama acima e dê o primeiro passo essa semana. Na consultoria, a gente acompanha sua evolução de perto."]),
+    el("div",{class:"noprint",style:"margin-top:12px"},[ el("button",{class:"btn",onclick:()=>window.print()},["Imprimir / Salvar PDF"]) ]),
+  ]));
+}
+render();
+</script>
+</body>
+</html>
