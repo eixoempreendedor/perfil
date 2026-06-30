@@ -9,75 +9,62 @@
   *{ box-sizing:border-box; }
   body{ margin:0; background:var(--off); color:var(--tinta); font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif; line-height:1.5; }
   .wrap{ max-width:760px; margin:0 auto; padding:24px 18px 60px; }
-  .top{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
-  .top .b{ width:10px; height:36px; background:var(--ambar); border-radius:3px; }
-  .top h1{ font-size:19px; margin:0; color:var(--verde); }
-  .top span{ display:block; font-size:12px; color:var(--cinza); }
   .card{ background:#fff; border:1px solid var(--linha); border-radius:14px; padding:22px; margin-bottom:16px; }
   h2{ color:var(--verde); font-size:18px; margin:0 0 8px; }
-  h3{ color:var(--verde); font-size:15px; margin:16px 0 6px; }
-  p{ margin:8px 0; }
-  .muted{ color:var(--cinza); font-size:13px; }
-  .legend{ display:flex; gap:18px; justify-content:center; font-size:13px; margin-top:6px; }
-  .legend i{ display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:middle; margin-right:5px; }
+  h3{ color:var(--verde); font-size:15px; margin:14px 0 6px; }
+  p{ margin:8px 0; } .muted{ color:var(--cinza); font-size:13px; }
+  .capa{ text-align:center; padding:46px 22px; }
+  .capa .logo{ width:14px; height:48px; background:var(--ambar); border-radius:4px; margin:0 auto 16px; }
+  .capa h1{ color:var(--verde); font-size:27px; margin:0 0 4px; }
+  .capa .sub{ color:var(--cinza); margin-bottom:26px; }
+  .capa .nome{ font-size:21px; font-weight:700; }
+  .aha{ background:var(--verde); color:#fff; border-radius:14px; padding:18px 20px; margin-bottom:16px; }
+  .aha b{ color:var(--ambar); }
+  .leg{ display:flex; gap:20px; justify-content:center; font-size:13px; margin-top:6px; }
+  .leg i{ display:inline-block; width:20px; height:0; vertical-align:middle; margin-right:6px; }
+  .adernum{ text-align:center; font-size:34px; font-weight:800; color:var(--verde); line-height:1; margin-top:8px; }
   .forca{ background:#e7f0ec; border-radius:10px; padding:10px 14px; margin:8px 0; }
-  .dev{ border:1px solid var(--linha); border-left:4px solid var(--ambar); border-radius:10px; padding:14px 16px; margin:12px 0; }
-  .dev h3{ margin:0 0 4px; color:var(--tinta); }
-  .dev .por{ color:var(--cinza); font-size:13px; margin:0 0 8px; }
-  .acoes{ margin:0; padding-left:18px; } .acoes li{ margin:5px 0; }
+  .foco{ border:2px solid var(--ambar); border-radius:14px; padding:18px; margin:6px 0 12px; }
+  .foco .badge{ display:inline-block; background:var(--ambar); color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; }
+  .foco h3{ color:var(--tinta); margin:8px 0 4px; font-size:17px; }
+  .acoes{ margin:6px 0; padding-left:18px; } .acoes li{ margin:5px 0; }
+  .obs{ border:1px solid var(--linha); border-radius:10px; padding:10px 14px; margin:8px 0; }
+  .pacto{ background:#f3f8f6; border:1px dashed var(--verde); border-radius:12px; padding:18px; }
+  .pacto .linha{ border-bottom:1px solid var(--cinza); min-height:22px; margin:8px 0 2px; }
+  .fbloco{ border-left:4px solid #0F3D3A; padding:2px 0 2px 12px; margin:10px 0; }
+  .cmp{ display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
   .btn{ border:1px solid var(--verde); background:var(--verde); color:#fff; border-radius:10px; padding:12px 18px; font-size:15px; cursor:pointer; font-weight:600; }
   .foot{ text-align:center; font-size:12px; color:var(--cinza); margin-top:14px; }
-  @media print{ .noprint{ display:none!important; } body{ background:#fff; } .card{ break-inside:avoid; border-color:#ccc; } }
+  @media print{
+    .noprint{ display:none!important; } body{ background:#fff; }
+    .card,.foco,.obs,.pacto,.aha,.fbloco,.forca{ break-inside:avoid; }
+    h2,h3{ break-after:avoid; }
+    .capa{ break-after:always; }
+    @page{ margin:16mm; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top"><div class="b"></div><div><h1>Seu Perfil Empreendedor</h1><span>Eixo Empreendedor</span></div></div>
-  <div id="app"></div>
+<div class="wrap"><div id="app"></div>
   <div class="foot">Luiz Curti · Eixo Empreendedor · eixoempreendedor.com.br</div>
 </div>
 <script>
-const FATOR={ D:{nome:"Direto",txt:"Você decide rápido, encara o que precisa e foca no resultado."}, I:{nome:"Comunicador",txt:"Você conecta, vende a ideia e mobiliza as pessoas ao seu redor."}, S:{nome:"Constante",txt:"Você sustenta a operação, é leal e mantém o ritmo do dia a dia."}, C:{nome:"Analítico",txt:"Você preza pelo dado, pelo padrão e pela qualidade do que entrega."} };
+const FATOR={ D:{nome:"Direto",txt:"Você decide rápido, encara o que precisa e foca no resultado."}, I:{nome:"Comunicador",txt:"Você conecta, vende a ideia e põe gente pra andar junto."}, S:{nome:"Constante",txt:"Você sustenta a operação, é leal e mantém o ritmo do dia a dia."}, C:{nome:"Analítico",txt:"Você preza pelo dado, pelo padrão e pela qualidade do que entrega."} };
+const FCOR={ D:"#0F3D3A", I:"#C78F2C", S:"#2f6f7a", C:"#7a5230" };
 const ORDER=["D","I","S","C"];
 const IDEAL={ D:82, I:70, S:69, C:83 };
 const IDEAL_TRACO={"Comando e firmeza":85,"Senso de urgência":85,"Ousadia (risco calculado)":80,"Independência":75,"Objetividade":85,"Dinamismo":80,"Entusiasmo e motivação":75,"Persuasão":80,"Carisma":65,"Sociabilidade":65,"Extroversão":60,"Empatia":75,"Persistência":90,"Estabilidade":60,"Paciência":60,"Conciliação":55,"Flexibilidade com mudanças":80,"Detalhismo":75,"Disciplina":90,"Organização e controle":85,"Planejamento":90,"Concentração e precisão":75,"Prudência":75,"Racionalidade":85};
-// [nome, fator, porquê curto]
+// [nome, fator, "tem mais a ganhar pra...", mês no Eixo 180]
 const T=[
-  ["Comando e firmeza","D","pra equipe ter direção clara"],["Senso de urgência","D","pra resolver o que trava o caixa na hora"],["Ousadia (risco calculado)","D","pra decidir risco com número, sem travar"],["Independência","D","pra não depender de aprovação o tempo todo"],["Objetividade","D","pra ir direto ao resultado"],["Dinamismo","D","pra puxar o ritmo do negócio"],
-  ["Entusiasmo e motivação","I","pra engajar o time na meta"],["Persuasão","I","pra fechar e convencer melhor"],["Carisma","I","pra criar bom clima e relação"],["Sociabilidade","I","pra abrir portas e fazer rede"],["Extroversão","I","pra se expor e aparecer"],["Empatia","I","pra ouvir antes de cobrar"],
-  ["Persistência","S","pra terminar o que começa"],["Estabilidade","S","pra dar previsibilidade ao time"],["Paciência","S","pra dar tempo ao que rende devagar"],["Conciliação","S","pra resolver conflito sem briga"],["Flexibilidade com mudanças","S","pra ver oportunidade na mudança"],
-  ["Detalhismo","C","pra não deixar passar erro"],["Disciplina","C","pra manter o hábito que dá resultado"],["Organização e controle","C","pra ter os números na mão"],["Planejamento","C","pra agir com plano, não no escuro"],["Concentração e precisão","C","pra entregar sem retrabalho"],["Prudência","C","pra decidir com informação"],["Racionalidade","C","pra decidir pelo número, não pela emoção"],
+  ["Comando e firmeza","D","ter direção clara pra equipe","M4 — soltar e delegar"],["Senso de urgência","D","resolver o que trava o caixa na hora","M1 — vitória de caixa"],["Ousadia (risco calculado)","D","decidir risco com número, sem travar","M2 — mover a alavanca"],["Independência","D","não depender de aprovação o tempo todo","M6 — autonomia"],["Objetividade","D","ir direto ao resultado","M1 — Meta dos 6 meses"],["Dinamismo","D","puxar o ritmo do negócio","M2 — 3 Movimentos"],
+  ["Entusiasmo e motivação","I","engajar o time na meta","M3 — reunião de equipe"],["Persuasão","I","fechar e convencer melhor","M4 — mobilizar a equipe"],["Carisma","I","criar bom clima e relação","acompanhamento"],["Sociabilidade","I","abrir portas e fazer rede","M5 — rede/parcerias"],["Extroversão","I","se expor e aparecer","acompanhamento"],["Empatia","I","ouvir antes de cobrar","M4 — relações"],
+  ["Persistência","S","terminar o que começa","todo o programa"],["Estabilidade","S","dar previsibilidade ao time","acompanhamento"],["Paciência","S","dar tempo ao que rende devagar","M3 — ritmo"],["Conciliação","S","resolver conflito sem briga","M4 — relações"],["Flexibilidade com mudanças","S","ver oportunidade na mudança","M2 — oportunidades"],
+  ["Detalhismo","C","não deixar passar erro","M5 — padronizar"],["Disciplina","C","manter o hábito que dá resultado","M2 — DRG sem furo"],["Organização e controle","C","ter os números na mão","M1 — Bússola/DRG"],["Planejamento","C","agir com plano, não no escuro","M1 e M5"],["Concentração e precisão","C","entregar sem retrabalho","M5 — processos"],["Prudência","C","decidir com informação","M3 — risco com info"],["Racionalidade","C","decidir pelo número, não pela emoção","M2 — decidir pelo número"],
 ];
-const ACOES={
-  "Comando e firmeza":["Numa decisão por semana, decida você e comunique em 1 frase clara.","Quando o time hesitar, diga 'a decisão é essa, e por isso' em vez de adiar."],
-  "Senso de urgência":["Toda manhã, escolha 1 coisa que mexe no caixa e faça antes do almoço.","Crie a regra: o que trava resultado se resolve no mesmo dia."],
-  "Ousadia (risco calculado)":["Antes de uma decisão de risco, escreva o ganho possível × a perda máxima e decida pelo número.","Faça 1 aposta pequena por mês pra treinar o risco controlado."],
-  "Independência":["Tome 1 decisão sozinho por semana, sem pedir validação.","Liste 3 decisões que você empurra pros outros e reassuma 1."],
-  "Objetividade":["Comece reuniões dizendo o resultado esperado em 1 frase.","Corte 1 produto ou tarefa sem retorno por mês."],
-  "Dinamismo":["Defina 3 prioridades do dia e ataque na ordem.","Pegue a tarefa mais travada e dê o 1º passo hoje."],
-  "Entusiasmo e motivação":["Abra a semana com o time relembrando a meta e 1 vitória.","Reconheça em público 1 esforço da equipe por semana."],
-  "Persuasão":["Antes de negociar, anote o benefício pro outro lado.","Treine pedir o fechamento na conversa: 'bora fazer?'."],
-  "Carisma":["Cumprimente cada pessoa do time pelo nome todo dia.","Em dia tenso, traga 1 frase que alivia o clima."],
-  "Sociabilidade":["Marque 1 conversa nova por semana (fornecedor, parceiro).","Reative 1 contato antigo por mês."],
-  "Extroversão":["Puxe você a conversa numa situação que normalmente evitaria.","Grave 1 vídeo curto se apresentando ou da empresa."],
-  "Empatia":["Antes de cobrar, pergunte 'como você tá?' e escute.","Repita o que o outro disse antes de responder."],
-  "Persistência":["Escolha 1 meta e revise o progresso toda segunda, sem largar.","Ao bater obstáculo, defina o próximo passo em vez de parar."],
-  "Estabilidade":["Crie 1 rotina fixa de início de dia pra dar previsibilidade ao time.","Em crise, respire e comunique o plano com calma."],
-  "Paciência":["Dê tempo a 1 processo que rende devagar, sem forçar.","Antes de reagir, conte até 10 e responda depois."],
-  "Conciliação":["Numa divergência, ache 1 ponto de acordo antes de decidir.","Ceda no pequeno pra ganhar no que importa."],
-  "Flexibilidade com mudanças":["Quando o cenário mudar, liste a oportunidade que ele abre.","Teste 1 jeito novo de fazer algo por mês."],
-  "Detalhismo":["Crie 1 checklist de conferência antes de entregar.","Revise os 3 pontos que mais geram erro."],
-  "Disciplina":["Lance o DRG toda segunda, sem exceção — vira hábito.","Escolha 1 hábito e cumpra 21 dias seguidos."],
-  "Organização e controle":["Centralize seus números numa tela só (a Bússola).","Defina 1 lugar certo pra cada informação-chave."],
-  "Planejamento":["Planeje a semana na sexta: 3 prioridades + prazos.","Compare o planejado × o realizado toda semana."],
-  "Concentração e precisão":["Bloqueie 1h sem interrupção pra a tarefa que exige foco.","Termine 1 coisa antes de começar outra."],
-  "Prudência":["Antes de decidir, busque o 1 dado que falta.","Liste a consequência antes de se comprometer."],
-  "Racionalidade":["Decida olhando o número, não o humor do dia.","Pergunte 'como eu sei disso?' pra separar fato de achismo."],
-};
 const DESC={
 "Comando e firmeza":"Liderar com convicção: assumir a frente, decidir com firmeza e segurar a posição sob pressão e conflito, sem terceirizar a decisão.",
 "Senso de urgência":"Agir no tempo certo: atenção aos prazos, priorizar o urgente e resolver na hora o que ameaça o resultado, em vez de empurrar.",
-"Ousadia (risco calculado)":"Coragem com a conta na mão: encarar desafios e decisões de risco pesando o ganho possível contra a perda máxima antes de apostar.",
+"Ousadia (risco calculado)":"Coragem com a conta na mão: encarar desafios e decisões de risco pesando o ganho contra a perda máxima antes de apostar.",
 "Independência":"Andar com as próprias pernas: confiar na própria capacidade de virar o jogo e decidir sem depender de aprovação o tempo todo.",
 "Objetividade":"Ir direto ao ponto: foco em solução prática e resultado, comunicação clara e sem rodeio, cortando o que não serve.",
 "Dinamismo":"Energia e ritmo: tocar várias frentes com velocidade e puxar o time no mesmo passo, sem deixar o negócio parar.",
@@ -93,102 +80,155 @@ const DESC={
 "Conciliação":"Buscar acordo: resolver divergência pela negociação, cedendo no pequeno pra manter a relação.",
 "Flexibilidade com mudanças":"Rolar com a mudança: lidar bem com o imprevisto e enxergar oportunidade onde os outros veem ameaça.",
 "Detalhismo":"Olho no detalhe: enxergar o que passa batido e corrigir o erro antes de entregar.",
-"Disciplina":"Manter o compromisso: foco e autocontrole pra cumprir a rotina e o combinado, mesmo nos dias difíceis.",
+"Disciplina":"Manter o compromisso: rédea curta com você mesmo pra cumprir a rotina e o combinado, mesmo nos dias difíceis.",
 "Organização e controle":"Tudo no lugar: métodos, registros e sistemas pra acompanhar processos e ter os números à mão.",
 "Planejamento":"Pensar antes de agir: montar plano com metas, etapas e prazos — e um plano B pros contratempos.",
 "Concentração e precisão":"Foco e qualidade: atenção contínua numa tarefa e entrega precisa, evitando retrabalho.",
 "Prudência":"Pés no chão: buscar a informação que falta e prever o que pode dar errado antes de se comprometer.",
 "Racionalidade":"Decidir pela razão: separar fato de achismo e decidir pelo dado e pela lógica, não pela emoção do momento.",
 };
-const AMBIENTE={
-  D:"Você rende mais em ambientes com autonomia pra decidir, metas claras e ritmo rápido — onde pode assumir a frente e ver resultado.",
-  I:"Você rende mais perto de gente, com liberdade pra criar e reconhecimento — ambientes interativos e movimentados são o seu lugar.",
-  S:"Você rende mais em ambientes estáveis, com rotina e relações de confiança — onde pode sustentar e ser o porto seguro do time.",
-  C:"Você rende mais em ambientes organizados, com regras claras e tempo pra fazer bem feito — onde a qualidade e o dado importam.",
+const ACOES={
+"Comando e firmeza":["Numa decisão por semana, decida você e comunique em 1 frase clara.","Quando o time hesitar, diga 'a decisão é essa, e por isso' em vez de adiar."],
+"Senso de urgência":["Toda manhã, escolha 1 coisa que mexe no caixa e faça antes do almoço.","Crie a regra: o que trava resultado se resolve no mesmo dia."],
+"Ousadia (risco calculado)":["Antes de uma decisão de risco, escreva o ganho possível × a perda máxima e decida pelo número.","Faça 1 aposta pequena por mês pra treinar o risco controlado."],
+"Independência":["Tome 1 decisão sozinho por semana, sem pedir validação.","Liste 3 decisões que você empurra pros outros e reassuma 1."],
+"Objetividade":["Comece reuniões dizendo o resultado esperado em 1 frase.","Corte 1 produto ou tarefa sem retorno por mês."],
+"Dinamismo":["Defina 3 prioridades do dia e ataque na ordem.","Pegue a tarefa mais travada e dê o 1º passo hoje."],
+"Entusiasmo e motivação":["Abra a semana com o time relembrando a meta e 1 vitória.","Reconheça em público 1 esforço da equipe por semana."],
+"Persuasão":["Antes de negociar, anote o benefício pro outro lado.","Treine pedir o fechamento na conversa: 'bora fazer?'."],
+"Carisma":["Cumprimente cada pessoa do time pelo nome todo dia.","Em dia tenso, traga 1 frase que alivia o clima."],
+"Sociabilidade":["Marque 1 conversa nova por semana (fornecedor, parceiro).","Reative 1 contato antigo por mês."],
+"Extroversão":["Puxe você a conversa numa situação que normalmente evitaria.","Grave 1 vídeo curto se apresentando ou da empresa."],
+"Empatia":["Antes de cobrar, pergunte 'como você tá?' e escute.","Repita o que o outro disse antes de responder."],
+"Persistência":["Escolha 1 meta e revise o progresso toda segunda, sem largar.","Ao bater obstáculo, defina o próximo passo em vez de parar."],
+"Estabilidade":["Crie 1 rotina fixa de início de dia pra dar previsibilidade ao time.","Em crise, respire e comunique o plano com calma."],
+"Paciência":["Dê tempo a 1 processo que rende devagar, sem forçar.","Antes de reagir, conte até 10 e responda depois."],
+"Conciliação":["Numa divergência, ache 1 ponto de acordo antes de decidir.","Ceda no pequeno pra ganhar no que importa."],
+"Flexibilidade com mudanças":["Quando o cenário mudar, liste a oportunidade que ele abre.","Teste 1 jeito novo de fazer algo por mês."],
+"Detalhismo":["Crie 1 checklist de conferência antes de entregar.","Revise os 3 pontos que mais geram erro."],
+"Disciplina":["Lance o DRG toda segunda, sem exceção — vira hábito.","Escolha 1 hábito e cumpra 21 dias seguidos."],
+"Organização e controle":["Centralize seus números numa tela só (a Bússola).","Defina 1 lugar certo pra cada informação-chave."],
+"Planejamento":["Planeje a semana na sexta: 3 prioridades + prazos.","Compare o planejado × o realizado toda semana."],
+"Concentração e precisão":["Bloqueie 1h sem interrupção pra a tarefa que exige foco.","Termine 1 coisa antes de começar outra."],
+"Prudência":["Antes de decidir, busque o 1 dado que falta.","Liste a consequência antes de se comprometer."],
+"Racionalidade":["Decida olhando o número, não o humor do dia.","Pergunte 'como eu sei disso?' pra separar fato de achismo."],
 };
+const AMBIENTE={ D:"Você rende mais em ambientes com autonomia pra decidir, metas claras e ritmo rápido — onde pode assumir a frente e ver resultado.", I:"Você rende mais perto de gente, com liberdade pra criar e reconhecimento — ambientes interativos e movimentados são o seu lugar.", S:"Você rende mais em ambientes estáveis, com rotina e relações de confiança — onde pode sustentar e ser o porto seguro do time.", C:"Você rende mais em ambientes organizados, com regras claras e tempo pra fazer bem feito — onde a qualidade e o dado importam." };
+const SHORT={"Comando e firmeza":"Comando","Senso de urgência":"Urgência","Ousadia (risco calculado)":"Ousadia","Independência":"Independência","Objetividade":"Objetividade","Dinamismo":"Dinamismo","Entusiasmo e motivação":"Entusiasmo","Persuasão":"Persuasão","Carisma":"Carisma","Sociabilidade":"Sociabilidade","Extroversão":"Extroversão","Empatia":"Empatia","Persistência":"Persistência","Estabilidade":"Estabilidade","Paciência":"Paciência","Conciliação":"Conciliação","Flexibilidade com mudanças":"Flexibilidade","Detalhismo":"Detalhismo","Disciplina":"Disciplina","Organização e controle":"Organização","Planejamento":"Planejamento","Concentração e precisão":"Concentração","Prudência":"Prudência","Racionalidade":"Racionalidade"};
 
 function el(t,a,k){ const e=document.createElement(t); a=a||{}; for(const x in a){ const v=a[x]; if(x==="class")e.className=v; else if(x==="html")e.innerHTML=v; else if(x.slice(0,2)==="on"&&typeof v==="function")e.addEventListener(x.slice(2),v); else if(typeof v==="boolean"){ if(v)e.setAttribute(x,""); } else if(v!=null)e.setAttribute(x,v); } (k||[]).forEach(c=>{ if(c==null)return; e.appendChild(typeof c==="string"?document.createTextNode(c):c); }); return e; }
-
 function getData(){ try{ const p=new URLSearchParams(location.search).get("d"); if(!p)return null; return JSON.parse(decodeURIComponent(atob(decodeURIComponent(p)))); }catch(e){ return null; } }
 
-const SHORT={"Comando e firmeza":"Comando","Senso de urgência":"Urgência","Ousadia (risco calculado)":"Ousadia","Independência":"Independência","Objetividade":"Objetividade","Dinamismo":"Dinamismo","Entusiasmo e motivação":"Entusiasmo","Persuasão":"Persuasão","Carisma":"Carisma","Sociabilidade":"Sociabilidade","Extroversão":"Extroversão","Empatia":"Empatia","Persistência":"Persistência","Estabilidade":"Estabilidade","Paciência":"Paciência","Conciliação":"Conciliação","Flexibilidade com mudanças":"Flexibilidade","Detalhismo":"Detalhismo","Disciplina":"Disciplina","Organização e controle":"Organização","Planejamento":"Planejamento","Concentração e precisão":"Concentração","Prudência":"Prudência","Racionalidade":"Racionalidade"};
-// Radar dos 24 comportamentos (você x ideal)
+// Radar dos 24 comportamentos (você cheia × dono que cresce tracejada)
 function radarSVG(tr){
   const N=tr.length, cx=300, cy=280, R=175, Rl=192;
   const pt=(i,val)=>{ const a=(i/N*2*Math.PI)-Math.PI/2; const r=R*(Math.max(0,Math.min(100,val))/100); return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; };
   const polyPts=key=> tr.map((x,i)=>pt(i,x[key]).map(n=>n.toFixed(1)).join(",")).join(" ");
   let grid=""; [25,50,75,100].forEach(g=>{ grid+=`<polygon points="${tr.map((x,i)=>pt(i,g).map(n=>n.toFixed(1)).join(",")).join(" ")}" fill="none" stroke="#ece5d6" stroke-width="1"/>`; });
-  let spokes="",labels="";
-  tr.forEach((x,i)=>{ const a=(i/N*2*Math.PI)-Math.PI/2; const [ex,ey]=pt(i,100); spokes+=`<line x1="${cx}" y1="${cy}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#f0ead8" stroke-width="1"/>`; const ca=Math.cos(a); const lx=cx+Rl*ca, ly=cy+Rl*Math.sin(a); const anchor=ca>0.15?"start":(ca<-0.15?"end":"middle"); labels+=`<text x="${lx.toFixed(1)}" y="${(ly+4).toFixed(1)}" font-size="13" font-weight="600" fill="#2b3633" text-anchor="${anchor}">${SHORT[x.n]||x.n}</text>`; });
-  const ideal=`<polygon points="${polyPts('ideal')}" fill="rgba(199,143,44,.10)" stroke="#C78F2C" stroke-width="1.5"/>`;
-  const voce=`<polygon points="${polyPts('voce')}" fill="rgba(15,61,58,.25)" stroke="#0F3D3A" stroke-width="2"/>`;
-  return `<svg viewBox="0 0 600 560" width="100%" style="width:100%;display:block;margin:0 auto">${grid}${spokes}${ideal}${voce}${labels}</svg>`;
+  let spokes="",labels="",dots="";
+  tr.forEach((x,i)=>{ const a=(i/N*2*Math.PI)-Math.PI/2; const [ex,ey]=pt(i,100); spokes+=`<line x1="${cx}" y1="${cy}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#f0ead8" stroke-width="1"/>`; const ca=Math.cos(a); const lx=cx+Rl*ca, ly=cy+Rl*Math.sin(a); const anchor=ca>0.15?"start":(ca<-0.15?"end":"middle"); labels+=`<text x="${lx.toFixed(1)}" y="${(ly+4).toFixed(1)}" font-size="13" font-weight="600" fill="#2b3633" text-anchor="${anchor}">${SHORT[x.n]||x.n}</text>`; if(x.m){ const [vx,vy]=pt(i,x.voce); dots+=`<circle cx="${vx.toFixed(1)}" cy="${vy.toFixed(1)}" r="4" fill="#C78F2C" stroke="#fff" stroke-width="1.5"/>`; } });
+  const ideal=`<polygon points="${polyPts('ideal')}" fill="rgba(199,143,44,.08)" stroke="#C78F2C" stroke-width="2" stroke-dasharray="5 4"/>`;
+  const voce=`<polygon points="${polyPts('voce')}" fill="rgba(15,61,58,.22)" stroke="#0F3D3A" stroke-width="2.4"/>`;
+  return `<svg viewBox="0 0 600 560" width="100%" style="width:100%;display:block;margin:0 auto">${grid}${spokes}${ideal}${voce}${dots}${labels}</svg>`;
 }
 
 function render(){
   const $=document.getElementById("app");
   const d=getData();
-  if(!d){ $.appendChild(el("div",{class:"card"},[ el("h2",{},["Relatório não encontrado"]), el("p",{class:"muted"},["Abra este relatório pelo link gerado na avaliação (ele carrega os dados pela URL)."]) ])); return; }
+  if(!d){ $.appendChild(el("div",{class:"card"},[ el("h2",{},["Relatório não encontrado"]), el("p",{class:"muted"},["Abra este relatório pelo link gerado na avaliação."]) ])); return; }
   const comb=d.c, marc=new Set(d.m||[]), id=d.id||{};
   const ord=ORDER.slice().sort((a,b)=>comb[b]-comb[a]); const primary=ord[0];
-  // traços
-  const tr=T.map((t,i)=>{ const f=t[1]; const m=marc.has(i); const voce=m?Math.max(0,comb[f]-30):comb[f]; const ideal=IDEAL_TRACO[t[0]]||IDEAL[f]; return {n:t[0],f,por:t[2],voce,ideal,gap:ideal-voce,m}; });
+  // por traço: você = nível do fator (sem penalidade); marcado = foco escolhido (estrela, não nota)
+  const tr=T.map((t,i)=>{ const f=t[1]; return {n:t[0],f,por:t[2],mom:t[3],voce:comb[f],ideal:IDEAL_TRACO[t[0]]||IDEAL[f],gap:(IDEAL_TRACO[t[0]]||IDEAL[f])-comb[f],m:marc.has(i)}; });
   const fortes=tr.slice().sort((a,b)=>b.voce-a.voce).slice(0,4);
-  const devs=tr.slice().filter(x=>x.gap>0).sort((a,b)=>b.gap-a.gap).slice(0,6);
+  const marcados=tr.filter(x=>x.m).sort((a,b)=>b.gap-a.gap);
+  const pool=(marcados.length?marcados:tr.slice().filter(x=>x.gap>0).sort((a,b)=>b.gap-a.gap));
+  const foco=pool[0], observar=pool.slice(1,3);
   const aderencia=Math.round(ORDER.reduce((s,f)=>s+Math.min(comb[f],IDEAL[f])/IDEAL[f],0)/4*100);
 
-  // Abertura
+  // CAPA
+  $.appendChild(el("div",{class:"card capa"},[ el("div",{class:"logo"}), el("h1",{},["Perfil Empreendedor Eixo"]), el("div",{class:"sub"},["Eixo Empreendedor · Luiz Curti"]), el("div",{class:"nome"},[id.cliente||"—"]), el("div",{class:"muted",style:"margin-top:4px"},[id.empresa?id.empresa+" · ":"", hoje()]) ]));
+
+  // ABERTURA + AHA
   $.appendChild(el("div",{class:"card"},[
-    el("h2",{},[`Olá${id.cliente?(", "+id.cliente):""}!`]),
-    el("p",{},["Esse é o seu Perfil Empreendedor — um retrato de como você decide, lidera e age no dia a dia, e onde dá pra crescer. ", el("b",{},["Não tem certo ou errado:"]), " tem o seu jeito e o próximo passo."]),
-    el("p",{},[ el("b",{},[`Seu perfil é ${FATOR[primary].nome}.`]), " ", FATOR[primary].txt ]),
+    el("h2",{},[`Olá${id.cliente?(", "+id.cliente.split(" ")[0]):""}!`]),
+    el("p",{},["Esse é o seu Perfil Empreendedor — não um teste pra dizer se você tá certo ou errado, mas um espelho de como você toca o seu negócio no dia a dia, e onde tem mais chão pra crescer."]),
+    el("p",{},["Cada dono tem o seu jeito; o que muda o jogo é saber qual é o seu e dar o próximo passo a partir dele. E o seu jeito é o do ", el("b",{},[FATOR[primary].nome]), ": ", FATOR[primary].txt]),
+    el("div",{class:"aha"},[ el("b",{},["Repara nisso: "]), `sua força mais forte hoje é ${fortes[0].n}. É por aí que você abre vantagem — e ninguém nasce pronto no resto; a gente vira no caminho.` ]),
   ]));
-  // Radar
+
+  // RADAR
   $.appendChild(el("div",{class:"card"},[
     el("h2",{},["O seu mapa"]),
     el("div",{html:radarSVG(tr)}),
-    el("div",{class:"legend"},[ el("span",{html:'<i style="background:#0F3D3A"></i>Você'}), el("span",{html:'<i style="background:#C78F2C"></i>Perfil do dono que cresce'}) ]),
-    el("p",{style:"text-align:center;margin:8px 0 0;font-weight:700;color:var(--verde)"},[`Aderência ao perfil do dono ideal: ${aderencia}%`]),
-    el("p",{class:"muted",style:"text-align:center;margin-top:4px"},["Onde a área verde está dentro da âmbar, é onde dá pra desenvolver."]),
+    el("div",{class:"leg"},[ el("span",{html:'<i style="border-top:3px solid #0F3D3A"></i>Você'}), el("span",{html:'<i style="border-top:3px dashed #C78F2C"></i>Dono que cresce'}), el("span",{html:'<i style="width:9px;height:9px;border-radius:50%;background:#C78F2C;border-top:0"></i>Foco que você escolheu'}) ]),
+    el("div",{class:"adernum"},[`${aderencia}%`]),
+    el("p",{class:"muted",style:"text-align:center;margin-top:2px"},[`do caminho do "dono que cresce" você já percorreu. Em 6 meses, a gente mira subir isso — e mede de novo no fim.`]),
+    el("p",{class:"muted",style:"text-align:center"},["O mapa mostra o seu jeito projetado nos 24 comportamentos. Onde o verde fica dentro do tracejado, é onde tem mais a ganhar."]),
   ]));
-  // Forças
-  const cf=el("div",{class:"card"}); cf.appendChild(el("h2",{},["Suas forças"]));
-  cf.appendChild(el("p",{class:"muted"},["O que você já faz bem — continue usando isso a seu favor."]));
+
+  // FORÇAS (antes dos gaps)
+  const cf=el("div",{class:"card"}); cf.appendChild(el("h2",{},["Comece pelas suas forças"]));
+  cf.appendChild(el("p",{class:"muted"},["O que você já faz bem — é daqui que a gente parte."]));
   fortes.forEach(x=> cf.appendChild(el("div",{class:"forca"},[ el("b",{},[x.n]), " — ", x.por, "." ])));
   $.appendChild(cf);
-  // Detalhe dos 24 comportamentos
+
+  // FOCO DO MÊS (1 + 2 a observar)
+  const cfoco=el("div",{class:"card"});
+  cfoco.appendChild(el("h2",{},["Onde você tem mais a ganhar"]));
+  cfoco.appendChild(el("p",{class:"muted"},["Não precisa atacar tudo. Comece por UM — o que mais destrava o resto agora."]));
+  const fb=el("div",{class:"foco"},[
+    el("span",{class:"badge"},["Seu foco do mês"]),
+    el("h3",{},[foco.n]),
+    el("p",{},[DESC[foco.n]]),
+    el("p",{class:"muted"},[`Pensa um instante: quanto isso te custa hoje — em horas presas na operação ou em dinheiro que escapa? É o que a gente destrava primeiro.`]),
+    el("h3",{style:"font-size:14px;color:#0F3D3A"},["Nos próximos 30 dias:"]),
+    el("ul",{class:"acoes"}, (ACOES[foco.n]||[]).map(a=>el("li",{},[a]))),
+    el("p",{class:"muted"},[`No Eixo 180, isso é trabalhado em: ${foco.mom}.`]),
+  ]);
+  cfoco.appendChild(fb);
+  if(observar.length){ cfoco.appendChild(el("h3",{},["E mais 2 pra observar (depois)"]));
+    observar.forEach(x=> cfoco.appendChild(el("div",{class:"obs"},[ el("b",{},[x.n]), " — ", x.por, "." ]))); }
+  $.appendChild(cfoco);
+
+  // PACTO
+  $.appendChild(el("div",{class:"card"},[
+    el("h2",{},["Meu compromisso"]),
+    el("p",{},[`Eu, ${id.cliente||"_______________"}, escolho trabalhar `, el("b",{},[foco.n]), " nos próximos 30 dias."]),
+    el("p",{style:"margin-top:10px"},["Meu primeiro passo, até ___ /___ /______, é:"]),
+    el("div",{class:"pacto"},[ el("div",{class:"linha"}), el("div",{class:"linha"}), el("p",{class:"muted",style:"margin-top:10px"},["Como vou saber que cumpri:"]), el("div",{class:"linha"}), el("p",{style:"margin-top:14px"},["Assinatura:"]), el("div",{class:"linha"}) ]),
+  ]));
+
+  // MAPA DOS 24 (detalhe, reframe)
   const cdet=el("div",{class:"card"});
-  cdet.appendChild(el("h2",{},["Seus comportamentos em detalhe"]));
-  cdet.appendChild(el("p",{class:"muted"},["O que cada comportamento significa e onde você está em relação ao perfil do dono que cresce (você / ideal)."]));
+  cdet.appendChild(el("h2",{},["Seu mapa completo — os 24 comportamentos"]));
+  cdet.appendChild(el("p",{class:"muted"},["O que cada um significa, e onde você está em relação ao dono que cresce (você / dono que cresce). É o panorama — não precisa atacar tudo: o foco está acima."]));
   ORDER.forEach(f=>{
-    cdet.appendChild(el("h3",{},[`${FATOR[f].nome}`]));
+    const bloco=el("div",{class:"fbloco",style:`border-left-color:${FCOR[f]}`});
+    bloco.appendChild(el("h3",{style:`color:${FCOR[f]}`},[FATOR[f].nome]));
     tr.filter(x=>x.f===f).forEach(x=>{
-      const c = x.gap>20 ? "var(--ambar)" : (x.gap>0 ? "#b87a1e" : "var(--verde)");
-      cdet.appendChild(el("div",{style:"margin:8px 0;padding-bottom:8px;border-bottom:1px solid var(--linha)"},[
-        el("div",{style:"display:flex;justify-content:space-between;gap:10px;align-items:baseline"},[ el("b",{},[x.n]), el("span",{style:`white-space:nowrap;font-size:12px;font-weight:700;color:${c}`},[`${x.voce} / ${x.ideal}`]) ]),
-        el("p",{class:"muted",style:"margin:4px 0 0"},[DESC[x.n]||""]),
+      const c = x.gap>20 ? "#b87a1e" : (x.gap>0 ? "#8a5a12" : "var(--verde)");
+      bloco.appendChild(el("div",{style:"margin:6px 0 8px"},[
+        el("div",{class:"cmp"},[ el("b",{},[x.n, x.m?el("span",{style:"color:#C78F2C"},["  ★"]):null]), el("span",{style:`white-space:nowrap;font-size:12px;font-weight:700;color:${c}`},[`${x.voce} / ${x.ideal}`]) ]),
+        el("p",{class:"muted",style:"margin:3px 0 0"},[DESC[x.n]||""]),
       ]));
     });
+    cdet.appendChild(bloco);
   });
   $.appendChild(cdet);
-  // Desenvolver + ações
-  const cd=el("div",{class:"card"}); cd.appendChild(el("h2",{},["O que trabalhar — e como"]));
-  cd.appendChild(el("p",{class:"muted"},["Escolha 1 ou 2 pra começar. Pequenos passos, toda semana."]));
-  devs.forEach(x=>{
-    const box=el("div",{class:"dev"},[ el("h3",{},[x.n]), el("p",{class:"por"},[`Por que importa: ${x.por}.`]) ]);
-    const ul=el("ul",{class:"acoes"}); (ACOES[x.n]||["Converse com seu consultor sobre como treinar isso."]).forEach(a=> ul.appendChild(el("li",{},[a])));
-    box.appendChild(ul); cd.appendChild(box);
-  });
-  $.appendChild(cd);
-  // Ambiente favorável
+
+  // AMBIENTE
   $.appendChild(el("div",{class:"card"},[ el("h2",{},["Onde você rende mais"]), el("p",{},[AMBIENTE[primary]]) ]));
-  // Fechamento
+
+  // FECHAMENTO
   $.appendChild(el("div",{class:"card"},[
     el("h2",{},["Por onde começar"]),
-    el("p",{},["Não precisa mudar tudo de uma vez. Escolha ", el("b",{},["um comportamento"]), " que mais te chama acima e dê o primeiro passo essa semana. Na consultoria, a gente acompanha sua evolução de perto."]),
+    el("p",{},["Não precisa virar outra pessoa, nem mudar tudo de uma vez. Escolhe ", el("b",{},["o seu foco do mês"]), " ali em cima e dá o primeiro passo essa semana."]),
+    el("p",{},["E não se cobre demais: isso não é quem você ", el("b",{},["é"]), " pra sempre — é onde você ", el("b",{},["está"]), " hoje. Comportamento se treina, e a gente mede a sua evolução ao longo dos 6 meses. ", el("b",{},["A gente caminha junto — dono pra dono."]) ]),
     el("div",{class:"noprint",style:"margin-top:12px"},[ el("button",{class:"btn",onclick:()=>window.print()},["Imprimir / Salvar PDF"]) ]),
   ]));
 }
+function hoje(){ try{ return new Date().toLocaleDateString("pt-BR"); }catch(e){ return ""; } }
 render();
 </script>
 </body>
