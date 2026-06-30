@@ -74,6 +74,38 @@ const ACOES={
   "Prudência":["Antes de decidir, busque o 1 dado que falta.","Liste a consequência antes de se comprometer."],
   "Racionalidade":["Decida olhando o número, não o humor do dia.","Pergunte 'como eu sei disso?' pra separar fato de achismo."],
 };
+const DESC={
+"Comando e firmeza":"Liderar com convicção: assumir a frente, decidir com firmeza e segurar a posição sob pressão e conflito, sem terceirizar a decisão.",
+"Senso de urgência":"Agir no tempo certo: atenção aos prazos, priorizar o urgente e resolver na hora o que ameaça o resultado, em vez de empurrar.",
+"Ousadia (risco calculado)":"Coragem com a conta na mão: encarar desafios e decisões de risco pesando o ganho possível contra a perda máxima antes de apostar.",
+"Independência":"Andar com as próprias pernas: confiar na própria capacidade de virar o jogo e decidir sem depender de aprovação o tempo todo.",
+"Objetividade":"Ir direto ao ponto: foco em solução prática e resultado, comunicação clara e sem rodeio, cortando o que não serve.",
+"Dinamismo":"Energia e ritmo: tocar várias frentes com velocidade e puxar o time no mesmo passo, sem deixar o negócio parar.",
+"Entusiasmo e motivação":"Energia que contagia: encarar o trabalho com ânimo, se automotivar e levantar o astral da equipe, mesmo na adversidade.",
+"Persuasão":"Convencer e influenciar: construir argumento, defender o ponto de vista com confiança e fechar na conversa.",
+"Carisma":"Gerar simpatia: criar bom clima e fazer as pessoas gostarem de trabalhar e fazer negócio com você.",
+"Sociabilidade":"Foco em gente: preferir a interação e construir uma rede de contatos pra acelerar o resultado.",
+"Extroversão":"Estar à frente: se expor, puxar conversa e abrir portas com naturalidade.",
+"Empatia":"Ler o outro: perceber o que a pessoa sente, ajustar o jeito e ouvir de verdade antes de responder ou cobrar.",
+"Persistência":"Não desistir: seguir com dedicação mesmo na dificuldade e terminar o que começa, na crença de que o esforço leva ao objetivo.",
+"Estabilidade":"Ser o porto seguro: manter a calma e o ritmo, ser previsível pro time mesmo quando tudo aperta.",
+"Paciência":"Respeitar o tempo: dar espaço pro que rende devagar e lidar bem com processos longos, sem forçar a barra.",
+"Conciliação":"Buscar acordo: resolver divergência pela negociação, cedendo no pequeno pra manter a relação.",
+"Flexibilidade com mudanças":"Rolar com a mudança: lidar bem com o imprevisto e enxergar oportunidade onde os outros veem ameaça.",
+"Detalhismo":"Olho no detalhe: enxergar o que passa batido e corrigir o erro antes de entregar.",
+"Disciplina":"Manter o compromisso: foco e autocontrole pra cumprir a rotina e o combinado, mesmo nos dias difíceis.",
+"Organização e controle":"Tudo no lugar: métodos, registros e sistemas pra acompanhar processos e ter os números à mão.",
+"Planejamento":"Pensar antes de agir: montar plano com metas, etapas e prazos — e um plano B pros contratempos.",
+"Concentração e precisão":"Foco e qualidade: atenção contínua numa tarefa e entrega precisa, evitando retrabalho.",
+"Prudência":"Pés no chão: buscar a informação que falta e prever o que pode dar errado antes de se comprometer.",
+"Racionalidade":"Decidir pela razão: separar fato de achismo e decidir pelo dado e pela lógica, não pela emoção do momento.",
+};
+const AMBIENTE={
+  D:"Você rende mais em ambientes com autonomia pra decidir, metas claras e ritmo rápido — onde pode assumir a frente e ver resultado.",
+  I:"Você rende mais perto de gente, com liberdade pra criar e reconhecimento — ambientes interativos e movimentados são o seu lugar.",
+  S:"Você rende mais em ambientes estáveis, com rotina e relações de confiança — onde pode sustentar e ser o porto seguro do time.",
+  C:"Você rende mais em ambientes organizados, com regras claras e tempo pra fazer bem feito — onde a qualidade e o dado importam.",
+};
 
 function el(t,a,k){ const e=document.createElement(t); a=a||{}; for(const x in a){ const v=a[x]; if(x==="class")e.className=v; else if(x==="html")e.innerHTML=v; else if(x.slice(0,2)==="on"&&typeof v==="function")e.addEventListener(x.slice(2),v); else if(typeof v==="boolean"){ if(v)e.setAttribute(x,""); } else if(v!=null)e.setAttribute(x,v); } (k||[]).forEach(c=>{ if(c==null)return; e.appendChild(typeof c==="string"?document.createTextNode(c):c); }); return e; }
 
@@ -101,6 +133,7 @@ function render(){
   const tr=T.map((t,i)=>{ const f=t[1]; const m=marc.has(i); const voce=m?Math.max(0,comb[f]-30):comb[f]; const ideal=IDEAL_TRACO[t[0]]||IDEAL[f]; return {n:t[0],f,por:t[2],voce,ideal,gap:ideal-voce,m}; });
   const fortes=tr.slice().sort((a,b)=>b.voce-a.voce).slice(0,4);
   const devs=tr.slice().filter(x=>x.gap>0).sort((a,b)=>b.gap-a.gap).slice(0,6);
+  const aderencia=Math.round(ORDER.reduce((s,f)=>s+Math.min(comb[f],IDEAL[f])/IDEAL[f],0)/4*100);
 
   // Abertura
   $.appendChild(el("div",{class:"card"},[
@@ -113,13 +146,29 @@ function render(){
     el("h2",{},["O seu mapa"]),
     el("div",{html:radarSVG(comb)}),
     el("div",{class:"legend"},[ el("span",{html:'<i style="background:#0F3D3A"></i>Você'}), el("span",{html:'<i style="background:#C78F2C"></i>Perfil do dono que cresce'}) ]),
-    el("p",{class:"muted",style:"text-align:center;margin-top:8px"},["Onde a área verde está dentro da âmbar, é onde dá pra desenvolver."]),
+    el("p",{style:"text-align:center;margin:8px 0 0;font-weight:700;color:var(--verde)"},[`Aderência ao perfil do dono ideal: ${aderencia}%`]),
+    el("p",{class:"muted",style:"text-align:center;margin-top:4px"},["Onde a área verde está dentro da âmbar, é onde dá pra desenvolver."]),
   ]));
   // Forças
   const cf=el("div",{class:"card"}); cf.appendChild(el("h2",{},["Suas forças"]));
   cf.appendChild(el("p",{class:"muted"},["O que você já faz bem — continue usando isso a seu favor."]));
   fortes.forEach(x=> cf.appendChild(el("div",{class:"forca"},[ el("b",{},[x.n]), " — ", x.por, "." ])));
   $.appendChild(cf);
+  // Detalhe dos 24 comportamentos
+  const cdet=el("div",{class:"card"});
+  cdet.appendChild(el("h2",{},["Seus comportamentos em detalhe"]));
+  cdet.appendChild(el("p",{class:"muted"},["O que cada comportamento significa e onde você está em relação ao perfil do dono que cresce (você / ideal)."]));
+  ORDER.forEach(f=>{
+    cdet.appendChild(el("h3",{},[`${FATOR[f].nome}`]));
+    tr.filter(x=>x.f===f).forEach(x=>{
+      const c = x.gap>20 ? "var(--ambar)" : (x.gap>0 ? "#b87a1e" : "var(--verde)");
+      cdet.appendChild(el("div",{style:"margin:8px 0;padding-bottom:8px;border-bottom:1px solid var(--linha)"},[
+        el("div",{style:"display:flex;justify-content:space-between;gap:10px;align-items:baseline"},[ el("b",{},[x.n]), el("span",{style:`white-space:nowrap;font-size:12px;font-weight:700;color:${c}`},[`${x.voce} / ${x.ideal}`]) ]),
+        el("p",{class:"muted",style:"margin:4px 0 0"},[DESC[x.n]||""]),
+      ]));
+    });
+  });
+  $.appendChild(cdet);
   // Desenvolver + ações
   const cd=el("div",{class:"card"}); cd.appendChild(el("h2",{},["O que trabalhar — e como"]));
   cd.appendChild(el("p",{class:"muted"},["Escolha 1 ou 2 pra começar. Pequenos passos, toda semana."]));
@@ -129,6 +178,8 @@ function render(){
     box.appendChild(ul); cd.appendChild(box);
   });
   $.appendChild(cd);
+  // Ambiente favorável
+  $.appendChild(el("div",{class:"card"},[ el("h2",{},["Onde você rende mais"]), el("p",{},[AMBIENTE[primary]]) ]));
   // Fechamento
   $.appendChild(el("div",{class:"card"},[
     el("h2",{},["Por onde começar"]),
