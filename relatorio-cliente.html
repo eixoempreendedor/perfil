@@ -114,15 +114,15 @@ function getData(){ try{ const p=new URLSearchParams(location.search).get("d"); 
 const SHORT={"Comando e firmeza":"Comando","Senso de urgência":"Urgência","Ousadia (risco calculado)":"Ousadia","Independência":"Independência","Objetividade":"Objetividade","Dinamismo":"Dinamismo","Entusiasmo e motivação":"Entusiasmo","Persuasão":"Persuasão","Carisma":"Carisma","Sociabilidade":"Sociabilidade","Extroversão":"Extroversão","Empatia":"Empatia","Persistência":"Persistência","Estabilidade":"Estabilidade","Paciência":"Paciência","Conciliação":"Conciliação","Flexibilidade com mudanças":"Flexibilidade","Detalhismo":"Detalhismo","Disciplina":"Disciplina","Organização e controle":"Organização","Planejamento":"Planejamento","Concentração e precisão":"Concentração","Prudência":"Prudência","Racionalidade":"Racionalidade"};
 // Radar dos 24 comportamentos (você x ideal)
 function radarSVG(tr){
-  const N=tr.length, cx=240, cy=240, R=145, Rl=160;
+  const N=tr.length, cx=300, cy=280, R=175, Rl=192;
   const pt=(i,val)=>{ const a=(i/N*2*Math.PI)-Math.PI/2; const r=R*(Math.max(0,Math.min(100,val))/100); return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; };
   const polyPts=key=> tr.map((x,i)=>pt(i,x[key]).map(n=>n.toFixed(1)).join(",")).join(" ");
   let grid=""; [25,50,75,100].forEach(g=>{ grid+=`<polygon points="${tr.map((x,i)=>pt(i,g).map(n=>n.toFixed(1)).join(",")).join(" ")}" fill="none" stroke="#ece5d6" stroke-width="1"/>`; });
   let spokes="",labels="";
-  tr.forEach((x,i)=>{ const a=(i/N*2*Math.PI)-Math.PI/2; const [ex,ey]=pt(i,100); spokes+=`<line x1="${cx}" y1="${cy}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#f0ead8" stroke-width="1"/>`; const lx=cx+Rl*Math.cos(a), ly=cy+Rl*Math.sin(a); const left=Math.cos(a)<-0.0001; const deg=a*180/Math.PI; const rot=left?deg+180:deg; labels+=`<text x="${lx.toFixed(1)}" y="${(ly+3).toFixed(1)}" font-size="8" fill="#5b6763" text-anchor="${left?'end':'start'}" transform="rotate(${rot.toFixed(1)} ${lx.toFixed(1)} ${ly.toFixed(1)})">${SHORT[x.n]||x.n}</text>`; });
+  tr.forEach((x,i)=>{ const a=(i/N*2*Math.PI)-Math.PI/2; const [ex,ey]=pt(i,100); spokes+=`<line x1="${cx}" y1="${cy}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#f0ead8" stroke-width="1"/>`; const ca=Math.cos(a); const lx=cx+Rl*ca, ly=cy+Rl*Math.sin(a); const anchor=ca>0.15?"start":(ca<-0.15?"end":"middle"); labels+=`<text x="${lx.toFixed(1)}" y="${(ly+4).toFixed(1)}" font-size="13" font-weight="600" fill="#2b3633" text-anchor="${anchor}">${SHORT[x.n]||x.n}</text>`; });
   const ideal=`<polygon points="${polyPts('ideal')}" fill="rgba(199,143,44,.10)" stroke="#C78F2C" stroke-width="1.5"/>`;
   const voce=`<polygon points="${polyPts('voce')}" fill="rgba(15,61,58,.25)" stroke="#0F3D3A" stroke-width="2"/>`;
-  return `<svg viewBox="0 0 480 480" width="100%" style="max-width:480px;display:block;margin:0 auto">${grid}${spokes}${ideal}${voce}${labels}</svg>`;
+  return `<svg viewBox="0 0 600 560" width="100%" style="width:100%;display:block;margin:0 auto">${grid}${spokes}${ideal}${voce}${labels}</svg>`;
 }
 
 function render(){
