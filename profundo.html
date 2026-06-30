@@ -128,7 +128,7 @@ const TRACOS = [
 const MENOS = ["MENOS autoritário","MENOS precipitado","MENOS centralizador","MENOS impaciente","MENOS disperso","MENOS esquecido","MENOS acomodado","MENOS lento pra mudar","MENOS evita-conflito","MENOS perfeccionista","MENOS rígido","MENOS travado pra decidir"];
 
 // ===== helpers =====
-function el(t,a,k){ const e=document.createElement(t); a=a||{}; for(const x in a){ const v=a[x]; if(x==="class")e.className=v; else if(x==="html")e.innerHTML=v; else if(x.slice(0,2)==="on"&&typeof v==="function")e.addEventListener(x.slice(2),v); else if(v!=null)e.setAttribute(x,v); } (k||[]).forEach(c=>{ if(c==null)return; e.appendChild(typeof c==="string"?document.createTextNode(c):c); }); return e; }
+function el(t,a,k){ const e=document.createElement(t); a=a||{}; for(const x in a){ const v=a[x]; if(x==="class")e.className=v; else if(x==="html")e.innerHTML=v; else if(x.slice(0,2)==="on"&&typeof v==="function")e.addEventListener(x.slice(2),v); else if(typeof v==="boolean"){ if(v)e.setAttribute(x,""); } else if(v!=null)e.setAttribute(x,v); } (k||[]).forEach(c=>{ if(c==null)return; e.appendChild(typeof c==="string"?document.createTextNode(c):c); }); return e; }
 const $app=document.getElementById("app");
 const state={ step:"intro", f1:GRUPOS.map(()=>[]), f2:AFIRM.map(()=>null), f3mais:new Set(), f3menos:new Set(), id:{cliente:"",empresa:"",data:""} };
 
