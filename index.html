@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Perfil do Dono — questionário de perfil com resultado imediato e opção de relatório personalizado por segmento." />
+  <meta name="description" content="Perfil do Dono (DISC) — avaliação comportamental dos clientes da consultoria Eixo. Uso interno." />
   <meta name="theme-color" content="#2E7D32" />
-  <title>Perfil do Dono — Questionário</title>
+  <title>Perfil do Dono — Avaliação Eixo</title>
 
   <style>
     :root{
@@ -388,29 +388,8 @@
   </div>
 
 <script>
-  const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbzXQlfgpA6GPAn0i0hQZUPMQ0rXab9Eksdt2CyWvwcdatUy_qMC2JGm_4rCAPb7gTwt/exec";
-  const QUIZ_VERSION = "perfil-do-dono-v1";
-
-  const SEGMENTS = [
-    "Restaurante / Food Service",
-    "Cafeteria / Padaria",
-    "Varejo (loja física)",
-    "E-commerce",
-    "Beleza (salão, estética, barbearia)",
-    "Saúde (clínica, consultório)",
-    "Odonto",
-    "Pet (clínica/petshop)",
-    "Academia / Fitness",
-    "Imobiliária / Corretagem",
-    "Construção / Arquitetura / Engenharia",
-    "Contabilidade / Jurídico / Serviços profissionais",
-    "Indústria",
-    "Agro",
-    "Escola / Educação",
-    "Hotelaria / Turismo",
-    "Oficina / Auto",
-    "Outro (digitar)"
-  ];
+  // CRM removido (2026-06-30): o app virou ferramenta INTERNA de avaliação dos clientes da consultoria. Nada é enviado pra fora.
+  const QUIZ_VERSION = "perfil-do-dono-v2-interno";
 
   const QUESTIONS = [
     { a:{t:"Eu gosto de decidir rápido e destravar o jogo.", k:"D"}, b:{t:"Eu prefiro analisar bem antes de decidir.", k:"C"} },
@@ -507,15 +486,8 @@
     idx: 0,
     answers: Array(QUESTIONS.length).fill(null),
     lead: {
-      nome:"", email:"", whatsapp:"",
-      empresa:"",
-      segmento_select:"",
-      segmento_outro:"",
-      consent:false, website:""
-    },
-    leadSubmitted: false,
-    isSubmitting: false,
-    leadStatus: { type:"", msg:"" }
+      nome:"", empresa:"", data:""
+    }
   };
 
   function compute(){
@@ -534,12 +506,6 @@
 
     const order = Object.keys(pct).sort((x,y)=> pct[y]-pct[x]);
     return { raw, pct, order, primary: order[0], secondary: order[1] };
-  }
-
-  function getFinalSegment(){
-    const sel = state.lead.segmento_select;
-    if (sel === "Outro (digitar)") return (state.lead.segmento_outro || "").trim();
-    return sel || "";
   }
 
   const actionbar = document.getElementById("actionbar");
@@ -567,28 +533,14 @@
     btnFinish.disabled = !allAnswered;
   }
 
-  function buildSegmentSelect(){
-    const sel = el("select", { id:"segmento_select", onchange: onSegmentChange }, []);
-    sel.appendChild(el("option", { value:"" }, ["Selecione…"]));
-    SEGMENTS.forEach(s => sel.appendChild(el("option", { value:s, selected: state.lead.segmento_select === s }, [s])));
-    return sel;
-  }
-
-  function onSegmentChange(){
-    const v = document.getElementById("segmento_select")?.value || "";
-    state.lead.segmento_select = v;
-    const row = document.getElementById("segmentoOutroRow");
-    if (row) row.style.display = (v === "Outro (digitar)") ? "" : "none";
-  }
-
   function render(){
     const root = document.getElementById("app");
     root.innerHTML = "";
 
     if(state.step === "intro"){
-      root.appendChild(el("h1",{},["Descubra seu Perfil de Empresário (em 3 minutos)"]));
+      root.appendChild(el("h1",{},["Perfil do Dono (DISC) — Avaliação Eixo"]));
       root.appendChild(el("p",{},[
-        "Responda 24 escolhas rápidas. No final, você recebe seu perfil na hora + um plano curto por segmento (empresa + segmento)."
+        "São 24 escolhas rápidas (uns 3 minutos). No final, o perfil aparece na hora e o consultor exporta o resultado pra ficha do cliente."
       ]));
 
       root.appendChild(el("div",{class:"hr"}));
@@ -599,7 +551,7 @@
       ]));
 
       root.appendChild(el("div",{style:"margin-top:14px; display:grid; grid-template-columns: 1fr; gap:10px; max-width: 420px;"},[
-        el("button",{class:"btn primary", type:"button", onclick: startQuiz},["Ver meu perfil (grátis)"])
+        el("button",{class:"btn primary", type:"button", onclick: startQuiz},["Começar avaliação"])
       ]));
     }
 
@@ -696,57 +648,30 @@
 
       root.appendChild(el("div",{class:"hr"}));
 
-      root.appendChild(el("h2",{},["Plano do seu segmento (feito pra sua empresa)"]));
-      root.appendChild(el("p",{},["Preencha empresa e segmento. Eu te mando um plano direto com 3–5 ajustes práticos pra aplicar já (sem enrolação)."]));
+      root.appendChild(el("h2",{},["Registro do consultor"]));
+      root.appendChild(el("p",{class:"small"},["Identifique de quem é esta avaliação e exporte o resultado pra ficha do cliente. Nada é enviado pra fora — fica só com você."]));
 
       root.appendChild(el("div",{class:"row"},[
         el("div",{class:"col"},[
-          el("label",{},["Seu nome"]),
-          el("input",{id:"nome", placeholder:"Ex.: Maria", value: state.lead.nome})
+          el("label",{},["Cliente"]),
+          el("input",{id:"cliente", placeholder:"Ex.: Maria", value: state.lead.nome})
         ]),
         el("div",{class:"col"},[
-          el("label",{},["E-mail"]),
-          el("input",{id:"email", placeholder:"voce@empresa.com", value: state.lead.email})
-        ]),
-        el("div",{class:"col"},[
-          el("label",{},["WhatsApp"]),
-          el("input",{id:"whatsapp", placeholder:"(xx) xxxxx-xxxx", value: state.lead.whatsapp})
-        ]),
-        el("div",{class:"col"},[
-          el("label",{},["Nome da empresa"]),
+          el("label",{},["Empresa"]),
           el("input",{id:"empresa", placeholder:"Ex.: Café do Centro", value: state.lead.empresa})
         ]),
         el("div",{class:"col"},[
-          el("label",{},["Segmento de atuação"]),
-          buildSegmentSelect()
+          el("label",{},["Data"]),
+          el("input",{id:"data", placeholder:"__/__/____", value: state.lead.data})
         ]),
       ]));
 
-      root.appendChild(el("div",{class:"row", id:"segmentoOutroRow", style:(state.lead.segmento_select==="Outro (digitar)" ? "" : "display:none")},[
-        el("div",{class:"col"},[
-          el("label",{},["Qual segmento? (digite)"]),
-          el("input",{id:"segmento_outro", placeholder:"Ex.: Distribuidora / Loja de festa / Clínica veterinária…", value: state.lead.segmento_outro})
-        ])
+      root.appendChild(el("div",{style:"margin-top:14px; display:grid; grid-template-columns: 1fr 1fr; gap:10px;"},[
+        el("button",{class:"btn primary", type:"button", onclick: copySummary},["Copiar resultado completo"]),
+        el("button",{class:"btn", type:"button", onclick: ()=>window.print()},["Imprimir / Salvar PDF"]),
       ]));
-
-      // honeypot
-      root.appendChild(el("input",{id:"website", class:"hidden", autocomplete:"off", value: state.lead.website}));
-
       root.appendChild(el("div",{style:"margin-top:10px"},[
-        el("label",{class:"consent-label"},[
-          el("input",{type:"checkbox", id:"consent", checked: state.lead.consent, class:"consent-checkbox"}),
-          el("span",{class:"small"},["Ok. Você pode pedir remoção dos dados quando quiser."])
-        ])
-      ]));
-
-      if (state.leadStatus.msg) {
-        root.appendChild(el("div",{class: state.leadStatus.type === "err" ? "err" : "ok"},[state.leadStatus.msg]));
-      }
-
-      root.appendChild(el("div",{style:"margin-top:12px; display:grid; grid-template-columns: 1fr; gap:10px;"},[
-        el("button",{class:"btn primary", type:"button", disabled: state.leadSubmitted || state.isSubmitting, onclick: submitLead},[
-          state.leadSubmitted ? "Enviado ✅" : (state.isSubmitting ? "Enviando…" : "Quero meu plano por segmento")
-        ])
+        el("button",{class:"btn", type:"button", onclick: restart},["Refazer avaliação"]),
       ]));
     }
   }
@@ -787,108 +712,33 @@
     state.step = "intro";
     state.idx = 0;
     state.answers = Array(QUESTIONS.length).fill(null);
-    state.leadSubmitted = false;
-    state.isSubmitting = false;
-    state.leadStatus = { type:"", msg:"" };
     scrollTopSoft();
     render();
   }
 
   function copySummary(){
     const r = compute();
+    const d = AXIS_DESC[r.primary];
+    const cliente = (document.getElementById("cliente")?.value || "").trim();
+    const empresa = (document.getElementById("empresa")?.value || "").trim();
+    const data = (document.getElementById("data")?.value || "").trim();
     const text =
-`Perfil do Dono:
-- Primário: ${AXIS_LABEL[r.primary]} (${r.primary}) — ${AXIS_DESC[r.primary].headline}
-- Secundário: ${AXIS_LABEL[r.secondary]} (${r.secondary}) — ${AXIS_DESC[r.secondary].headline}
-- Pontuações: D ${r.pct.D}% | I ${r.pct.I}% | S ${r.pct.S}% | C ${r.pct.C}%`;
+`PERFIL DO DONO (DISC) — Avaliação Eixo
+Cliente: ${cliente || "—"}   Empresa: ${empresa || "—"}   Data: ${data || "—"}
+
+Perfil: ${AXIS_LABEL[r.primary]} (${r.primary}) / ${AXIS_LABEL[r.secondary]} (${r.secondary})
+Pontuações: D ${r.pct.D}% | I ${r.pct.I}% | S ${r.pct.S}% | C ${r.pct.C}%
+
+Pontos fortes: ${d.strengths.join("; ")}
+Riscos típicos: ${d.risks.join("; ")}
+Ajustes práticos: ${d.tips.join("; ")}`;
 
     navigator.clipboard.writeText(text)
-      .then(()=> toast("Resumo copiado ✅"))
+      .then(()=> toast("Resultado copiado ✅"))
       .catch(()=> toast("Não consegui copiar. Tenta manualmente."));
   }
 
-  function readLeadInputs(){
-    state.lead.nome = (document.getElementById("nome")?.value || "").trim();
-    state.lead.email = (document.getElementById("email")?.value || "").trim();
-    state.lead.whatsapp = (document.getElementById("whatsapp")?.value || "").trim();
-    state.lead.empresa = (document.getElementById("empresa")?.value || "").trim();
-    state.lead.segmento_select = (document.getElementById("segmento_select")?.value || "").trim();
-    state.lead.segmento_outro = (document.getElementById("segmento_outro")?.value || "").trim();
-    state.lead.website = (document.getElementById("website")?.value || "").trim();
-    state.lead.consent = !!document.getElementById("consent")?.checked;
-  }
-
-  function validateLead(){
-    if (!SUBMIT_URL || !SUBMIT_URL.startsWith("https://")) return "Endpoint do Apps Script inválido (SUBMIT_URL).";
-    if (!state.lead.consent) return "Marque o consentimento para receber o relatório personalizado por segmento.";
-    if (!state.lead.empresa) return "Coloque o nome da sua empresa.";
-    if (!state.lead.segmento_select) return "Selecione o seu segmento.";
-    if (state.lead.segmento_select === "Outro (digitar)" && !getFinalSegment()) return "Digite o seu segmento (opção Outro).";
-    if (!state.lead.email && !state.lead.whatsapp) return "Preencha E-mail ou WhatsApp pra eu te enviar.";
-    if (state.lead.email && !state.lead.email.includes("@")) return "Seu e-mail parece inválido. Confere aí.";
-    return "";
-  }
-
-  async function submitLead(){
-    if (state.isSubmitting) return;
-
-    readLeadInputs();
-    const err = validateLead();
-    if (err) {
-      state.leadStatus = { type:"err", msg: err };
-      render();
-      toast(err);
-      return;
-    }
-
-    const r = compute();
-    const payload = {
-      nome: state.lead.nome,
-      email: state.lead.email,
-      whatsapp: state.lead.whatsapp,
-      empresa: state.lead.empresa,
-
-      segmento_select: state.lead.segmento_select,
-      segmento_outro: state.lead.segmento_outro,
-      segmento: getFinalSegment(),
-
-      consent: state.lead.consent,
-      website: state.lead.website,
-      primary: r.primary,
-      secondary: r.secondary,
-      pct: r.pct,
-      answers: state.answers,
-      pageUrl: location.href,
-      referrer: document.referrer || "",
-      userAgent: navigator.userAgent || "",
-      quizVersion: QUIZ_VERSION
-    };
-
-    state.isSubmitting = true;
-    state.leadStatus = { type:"", msg:"" };
-    render();
-    toast("Enviando…");
-
-    try{
-      await fetch(SUBMIT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
-
-      state.leadSubmitted = true;
-      state.leadStatus = { type:"ok", msg: "Recebido ✅ Vou te mandar um plano curto e direto pra sua empresa." };
-      state.isSubmitting = false;
-      render();
-      toast("Recebido ✅");
-    } catch(e){
-      state.isSubmitting = false;
-      state.leadStatus = { type:"err", msg: "Erro ao enviar. Tente novamente." };
-      render();
-      toast("Erro ao enviar.");
-    }
-  }
+  // Envio pra CRM/Apps Script removido (2026-06-30). App é interno: o resultado é exportado via "Copiar resultado completo" e "Imprimir / Salvar PDF".
 
   document.addEventListener("keydown", (ev)=>{
     if (state.step !== "quiz") return;
