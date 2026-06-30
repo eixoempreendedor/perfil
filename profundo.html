@@ -34,7 +34,12 @@
   /* Fase 2 */
   .afirm{ padding:14px 0; border-top:1px solid var(--linha); } .afirm:first-of-type{ border-top:0; }
   .afirm .q{ font-size:15px; margin-bottom:8px; }
-  input[type=range]{ width:100%; accent-color:var(--verde); }
+  .val{ text-align:center; font-weight:700; color:var(--verde); font-size:14px; margin-bottom:4px; }
+  input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; background:transparent; touch-action:none; height:40px; margin:0; cursor:pointer; }
+  input[type=range]::-webkit-slider-runnable-track{ height:10px; background:var(--linha); border-radius:8px; }
+  input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:32px; height:32px; border-radius:50%; background:var(--verde); border:3px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.25); margin-top:-11px; }
+  input[type=range]::-moz-range-track{ height:10px; background:var(--linha); border-radius:8px; }
+  input[type=range]::-moz-range-thumb{ width:32px; height:32px; border-radius:50%; background:var(--verde); border:3px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.25); }
   .ends{ display:flex; justify-content:space-between; font-size:11px; color:var(--cinza); }
   /* Fase 3 */
   .chips{ display:flex; flex-wrap:wrap; gap:8px; }
@@ -130,7 +135,7 @@ const MENOS = ["MENOS autoritário","MENOS precipitado","MENOS centralizador","M
 // ===== helpers =====
 function el(t,a,k){ const e=document.createElement(t); a=a||{}; for(const x in a){ const v=a[x]; if(x==="class")e.className=v; else if(x==="html")e.innerHTML=v; else if(x.slice(0,2)==="on"&&typeof v==="function")e.addEventListener(x.slice(2),v); else if(typeof v==="boolean"){ if(v)e.setAttribute(x,""); } else if(v!=null)e.setAttribute(x,v); } (k||[]).forEach(c=>{ if(c==null)return; e.appendChild(typeof c==="string"?document.createTextNode(c):c); }); return e; }
 const $app=document.getElementById("app");
-const F2_POR_PAGINA=4;
+const F2_POR_PAGINA=3;
 const F2_PAGINAS=Math.ceil(AFIRM.length/F2_POR_PAGINA);
 const state={ step:"intro", p1:0, p2:0, f1:GRUPOS.map(()=>[]), f2:AFIRM.map(()=>null), f3mais:new Set(), f3menos:new Set(), id:{cliente:"",empresa:"",data:""} };
 
@@ -198,9 +203,12 @@ function fase2(){
   card.appendChild(el("h2",{style:"margin-top:6px"},["O quanto cada frase combina com você"]));
   card.appendChild(el("p",{class:"muted"},["Arraste: esquerda = não tem nada a ver · direita = tem tudo a ver."]));
   itens.forEach((a,idx)=>{ const i=start+idx;
+    const v0=state.f2[i]==null?50:state.f2[i];
     const af=el("div",{class:"afirm"},[ el("div",{class:"q"},[a[0]]) ]);
-    const r=el("input",{type:"range",min:"0",max:"100",value:String(state.f2[i]==null?50:state.f2[i])});
-    r.addEventListener("input",e=>{ state.f2[i]=parseInt(e.target.value,10); });
+    const badge=el("div",{class:"val"},[String(v0)]);
+    const r=el("input",{type:"range",min:"0",max:"100",value:String(v0)});
+    r.addEventListener("input",e=>{ const v=parseInt(e.target.value,10); state.f2[i]=v; badge.textContent=String(v); });
+    af.appendChild(badge);
     af.appendChild(r);
     af.appendChild(el("div",{class:"ends"},[ el("span",{},["Não tem nada a ver"]), el("span",{},["Tem tudo a ver"]) ]));
     card.appendChild(af);
