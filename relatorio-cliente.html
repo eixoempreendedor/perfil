@@ -4,42 +4,58 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Seu Perfil Empreendedor Eixo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --verde:#0F3D3A; --off:#F3EFE8; --ambar:#C78F2C; --tinta:#1d2522; --cinza:#7c8a85; --linha:#e3ddd1; }
+  :root{ --verde:#0F3D3A; --off:#F3EFE8; --ambar:#C78F2C; --tinta:#1d2522; --cinza:#7c8a85; --linha:#e3ddd1;
+    --serif:'Playfair Display',Georgia,serif; --sans:'Open Sans',system-ui,Arial,sans-serif; }
   *{ box-sizing:border-box; }
-  body{ margin:0; background:var(--off); color:var(--tinta); font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif; line-height:1.5; }
+  body{ margin:0; background:var(--off); color:var(--tinta); font-family:var(--sans); line-height:1.5; }
   .wrap{ max-width:760px; margin:0 auto; padding:24px 18px 60px; }
   .card{ background:#fff; border:1px solid var(--linha); border-radius:14px; padding:22px; margin-bottom:16px; }
-  h2{ color:var(--verde); font-size:18px; margin:0 0 8px; }
+  h1,h2,h3{ font-family:var(--serif); }
+  h2{ color:var(--verde); font-size:19px; margin:0 0 8px; }
   h3{ color:var(--verde); font-size:15px; margin:14px 0 6px; }
   p{ margin:8px 0; } .muted{ color:var(--cinza); font-size:13px; }
-  .capa{ text-align:center; padding:46px 22px; }
-  .capa .logo{ width:14px; height:48px; background:var(--ambar); border-radius:4px; margin:0 auto 16px; }
-  .capa h1{ color:var(--verde); font-size:27px; margin:0 0 4px; }
-  .capa .sub{ color:var(--cinza); margin-bottom:26px; }
-  .capa .nome{ font-size:21px; font-weight:700; }
-  .aha{ background:var(--verde); color:#fff; border-radius:14px; padding:18px 20px; margin-bottom:16px; }
+  /* hero */
+  .hero{ background:var(--verde); color:#fff; border-radius:14px; padding:44px 26px; text-align:center; margin-bottom:16px; }
+  .hero .wm{ letter-spacing:3px; font-size:12px; color:var(--ambar); font-weight:700; }
+  .hero h1{ color:#fff; font-size:29px; margin:14px 0 4px; }
+  .hero .nome{ font-size:21px; font-weight:700; margin-top:20px; }
+  .hero .meta{ color:#cfe0db; font-size:13px; margin-top:2px; }
+  .hero .badge{ display:inline-block; margin-top:16px; border:1px solid var(--ambar); border-radius:999px; padding:5px 16px; font-size:13px; }
+  .tema{ font-family:var(--serif); font-size:17px; color:var(--verde); font-style:italic; margin:8px 0; }
+  .aha{ background:var(--verde); color:#fff; border-radius:12px; padding:16px 18px; margin:12px 0 0; }
   .aha b{ color:var(--ambar); }
-  .leg{ display:flex; gap:20px; justify-content:center; font-size:13px; margin-top:6px; }
+  .leg{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; font-size:13px; margin-top:6px; }
   .leg i{ display:inline-block; width:20px; height:0; vertical-align:middle; margin-right:6px; }
-  .adernum{ text-align:center; font-size:34px; font-weight:800; color:var(--verde); line-height:1; margin-top:8px; }
+  .adernum{ text-align:center; font-size:36px; font-weight:800; color:var(--verde); line-height:1; margin-top:8px; font-family:var(--serif); }
+  .nivel{ text-align:center; font-weight:700; color:var(--ambar); margin-top:2px; }
   .forca{ background:#e7f0ec; border-radius:10px; padding:10px 14px; margin:8px 0; }
   .foco{ border:2px solid var(--ambar); border-radius:14px; padding:18px; margin:6px 0 12px; }
-  .foco .badge{ display:inline-block; background:var(--ambar); color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; }
-  .foco h3{ color:var(--tinta); margin:8px 0 4px; font-size:17px; }
+  .foco .pill{ display:inline-block; background:var(--ambar); color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; }
+  .foco h3{ color:var(--tinta); margin:8px 0 4px; font-size:18px; }
+  .virada{ font-weight:700; color:var(--verde); margin:12px 0 2px; }
+  .roi{ background:#fff; border:1px dashed var(--ambar); border-radius:10px; padding:12px 14px; margin:8px 0; font-size:14px; }
+  .roi .l{ border-bottom:1px solid var(--cinza); display:inline-block; min-width:54px; }
+  .quick{ background:#fff7ea; border-left:4px solid var(--ambar); border-radius:8px; padding:10px 14px; margin:8px 0; }
   .acoes{ margin:6px 0; padding-left:18px; } .acoes li{ margin:5px 0; }
   .obs{ border:1px solid var(--linha); border-radius:10px; padding:10px 14px; margin:8px 0; }
   .pacto{ background:#f3f8f6; border:1px dashed var(--verde); border-radius:12px; padding:18px; }
   .pacto .linha{ border-bottom:1px solid var(--cinza); min-height:22px; margin:8px 0 2px; }
+  .mapa6{ display:flex; gap:4px; margin:8px 0; }
+  .mapa6 .et{ flex:1; text-align:center; font-size:10px; padding:7px 2px; border-radius:6px; background:var(--off); color:var(--cinza); border:1px solid var(--linha); }
+  .mapa6 .et.on{ background:var(--verde); color:#fff; font-weight:700; border-color:var(--verde); }
   .fbloco{ border-left:4px solid #0F3D3A; padding:2px 0 2px 12px; margin:10px 0; }
   .cmp{ display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
-  .btn{ border:1px solid var(--verde); background:var(--verde); color:#fff; border-radius:10px; padding:12px 18px; font-size:15px; cursor:pointer; font-weight:600; }
+  .btn{ border:1px solid var(--verde); background:var(--verde); color:#fff; border-radius:10px; padding:12px 18px; font-size:15px; cursor:pointer; font-weight:600; font-family:var(--sans); }
   .foot{ text-align:center; font-size:12px; color:var(--cinza); margin-top:14px; }
   @media print{
     .noprint{ display:none!important; } body{ background:#fff; }
-    .card,.foco,.obs,.pacto,.aha,.fbloco,.forca{ break-inside:avoid; }
+    .card,.foco,.obs,.pacto,.aha,.fbloco,.forca,.hero{ break-inside:avoid; }
     h2,h3{ break-after:avoid; }
-    .capa{ break-after:always; }
+    .hero{ break-after:always; }
     @page{ margin:16mm; }
   }
 </style>
@@ -52,14 +68,14 @@
 const FATOR={ D:{nome:"Direto",txt:"Você decide rápido, encara o que precisa e foca no resultado."}, I:{nome:"Comunicador",txt:"Você conecta, vende a ideia e põe gente pra andar junto."}, S:{nome:"Constante",txt:"Você sustenta a operação, é leal e mantém o ritmo do dia a dia."}, C:{nome:"Analítico",txt:"Você preza pelo dado, pelo padrão e pela qualidade do que entrega."} };
 const FCOR={ D:"#0F3D3A", I:"#C78F2C", S:"#2f6f7a", C:"#7a5230" };
 const ORDER=["D","I","S","C"];
+const FASES=[["M1","VER"],["M2","MEXER"],["M3","SISTEMAT."],["M4","SOLTAR"],["M5","PADRONIZ."],["M6","PERPETUAR"]];
 const IDEAL={ D:82, I:70, S:69, C:83 };
 const IDEAL_TRACO={"Comando e firmeza":85,"Senso de urgência":85,"Ousadia (risco calculado)":80,"Independência":75,"Objetividade":85,"Dinamismo":80,"Entusiasmo e motivação":75,"Persuasão":80,"Carisma":65,"Sociabilidade":65,"Extroversão":60,"Empatia":75,"Persistência":90,"Estabilidade":60,"Paciência":60,"Conciliação":55,"Flexibilidade com mudanças":80,"Detalhismo":75,"Disciplina":90,"Organização e controle":85,"Planejamento":90,"Concentração e precisão":75,"Prudência":75,"Racionalidade":85};
-// [nome, fator, "tem mais a ganhar pra...", mês no Eixo 180]
 const T=[
   ["Comando e firmeza","D","ter direção clara pra equipe","M4 — soltar e delegar"],["Senso de urgência","D","resolver o que trava o caixa na hora","M1 — vitória de caixa"],["Ousadia (risco calculado)","D","decidir risco com número, sem travar","M2 — mover a alavanca"],["Independência","D","não depender de aprovação o tempo todo","M6 — autonomia"],["Objetividade","D","ir direto ao resultado","M1 — Meta dos 6 meses"],["Dinamismo","D","puxar o ritmo do negócio","M2 — 3 Movimentos"],
-  ["Entusiasmo e motivação","I","engajar o time na meta","M3 — reunião de equipe"],["Persuasão","I","fechar e convencer melhor","M4 — mobilizar a equipe"],["Carisma","I","criar bom clima e relação","acompanhamento"],["Sociabilidade","I","abrir portas e fazer rede","M5 — rede/parcerias"],["Extroversão","I","se expor e aparecer","acompanhamento"],["Empatia","I","ouvir antes de cobrar","M4 — relações"],
-  ["Persistência","S","terminar o que começa","todo o programa"],["Estabilidade","S","dar previsibilidade ao time","acompanhamento"],["Paciência","S","dar tempo ao que rende devagar","M3 — ritmo"],["Conciliação","S","resolver conflito sem briga","M4 — relações"],["Flexibilidade com mudanças","S","ver oportunidade na mudança","M2 — oportunidades"],
-  ["Detalhismo","C","não deixar passar erro","M5 — padronizar"],["Disciplina","C","manter o hábito que dá resultado","M2 — DRG sem furo"],["Organização e controle","C","ter os números na mão","M1 — Bússola/DRG"],["Planejamento","C","agir com plano, não no escuro","M1 e M5"],["Concentração e precisão","C","entregar sem retrabalho","M5 — processos"],["Prudência","C","decidir com informação","M3 — risco com info"],["Racionalidade","C","decidir pelo número, não pela emoção","M2 — decidir pelo número"],
+  ["Entusiasmo e motivação","I","engajar o time na meta","M3 — reunião de equipe"],["Persuasão","I","fechar e convencer melhor","M4 — mobilizar a equipe"],["Carisma","I","criar bom clima e relação","M3 — equipe"],["Sociabilidade","I","abrir portas e fazer rede","M5 — rede/parcerias"],["Extroversão","I","se expor e aparecer","M5 — rede"],["Empatia","I","ouvir antes de cobrar","M4 — relações"],
+  ["Persistência","S","terminar o que começa","todo o programa"],["Estabilidade","S","dar previsibilidade ao time","M3 — ritmo"],["Paciência","S","dar tempo ao que rende devagar","M3 — ritmo"],["Conciliação","S","resolver conflito sem briga","M4 — relações"],["Flexibilidade com mudanças","S","ver oportunidade na mudança","M2 — oportunidades"],
+  ["Detalhismo","C","não deixar passar erro","M5 — padronizar"],["Disciplina","C","manter o hábito que dá resultado","M2 — DRG sem furo"],["Organização e controle","C","ter os números na mão","M1 — Bússola/DRG"],["Planejamento","C","agir com plano, não no escuro","M1 — Meta/plano"],["Concentração e precisão","C","entregar sem retrabalho","M5 — processos"],["Prudência","C","decidir com informação","M3 — risco com info"],["Racionalidade","C","decidir pelo número, não pela emoção","M2 — decidir pelo número"],
 ];
 const DESC={
 "Comando e firmeza":"Liderar com convicção: assumir a frente, decidir com firmeza e segurar a posição sob pressão e conflito, sem terceirizar a decisão.",
@@ -113,20 +129,52 @@ const ACOES={
 "Prudência":["Antes de decidir, busque o 1 dado que falta.","Liste a consequência antes de se comprometer."],
 "Racionalidade":["Decida olhando o número, não o humor do dia.","Pergunte 'como eu sei disso?' pra separar fato de achismo."],
 };
+const QUICK={
+"Comando e firmeza":"Hoje, tome 1 decisão que você vinha adiando e comunique pro time em 1 frase.",
+"Senso de urgência":"Amanhã de manhã, antes de qualquer coisa, resolva a tarefa que mais trava o seu caixa.",
+"Ousadia (risco calculado)":"Hoje, pegue a decisão de risco parada e escreva numa folha: ganho possível × perda máxima.",
+"Independência":"Esta semana, tome 1 decisão sozinho — sem pedir validação a ninguém.",
+"Objetividade":"Na próxima reunião, comece dizendo em 1 frase o resultado que você espera dela.",
+"Dinamismo":"Amanhã, escreva 3 prioridades do dia e ataque na ordem, sem desviar.",
+"Entusiasmo e motivação":"Na próxima segunda, abra com o time relembrando a meta e 1 vitória da semana.",
+"Persuasão":"Na próxima conversa de venda, termine pedindo o fechamento: 'bora fazer?'.",
+"Carisma":"Amanhã, cumprimente cada pessoa do time pelo nome.",
+"Sociabilidade":"Esta semana, marque 1 conversa nova com um fornecedor ou parceiro.",
+"Extroversão":"Hoje, grave 1 vídeo curto de 30s se apresentando ou mostrando a empresa.",
+"Empatia":"Antes da próxima cobrança, pergunte 'como você tá?' e escute até o fim.",
+"Persistência":"Esta segunda, escolha 1 meta e marque na agenda a revisão de todas as segundas.",
+"Estabilidade":"Amanhã, comece o dia com 1 rotina fixa de 10 min pra dar previsibilidade ao time.",
+"Paciência":"Hoje, escolha 1 processo lento e se comprometa a não forçá-lo esta semana.",
+"Conciliação":"Na próxima divergência, ache 1 ponto de acordo antes de bater o martelo.",
+"Flexibilidade com mudanças":"Hoje, pegue uma mudança recente e liste 1 oportunidade que ela abriu.",
+"Detalhismo":"Amanhã, crie 1 checklist de conferência pra o que você mais entrega.",
+"Disciplina":"Esta segunda, lance o DRG na Bússola antes das 10h — e repita toda segunda.",
+"Organização e controle":"Hoje, centralize seus números numa tela só.",
+"Planejamento":"Nesta sexta, planeje a semana: 3 prioridades + prazos.",
+"Concentração e precisão":"Amanhã, bloqueie 1h sem interrupção pra a tarefa que exige foco.",
+"Prudência":"Antes da próxima decisão importante, busque o 1 dado que está faltando.",
+"Racionalidade":"Na próxima decisão, escreva o número que a sustenta antes de bater o martelo.",
+};
 const AMBIENTE={ D:"Você rende mais em ambientes com autonomia pra decidir, metas claras e ritmo rápido — onde pode assumir a frente e ver resultado.", I:"Você rende mais perto de gente, com liberdade pra criar e reconhecimento — ambientes interativos e movimentados são o seu lugar.", S:"Você rende mais em ambientes estáveis, com rotina e relações de confiança — onde pode sustentar e ser o porto seguro do time.", C:"Você rende mais em ambientes organizados, com regras claras e tempo pra fazer bem feito — onde a qualidade e o dado importam." };
 const SHORT={"Comando e firmeza":"Comando","Senso de urgência":"Urgência","Ousadia (risco calculado)":"Ousadia","Independência":"Independência","Objetividade":"Objetividade","Dinamismo":"Dinamismo","Entusiasmo e motivação":"Entusiasmo","Persuasão":"Persuasão","Carisma":"Carisma","Sociabilidade":"Sociabilidade","Extroversão":"Extroversão","Empatia":"Empatia","Persistência":"Persistência","Estabilidade":"Estabilidade","Paciência":"Paciência","Conciliação":"Conciliação","Flexibilidade com mudanças":"Flexibilidade","Detalhismo":"Detalhismo","Disciplina":"Disciplina","Organização e controle":"Organização","Planejamento":"Planejamento","Concentração e precisão":"Concentração","Prudência":"Prudência","Racionalidade":"Racionalidade"};
 
 function el(t,a,k){ const e=document.createElement(t); a=a||{}; for(const x in a){ const v=a[x]; if(x==="class")e.className=v; else if(x==="html")e.innerHTML=v; else if(x.slice(0,2)==="on"&&typeof v==="function")e.addEventListener(x.slice(2),v); else if(typeof v==="boolean"){ if(v)e.setAttribute(x,""); } else if(v!=null)e.setAttribute(x,v); } (k||[]).forEach(c=>{ if(c==null)return; e.appendChild(typeof c==="string"?document.createTextNode(c):c); }); return e; }
 function getData(){ try{ const p=new URLSearchParams(location.search).get("d"); if(!p)return null; return JSON.parse(decodeURIComponent(atob(decodeURIComponent(p)))); }catch(e){ return null; } }
+function hoje(){ try{ return new Date().toLocaleDateString("pt-BR"); }catch(e){ return ""; } }
+function nivel(a){ if(a<55)return "Dono-Operário — a empresa ainda depende muito de você."; if(a<75)return "Dono em transição — você já começa a sair do operacional."; return "Dono que construiu — a empresa anda mais sem você."; }
 
-// Radar dos 24 comportamentos (você cheia × dono que cresce tracejada)
+function assinatura(primary){
+  const idx={D:0,I:1,S:2,C:3}[primary]; let s="";
+  for(let i=0;i<4;i++){ const on=i===idx; s+=`<line x1="0" y1="${6+i*9}" x2="${on?110:64}" y2="${6+i*9}" stroke="${on?'#C78F2C':'#7e9b95'}" stroke-width="${on?3:2}"/>`; }
+  return `<svg width="120" height="40" viewBox="0 0 120 40" style="display:block;margin:0 auto" aria-label="Eixo">${s}</svg>`;
+}
 function radarSVG(tr){
   const N=tr.length, cx=300, cy=280, R=175, Rl=192;
   const pt=(i,val)=>{ const a=(i/N*2*Math.PI)-Math.PI/2; const r=R*(Math.max(0,Math.min(100,val))/100); return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; };
   const polyPts=key=> tr.map((x,i)=>pt(i,x[key]).map(n=>n.toFixed(1)).join(",")).join(" ");
   let grid=""; [25,50,75,100].forEach(g=>{ grid+=`<polygon points="${tr.map((x,i)=>pt(i,g).map(n=>n.toFixed(1)).join(",")).join(" ")}" fill="none" stroke="#ece5d6" stroke-width="1"/>`; });
   let spokes="",labels="",dots="";
-  tr.forEach((x,i)=>{ const a=(i/N*2*Math.PI)-Math.PI/2; const [ex,ey]=pt(i,100); spokes+=`<line x1="${cx}" y1="${cy}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#f0ead8" stroke-width="1"/>`; const ca=Math.cos(a); const lx=cx+Rl*ca, ly=cy+Rl*Math.sin(a); const anchor=ca>0.15?"start":(ca<-0.15?"end":"middle"); labels+=`<text x="${lx.toFixed(1)}" y="${(ly+4).toFixed(1)}" font-size="13" font-weight="600" fill="#2b3633" text-anchor="${anchor}">${SHORT[x.n]||x.n}</text>`; if(x.m){ const [vx,vy]=pt(i,x.voce); dots+=`<circle cx="${vx.toFixed(1)}" cy="${vy.toFixed(1)}" r="4" fill="#C78F2C" stroke="#fff" stroke-width="1.5"/>`; } });
+  tr.forEach((x,i)=>{ const a=(i/N*2*Math.PI)-Math.PI/2; const [ex,ey]=pt(i,100); spokes+=`<line x1="${cx}" y1="${cy}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#f0ead8" stroke-width="1"/>`; const ca=Math.cos(a); const lx=cx+Rl*ca, ly=cy+Rl*Math.sin(a); const anchor=ca>0.15?"start":(ca<-0.15?"end":"middle"); labels+=`<text x="${lx.toFixed(1)}" y="${(ly+4).toFixed(1)}" font-size="13" font-weight="600" fill="#2b3633" text-anchor="${anchor}" font-family="Open Sans,Arial">${SHORT[x.n]||x.n}</text>`; if(x.m){ const [vx,vy]=pt(i,x.voce); dots+=`<circle cx="${vx.toFixed(1)}" cy="${vy.toFixed(1)}" r="4" fill="#C78F2C" stroke="#fff" stroke-width="1.5"/>`; } });
   const ideal=`<polygon points="${polyPts('ideal')}" fill="rgba(199,143,44,.08)" stroke="#C78F2C" stroke-width="2" stroke-dasharray="5 4"/>`;
   const voce=`<polygon points="${polyPts('voce')}" fill="rgba(15,61,58,.22)" stroke="#0F3D3A" stroke-width="2.4"/>`;
   return `<svg viewBox="0 0 600 560" width="100%" style="width:100%;display:block;margin:0 auto">${grid}${spokes}${ideal}${voce}${dots}${labels}</svg>`;
@@ -137,72 +185,97 @@ function render(){
   const d=getData();
   if(!d){ $.appendChild(el("div",{class:"card"},[ el("h2",{},["Relatório não encontrado"]), el("p",{class:"muted"},["Abra este relatório pelo link gerado na avaliação."]) ])); return; }
   const comb=d.c, marc=new Set(d.m||[]), id=d.id||{};
-  const ord=ORDER.slice().sort((a,b)=>comb[b]-comb[a]); const primary=ord[0];
-  // por traço: você = nível do fator (sem penalidade); marcado = foco escolhido (estrela, não nota)
+  const ord=ORDER.slice().sort((a,b)=>comb[b]-comb[a]); const primary=ord[0], secondary=ord[1];
   const tr=T.map((t,i)=>{ const f=t[1]; return {n:t[0],f,por:t[2],mom:t[3],voce:comb[f],ideal:IDEAL_TRACO[t[0]]||IDEAL[f],gap:(IDEAL_TRACO[t[0]]||IDEAL[f])-comb[f],m:marc.has(i)}; });
   const fortes=tr.slice().sort((a,b)=>b.voce-a.voce).slice(0,4);
   const marcados=tr.filter(x=>x.m).sort((a,b)=>b.gap-a.gap);
   const pool=(marcados.length?marcados:tr.slice().filter(x=>x.gap>0).sort((a,b)=>b.gap-a.gap));
   const foco=pool[0], observar=pool.slice(1,3);
   const aderencia=Math.round(ORDER.reduce((s,f)=>s+Math.min(comb[f],IDEAL[f])/IDEAL[f],0)/4*100);
+  const data=hoje();
+  const focoMes=(foco.mom.match(/M(\d)/)||[])[1];
 
-  // CAPA
-  $.appendChild(el("div",{class:"card capa"},[ el("div",{class:"logo"}), el("h1",{},["Perfil Empreendedor Eixo"]), el("div",{class:"sub"},["Eixo Empreendedor · Luiz Curti"]), el("div",{class:"nome"},[id.cliente||"—"]), el("div",{class:"muted",style:"margin-top:4px"},[id.empresa?id.empresa+" · ":"", hoje()]) ]));
+  // HERO (capa)
+  $.appendChild(el("div",{class:"hero"},[
+    el("div",{html:assinatura(primary)}),
+    el("div",{class:"wm"},["EIXO EMPREENDEDOR"]),
+    el("h1",{},["Perfil Empreendedor Eixo"]),
+    el("div",{class:"nome"},[id.cliente||"—"]),
+    el("div",{class:"meta"},[(id.empresa?id.empresa+" · ":"")+data]),
+    el("div",{class:"badge"},[`${FATOR[primary].nome} ${FATOR[secondary].nome}`]),
+  ]));
 
-  // ABERTURA + AHA
+  // ABERTURA + tensão + AHA + tema
   $.appendChild(el("div",{class:"card"},[
     el("h2",{},[`Olá${id.cliente?(", "+id.cliente.split(" ")[0]):""}!`]),
     el("p",{},["Esse é o seu Perfil Empreendedor — não um teste pra dizer se você tá certo ou errado, mas um espelho de como você toca o seu negócio no dia a dia, e onde tem mais chão pra crescer."]),
-    el("p",{},["Cada dono tem o seu jeito; o que muda o jogo é saber qual é o seu e dar o próximo passo a partir dele. E o seu jeito é o do ", el("b",{},[FATOR[primary].nome]), ": ", FATOR[primary].txt]),
+    el("p",{},["Cada dono tem o seu jeito; o que muda o jogo é saber qual é o seu e dar o próximo passo a partir dele. O seu jeito é o do ", el("b",{},[FATOR[primary].nome]), ": ", FATOR[primary].txt]),
+    el("p",{},["Mas tem uma verdade aqui: às vezes o que te trouxe até aqui — a sua maior força — é o mesmo que começa a te segurar quando a empresa cresce."]),
     el("div",{class:"aha"},[ el("b",{},["Repara nisso: "]), `sua força mais forte hoje é ${fortes[0].n}. É por aí que você abre vantagem — e ninguém nasce pronto no resto; a gente vira no caminho.` ]),
+    el("p",{class:"tema"},[`Se este relatório fosse uma frase, seria: o seu mês é sobre ${foco.n.toLowerCase()}.`]),
   ]));
 
-  // RADAR
+  // RADAR + aderência datada + nível + prova social
   $.appendChild(el("div",{class:"card"},[
     el("h2",{},["O seu mapa"]),
     el("div",{html:radarSVG(tr)}),
     el("div",{class:"leg"},[ el("span",{html:'<i style="border-top:3px solid #0F3D3A"></i>Você'}), el("span",{html:'<i style="border-top:3px dashed #C78F2C"></i>Dono que cresce'}), el("span",{html:'<i style="width:9px;height:9px;border-radius:50%;background:#C78F2C;border-top:0"></i>Foco que você escolheu'}) ]),
     el("div",{class:"adernum"},[`${aderencia}%`]),
-    el("p",{class:"muted",style:"text-align:center;margin-top:2px"},[`do caminho do "dono que cresce" você já percorreu. Em 6 meses, a gente mira subir isso — e mede de novo no fim.`]),
-    el("p",{class:"muted",style:"text-align:center"},["O mapa mostra o seu jeito projetado nos 24 comportamentos. Onde o verde fica dentro do tracejado, é onde tem mais a ganhar."]),
+    el("div",{class:"nivel"},[nivel(aderencia)]),
+    el("p",{class:"muted",style:"text-align:center;margin-top:4px"},[`Sua aderência ao caminho do dono que cresce, medida hoje (${data}). É a sua linha de base — no mês 6 a gente remede neste mesmo mapa e você vê o quanto andou.`]),
+    el("p",{class:"muted",style:"text-align:center;font-size:12px"},["Régua calibrada com donos de pequenas e médias empresas do DF e de Goiás."]),
   ]));
 
-  // FORÇAS (antes dos gaps)
+  // FORÇAS
   const cf=el("div",{class:"card"}); cf.appendChild(el("h2",{},["Comece pelas suas forças"]));
   cf.appendChild(el("p",{class:"muted"},["O que você já faz bem — é daqui que a gente parte."]));
   fortes.forEach(x=> cf.appendChild(el("div",{class:"forca"},[ el("b",{},[x.n]), " — ", x.por, "." ])));
   $.appendChild(cf);
 
-  // FOCO DO MÊS (1 + 2 a observar)
+  // FOCO + virada + ROI + quick-win + 30 dias + semana na Bússola
   const cfoco=el("div",{class:"card"});
   cfoco.appendChild(el("h2",{},["Onde você tem mais a ganhar"]));
   cfoco.appendChild(el("p",{class:"muted"},["Não precisa atacar tudo. Comece por UM — o que mais destrava o resto agora."]));
-  const fb=el("div",{class:"foco"},[
-    el("span",{class:"badge"},["Seu foco do mês"]),
+  cfoco.appendChild(el("div",{class:"foco"},[
+    el("span",{class:"pill"},["Seu foco do mês"]),
     el("h3",{},[foco.n]),
     el("p",{},[DESC[foco.n]]),
-    el("p",{class:"muted"},[`Pensa um instante: quanto isso te custa hoje — em horas presas na operação ou em dinheiro que escapa? É o que a gente destrava primeiro.`]),
-    el("h3",{style:"font-size:14px;color:#0F3D3A"},["Nos próximos 30 dias:"]),
+    el("div",{class:"roi"},[ "Faça a conta comigo: 1 hora sua vale R$ ", el("span",{class:"l"}), ". Hoje a falta de ", foco.n.toLowerCase(), " te custa ~", el("span",{class:"l"}), " horas/semana. São R$ ", el("span",{class:"l"}), "/mês escapando — e é exatamente isso que a gente destrava primeiro." ]),
+    el("div",{class:"virada"},["Topa trabalhar ESTE ponto nos próximos 30 dias?"]),
+    el("div",{class:"quick"},[ el("b",{},["Comece amanhã de manhã: "]), QUICK[foco.n] ]),
+    el("h3",{style:"font-size:14px;color:#0F3D3A"},["E nos próximos 30 dias:"]),
     el("ul",{class:"acoes"}, (ACOES[foco.n]||[]).map(a=>el("li",{},[a]))),
-    el("p",{class:"muted"},[`No Eixo 180, isso é trabalhado em: ${foco.mom}.`]),
-  ]);
-  cfoco.appendChild(fb);
+    el("p",{class:"muted"},[`Toda semana isso vira 1 número que você marca na Bússola — e a gente revisa junto. No Eixo 180, é trabalhado em ${foco.mom}.`]),
+  ]));
   if(observar.length){ cfoco.appendChild(el("h3",{},["E mais 2 pra observar (depois)"]));
     observar.forEach(x=> cfoco.appendChild(el("div",{class:"obs"},[ el("b",{},[x.n]), " — ", x.por, "." ]))); }
   $.appendChild(cfoco);
 
-  // PACTO
+  // MINI-MAPA M1->M6
   $.appendChild(el("div",{class:"card"},[
-    el("h2",{},["Meu compromisso"]),
-    el("p",{},[`Eu, ${id.cliente||"_______________"}, escolho trabalhar `, el("b",{},[foco.n]), " nos próximos 30 dias."]),
-    el("p",{style:"margin-top:10px"},["Meu primeiro passo, até ___ /___ /______, é:"]),
-    el("div",{class:"pacto"},[ el("div",{class:"linha"}), el("div",{class:"linha"}), el("p",{class:"muted",style:"margin-top:10px"},["Como vou saber que cumpri:"]), el("div",{class:"linha"}), el("p",{style:"margin-top:14px"},["Assinatura:"]), el("div",{class:"linha"}) ]),
+    el("h2",{},["Onde isso entra na sua jornada de 6 meses"]),
+    el("div",{class:"mapa6"}, FASES.map(f=> el("div",{class:"et"+(focoMes&&f[0]==="M"+focoMes?" on":"")},[ el("div",{},[f[0]]), el("div",{},[f[1]]) ]))),
+    el("p",{class:"muted"},["Você está no começo (M1). O seu foco se encaixa no mês marcado — por isso ele vem agora, e o resto a gente trabalha no tempo certo."]),
   ]));
 
-  // MAPA DOS 24 (detalhe, reframe)
+  // PACTO + próximo encontro + caixa destravar
+  $.appendChild(el("div",{class:"card"},[
+    el("h2",{},["Meu compromisso"]),
+    el("p",{},["Topo. Eu, ", el("b",{},[id.cliente||"_______________"]), ", escolho trabalhar ", el("b",{},[foco.n]), " nos próximos 30 dias."]),
+    el("div",{class:"pacto"},[
+      el("p",{style:"margin:0"},["Meu primeiro passo, até ___ /___ /______, é:"]),
+      el("div",{class:"linha"}), el("div",{class:"linha"}),
+      el("p",{style:"margin-top:12px"},[el("b",{},["Nosso próximo encontro:"]), " ___ /___ às ___ h."]),
+      el("p",{class:"muted",style:"margin-top:12px"},["O que eu quero destravar primeiro com o Luiz:"]),
+      el("div",{class:"linha"}), el("div",{class:"linha"}),
+      el("p",{style:"margin-top:14px"},["Assinatura:"]), el("div",{class:"linha"}),
+    ]),
+  ]));
+
+  // MAPA DOS 24
   const cdet=el("div",{class:"card"});
   cdet.appendChild(el("h2",{},["Seu mapa completo — os 24 comportamentos"]));
-  cdet.appendChild(el("p",{class:"muted"},["O que cada um significa, e onde você está em relação ao dono que cresce (você / dono que cresce). É o panorama — não precisa atacar tudo: o foco está acima."]));
+  cdet.appendChild(el("p",{class:"muted"},["O que cada um significa, e onde você está em relação ao dono que cresce (você / dono que cresce). É o panorama — o foco está lá em cima."]));
   ORDER.forEach(f=>{
     const bloco=el("div",{class:"fbloco",style:`border-left-color:${FCOR[f]}`});
     bloco.appendChild(el("h3",{style:`color:${FCOR[f]}`},[FATOR[f].nome]));
@@ -223,12 +296,12 @@ function render(){
   // FECHAMENTO
   $.appendChild(el("div",{class:"card"},[
     el("h2",{},["Por onde começar"]),
-    el("p",{},["Não precisa virar outra pessoa, nem mudar tudo de uma vez. Escolhe ", el("b",{},["o seu foco do mês"]), " ali em cima e dá o primeiro passo essa semana."]),
-    el("p",{},["E não se cobre demais: isso não é quem você ", el("b",{},["é"]), " pra sempre — é onde você ", el("b",{},["está"]), " hoje. Comportamento se treina, e a gente mede a sua evolução ao longo dos 6 meses. ", el("b",{},["A gente caminha junto — dono pra dono."]) ]),
+    el("p",{},["Não precisa virar outra pessoa, nem mudar tudo de uma vez. Escolhe ", el("b",{},["o seu foco do mês"]), " e dá o primeiro passo essa semana."]),
+    el("p",{},["E não se cobre demais: isso não é quem você ", el("b",{},["é"]), " pra sempre — é onde você ", el("b",{},["está"]), " hoje. Comportamento se treina, e a gente mede a sua evolução ao longo dos 6 meses."]),
+    el("p",{},[ el("b",{},["Leve este relatório no nosso 1º encontro"]), " — é nele que a gente transforma o seu foco em plano. ", el("b",{},["A gente caminha junto, dono pra dono."]) ]),
     el("div",{class:"noprint",style:"margin-top:12px"},[ el("button",{class:"btn",onclick:()=>window.print()},["Imprimir / Salvar PDF"]) ]),
   ]));
 }
-function hoje(){ try{ return new Date().toLocaleDateString("pt-BR"); }catch(e){ return ""; } }
 render();
 </script>
 </body>
