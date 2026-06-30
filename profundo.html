@@ -68,7 +68,10 @@
 // ===== DADOS =====
 const FATOR = { D:{nome:"Direto",desc:"decide, urgência, risco"}, I:{nome:"Comunicador",desc:"conecta, vende, mobiliza"}, S:{nome:"Constante",desc:"sustenta, ritmo, lealdade"}, C:{nome:"Analítico",desc:"dado, padrão, qualidade"} };
 const FATOR_ORDER = ["D","I","S","C"];
+const EMAIL_DESTINO = "luizfernando.curti@gmail.com";
+const ENVIO_URL = ""; // cole aqui a URL /exec do Google Apps Script (ver perfil-envio-email no repo eixo-brain). Vazio = mostra preview na tela.
 const IDEAL = { D:82, I:70, S:69, C:83 }; // perfil do Dono Eixo ideal (média dos exig por fator)
+const IDEAL_TRACO = {"Comando e firmeza":85,"Senso de urgência":85,"Ousadia (risco calculado)":80,"Independência":75,"Objetividade":85,"Dinamismo":80,"Entusiasmo e motivação":75,"Persuasão":80,"Carisma":65,"Sociabilidade":65,"Extroversão":60,"Empatia":75,"Persistência":90,"Estabilidade":60,"Paciência":60,"Conciliação":55,"Flexibilidade com mudanças":80,"Detalhismo":75,"Disciplina":90,"Organização e controle":85,"Planejamento":90,"Concentração e precisão":75,"Prudência":75,"Racionalidade":85};
 const COND = {
   D:"Vá direto ao número, sem rodeio. Traga decisões, não teoria. Feche com 1 próximo passo e prazo. Ele respeita objetividade e perde a paciência com enrolação.",
   I:"Comece pelo relacionamento (ele abre falando), mas ancore na Bússola/DRG — ele foge do número. Deixe tudo por escrito (esquece no entusiasmo). Celebre as vitórias.",
@@ -154,14 +157,16 @@ function compute(){
 
 // ===== render =====
 function render(){ $app.innerHTML=""; const s=state.step;
-  if(s==="intro")return intro(); if(s==="f1")return fase1(); if(s==="f2")return fase2(); if(s==="f3")return fase3(); return result(); }
+  if(s==="intro")return intro(); if(s==="f1")return fase1(); if(s==="f2")return fase2(); if(s==="f3")return fase3(); if(s==="fim")return finalScreen(); return intro(); }
 
 function intro(){
   $app.appendChild(el("div",{class:"card"},[
     el("h2",{},["Avaliação comportamental do dono — 3 fases"]),
     el("p",{},["Responda pensando em como você ", el("b",{},["é e age de verdade"]), ", não no que acha que deveria."]),
     el("ul",{},[ el("li",{},["Fase 1: ordenar palavras pelo quanto combinam com você."]), el("li",{},["Fase 2: ajustar uma régua em cada frase."]), el("li",{},["Fase 3: marcar o que você acha que precisa desenvolver."]) ]),
-    el("p",{class:"muted"},["No final: seu perfil, a distância pro perfil do dono que faz a empresa crescer, e as prioridades de desenvolvimento ligadas ao programa."]),
+    el("h3",{},["Identificação"]),
+    el("div",{class:"row"},[ idInput("cliente","Seu nome"), idInput("empresa","Empresa") ]),
+    el("p",{class:"muted",style:"margin-top:10px"},["Ao terminar, o relatório vai direto pro seu consultor Eixo — você não vê o resultado na hora; ele será trabalhado junto com você."]),
     el("div",{class:"row noprint",style:"margin-top:12px"},[ el("button",{class:"btn primary",onclick:()=>{ state.p1=0; go("f1"); }},["Começar"]) ]),
   ]));
 }
@@ -238,68 +243,80 @@ function fase3(){
   card.appendChild(c2);
   card.appendChild(el("div",{class:"row noprint",style:"margin-top:16px; justify-content:space-between"},[
     el("button",{class:"btn",onclick:()=>{ state.p2=F2_PAGINAS-1; go("f2"); }},["Voltar"]),
-    el("button",{class:"btn primary",onclick:()=>go("result")},["Ver relatório"]),
+    el("button",{class:"btn primary",onclick:()=>enviar()},["Finalizar e enviar"]),
   ]));
   $app.appendChild(card);
 }
 
 function idInput(key,label){ return el("div",{style:"flex:1; min-width:140px"},[ el("div",{class:"muted"},[label]), el("input",{value:state.id[key],style:"width:100%; padding:8px; border:1px solid var(--linha); border-radius:8px",oninput:e=>{state.id[key]=e.target.value;}}) ]); }
 
-function result(){
-  const r=compute();
-  const perfil=`${FATOR[r.primary].nome} ${FATOR[r.secondary].nome}`;
-  // Capa
-  $app.appendChild(el("div",{class:"card"},[
-    el("h2",{},["Relatório — Perfil Empreendedor Eixo"]),
-    el("p",{},[ el("b",{},["Perfil: "]), perfil, ` (${r.primary}/${r.secondary})` ]),
-    el("div",{class:"row",style:"margin-top:8px"},[ idInput("cliente","Cliente"), idInput("empresa","Empresa"), idInput("data","Data") ]),
-  ]));
-  // Mapa de fatores
-  const c2=el("div",{class:"card"}); c2.appendChild(el("h2",{},["Mapa de fatores"]));
-  c2.appendChild(el("p",{class:"muted"},["Barra verde = você. Marca âmbar = nível do dono que faz a empresa crescer."]));
-  FATOR_ORDER.forEach(f=>{ c2.appendChild(el("div",{class:"bar"},[ el("div",{class:"lab"},[`${FATOR[f].nome} (${f})`]), el("div",{class:"track"},[ el("div",{class:"fill",style:`width:${r.comb[f]}%`}), el("div",{class:"ideal",style:`left:${IDEAL[f]}%`}) ]), el("div",{class:"pct"},[`${r.comb[f]} / ${IDEAL[f]}`]) ])); });
-  $app.appendChild(c2);
-  // 24 comportamentos por fator
-  const c3=el("div",{class:"card"}); c3.appendChild(el("h2",{},["Os 24 comportamentos"]));
-  c3.appendChild(el("p",{class:"muted"},["Força = fator no nível do ideal e não marcado. Desenvolver = você marcou OU o fator está abaixo do ideal."]));
-  FATOR_ORDER.forEach(f=>{
-    c3.appendChild(el("h3",{},[`${FATOR[f].nome} — você ${r.comb[f]} / ideal ${IDEAL[f]}`]));
-    const ul=el("ul");
-    TRACOS.forEach((t,i)=>{ if(t.f!==f)return; const marcado=state.f3mais.has(i); const baixo=r.comb[f] < IDEAL[f]-10; const dev = marcado||baixo;
-      ul.appendChild(el("li",{},[ t.n, " ", el("span",{class:"tag "+(dev?"dev":"forca")},[dev?"desenvolver":"força"]), marcado?el("span",{class:"muted"},["  · você marcou"]):null ])); });
-    c3.appendChild(ul);
-  });
-  $app.appendChild(c3);
-  // Prioridades de desenvolvimento
-  const prioMarc = TRACOS.map((t,i)=>({t,i})).filter(x=>state.f3mais.has(x.i));
-  const fatBaixos = FATOR_ORDER.filter(f=> r.comb[f] < IDEAL[f]-10).sort((a,b)=>(IDEAL[b]-r.comb[b])-(IDEAL[a]-r.comb[a]));
-  const c4=el("div",{class:"card"}); c4.appendChild(el("h2",{},["Prioridades de desenvolvimento"]));
-  if(prioMarc.length){ c4.appendChild(el("p",{class:"muted"},["O que o próprio dono reconheceu (Fase 3):"]));
-    c4.appendChild(el("ul",{}, prioMarc.map(x=>el("li",{},[ el("b",{},[x.t.n]), ` — CCE: ${x.t.cce}`, el("span",{class:"muted"},[`  ·  trabalha em: ${x.t.mom}`]) ])))); }
-  else c4.appendChild(el("p",{class:"muted"},["O dono não marcou prioridades na Fase 3 — use os fatores abaixo do ideal:"]));
-  if(fatBaixos.length) c4.appendChild(el("p",{},[ "Fatores abaixo do ideal: ", fatBaixos.map(f=>`${FATOR[f].nome} (${r.comb[f]} vs ${IDEAL[f]})`).join(" · ") ]));
-  if(state.f3menos.size) c4.appendChild(el("p",{class:"muted"},[ "A moderar (Fase 3): ", [...state.f3menos].map(i=>MENOS[i].replace("MENOS ","")).join(", ") ]));
-  $app.appendChild(c4);
-  // Leitura do consultor
-  $app.appendChild(el("div",{class:"card"},[ el("h3",{},[`Leitura do consultor — perfil ${FATOR[r.primary].nome}`]), el("p",{},[COND[r.primary]]), el("p",{class:"muted"},["Isto é estilo (não muda). A evolução em 6 meses é medida pela Régua da Postura de Dono."]) ]));
-  // Ações
-  $app.appendChild(el("div",{class:"card noprint"},[ el("div",{class:"row"},[ el("button",{class:"btn primary",onclick:()=>copiar(r,perfil)},["Copiar relatório"]), el("button",{class:"btn",onclick:()=>window.print()},["Imprimir / Salvar PDF"]), el("button",{class:"btn",onclick:()=>{ state.f1=GRUPOS.map(()=>[]); state.f2=AFIRM.map(()=>null); state.f3mais=new Set(); state.f3menos=new Set(); state.p1=0; state.p2=0; go("intro"); }},["Refazer"]) ]) ]));
+function clamp(v){ return Math.max(0,Math.min(100,Math.round(v))); }
+function hoje(){ try{ return new Date().toLocaleDateString("pt-BR"); }catch(e){ return ""; } }
+
+// barra de comparação você × ideal (tabela = compatível com e-mail/Gmail)
+function barComp(voce, ideal, corV){
+  voce=clamp(voce); ideal=clamp(ideal); const CINZA="#e3ddd1", FALTA="#f0d2c9";
+  if(voce>=ideal){
+    return `<table role="presentation" style="border-collapse:collapse;width:100%;table-layout:fixed"><tr><td style="background:${corV};height:14px;width:${voce}%"></td><td style="background:${CINZA};height:14px;width:${100-voce}%"></td></tr></table>`;
+  }
+  const falta=ideal-voce;
+  return `<table role="presentation" style="border-collapse:collapse;width:100%;table-layout:fixed"><tr><td style="background:${corV};height:14px;width:${voce}%"></td><td style="background:${FALTA};height:14px;width:${falta}%"></td><td style="background:${CINZA};height:14px;width:${100-ideal}%"></td></tr></table>`;
 }
 
-function copiar(r,perfil){
-  const id=state.id;
-  const marc=TRACOS.map((t,i)=>({t,i})).filter(x=>state.f3mais.has(x.i)).map(x=>`${x.t.n} (${x.t.cce}, ${x.t.mom})`);
-  const txt=`PERFIL EMPREENDEDOR EIXO — Relatório
-Cliente: ${id.cliente||"—"}   Empresa: ${id.empresa||"—"}   Data: ${id.data||"—"}
+// Relatório detalhado em HTML (usado no e-mail e no preview)
+function buildReportHTML(r){
+  const id=state.id, perfil=`${FATOR[r.primary].nome} ${FATOR[r.secondary].nome}`;
+  const VERDE="#0F3D3A",AMBAR="#C78F2C",VERM="#b4452f",CINZA="#7c8a85";
+  const cor=g=> g<=0?VERDE : (g<=20?AMBAR:VERM);
+  // estimativa por traço: nível do fator, rebaixado se o dono marcou "MAIS"
+  const tr=TRACOS.map((t,i)=>{ const base=r.comb[t.f]; const marc=state.f3mais.has(i); const voce=marc?Math.max(0,base-30):base; const ideal=IDEAL_TRACO[t.n]||IDEAL[t.f]; return {t,i,voce,ideal,gap:ideal-voce,marc}; }).sort((a,b)=>b.gap-a.gap);
+  let fat=""; FATOR_ORDER.forEach(f=>{ fat+=`<tr><td style="padding:5px 6px;font-weight:bold;color:${VERDE};white-space:nowrap">${FATOR[f].nome} (${f})</td><td style="padding:5px 6px">${barComp(r.comb[f],IDEAL[f],VERDE)}</td><td style="padding:5px 6px;color:${CINZA};font-size:12px;white-space:nowrap">${r.comb[f]} / ${IDEAL[f]}</td></tr>`; });
+  let chart=""; tr.forEach(x=>{ chart+=`<tr><td style="padding:5px 6px;font-size:13px">${x.t.n}${x.marc?' <span style="color:'+AMBAR+';font-size:11px">●</span>':''}</td><td style="padding:5px 6px;width:46%">${barComp(x.voce,x.ideal,cor(x.gap))}</td><td style="padding:5px 6px;color:${CINZA};font-size:12px;white-space:nowrap">${x.voce} / ${x.ideal} · <b style="color:${cor(x.gap)}">${x.gap>0?'+':''}${x.gap}</b></td></tr>`; });
+  const marc=TRACOS.map((t,i)=>({t,i})).filter(x=>state.f3mais.has(x.i));
+  const prio = marc.length ? "<ul style='margin:6px 0;padding-left:20px'>"+marc.map(x=>`<li><b>${x.t.n}</b> — CCE: ${x.t.cce} · trabalha em: ${x.t.mom}</li>`).join("")+"</ul>" : `<p style="color:${CINZA}">O dono não marcou — usar os comportamentos de maior gap no gráfico acima.</p>`;
+  const menos = state.f3menos.size ? [...state.f3menos].map(i=>MENOS[i].replace("MENOS ","")).join(", ") : "—";
+  return `<div style="font-family:Arial,Helvetica,sans-serif;color:#1d2522;max-width:680px;line-height:1.45">
+  <h2 style="color:${VERDE};margin:0 0 6px">Perfil Empreendedor Eixo — Relatório</h2>
+  <p style="margin:0"><b>Cliente:</b> ${id.cliente||"—"} &nbsp;|&nbsp; <b>Empresa:</b> ${id.empresa||"—"} &nbsp;|&nbsp; <b>Data:</b> ${hoje()}</p>
+  <p style="margin:10px 0"><b>Perfil:</b> ${perfil} (${r.primary}/${r.secondary})</p>
+  <h3 style="color:${VERDE};margin:16px 0 4px">Mapa de fatores (você × dono ideal)</h3>
+  <table style="border-collapse:collapse;width:100%">${fat}</table>
+  <h3 style="color:${VERDE};margin:18px 0 2px">Comportamentos × perfil do dono ideal</h3>
+  <p style="color:${CINZA};font-size:12px;margin:2px 0 6px">Ordenado pela maior carência. Barra colorida = você; faixa rosa = o quanto falta pro ideal. ● = o dono marcou pra desenvolver. (Estimativa por fator + auto-percepção da Fase 3.)</p>
+  <table style="border-collapse:collapse;width:100%">${chart}</table>
+  <h3 style="color:${VERDE};margin:18px 0 4px">Prioridades de desenvolvimento</h3>
+  ${prio}
+  <p style="margin:6px 0"><b>A moderar:</b> ${menos}</p>
+  <h3 style="color:${VERDE};margin:18px 0 4px">Leitura do consultor — perfil ${FATOR[r.primary].nome}</h3>
+  <p style="margin:4px 0">${COND[r.primary]}</p>
+  <p style="color:${CINZA};font-size:12px">Isto é estilo (não muda). A evolução em 6 meses é medida pela Régua da Postura de Dono.</p>
+  </div>`;
+}
 
-Perfil: ${perfil} (${r.primary}/${r.secondary})
-Fatores (você / ideal): D ${r.comb.D}/${IDEAL.D} · I ${r.comb.I}/${IDEAL.I} · S ${r.comb.S}/${IDEAL.S} · C ${r.comb.C}/${IDEAL.C}
+function reiniciar(){ state.f1=GRUPOS.map(()=>[]); state.f2=AFIRM.map(()=>null); state.f3mais=new Set(); state.f3menos=new Set(); state.id={cliente:"",empresa:"",data:""}; state.p1=0; state.p2=0; state.step="intro"; scrollTo(0,0); render(); }
 
-PRIORIDADES (marcadas pelo dono): ${marc.length?marc.join("; "):"—"}
-A MODERAR: ${state.f3menos.size?[...state.f3menos].map(i=>MENOS[i]).join("; "):"—"}
+function enviar(){
+  const r=compute();
+  state.relatorioHTML=buildReportHTML(r);
+  if(ENVIO_URL){
+    const assunto=`Perfil Empreendedor Eixo — ${state.id.cliente||"cliente"}${state.id.empresa?(" / "+state.id.empresa):""}`;
+    try{ fetch(ENVIO_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({destino:EMAIL_DESTINO,assunto,html:state.relatorioHTML})}); }catch(e){}
+  }
+  state.step="fim"; scrollTo(0,0); render();
+}
 
-LEITURA DO CONSULTOR (${FATOR[r.primary].nome}): ${COND[r.primary]}`;
-  navigator.clipboard.writeText(txt).then(()=>alert("Relatório copiado ✅")).catch(()=>alert("Selecione e copie manualmente."));
+function finalScreen(){
+  if(ENVIO_URL){
+    $app.appendChild(el("div",{class:"card"},[
+      el("h2",{},["Avaliação concluída ✅"]),
+      el("p",{},["Obrigado por responder! O relatório foi enviado ao consultor. Em breve o Luiz conversa com você sobre o seu perfil."]),
+      el("div",{class:"row noprint",style:"margin-top:12px"},[ el("button",{class:"btn",onclick:reiniciar},["Nova avaliação"]) ]),
+    ]));
+  } else {
+    $app.appendChild(el("div",{class:"card",style:"border-color:#C78F2C;background:#fdf6e9"},[ el("p",{class:"muted"},["⚠️ Envio por e-mail ainda não configurado — abaixo é só um PREVIEW (não foi enviado). Configure o Apps Script pra enviar automático."]) ]));
+    const c=el("div",{class:"card"}); c.innerHTML=state.relatorioHTML; $app.appendChild(c);
+    $app.appendChild(el("div",{class:"card noprint"},[ el("div",{class:"row"},[ el("button",{class:"btn",onclick:()=>window.print()},["Imprimir / Salvar PDF"]), el("button",{class:"btn",onclick:reiniciar},["Nova avaliação"]) ]) ]));
+  }
 }
 
 render();
