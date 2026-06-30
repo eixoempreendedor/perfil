@@ -130,7 +130,9 @@ const MENOS = ["MENOS autoritário","MENOS precipitado","MENOS centralizador","M
 // ===== helpers =====
 function el(t,a,k){ const e=document.createElement(t); a=a||{}; for(const x in a){ const v=a[x]; if(x==="class")e.className=v; else if(x==="html")e.innerHTML=v; else if(x.slice(0,2)==="on"&&typeof v==="function")e.addEventListener(x.slice(2),v); else if(typeof v==="boolean"){ if(v)e.setAttribute(x,""); } else if(v!=null)e.setAttribute(x,v); } (k||[]).forEach(c=>{ if(c==null)return; e.appendChild(typeof c==="string"?document.createTextNode(c):c); }); return e; }
 const $app=document.getElementById("app");
-const state={ step:"intro", f1:GRUPOS.map(()=>[]), f2:AFIRM.map(()=>null), f3mais:new Set(), f3menos:new Set(), id:{cliente:"",empresa:"",data:""} };
+const F2_POR_PAGINA=4;
+const F2_PAGINAS=Math.ceil(AFIRM.length/F2_POR_PAGINA);
+const state={ step:"intro", p1:0, p2:0, f1:GRUPOS.map(()=>[]), f2:AFIRM.map(()=>null), f3mais:new Set(), f3menos:new Set(), id:{cliente:"",empresa:"",data:""} };
 
 // ===== scoring =====
 function compute(){
@@ -155,46 +157,47 @@ function intro(){
     el("p",{},["Responda pensando em como você ", el("b",{},["é e age de verdade"]), ", não no que acha que deveria."]),
     el("ul",{},[ el("li",{},["Fase 1: ordenar palavras pelo quanto combinam com você."]), el("li",{},["Fase 2: ajustar uma régua em cada frase."]), el("li",{},["Fase 3: marcar o que você acha que precisa desenvolver."]) ]),
     el("p",{class:"muted"},["No final: seu perfil, a distância pro perfil do dono que faz a empresa crescer, e as prioridades de desenvolvimento ligadas ao programa."]),
-    el("div",{class:"row noprint",style:"margin-top:12px"},[ el("button",{class:"btn primary",onclick:()=>go("f1")},["Começar"]) ]),
+    el("div",{class:"row noprint",style:"margin-top:12px"},[ el("button",{class:"btn primary",onclick:()=>{ state.p1=0; go("f1"); }},["Começar"]) ]),
   ]));
 }
 
 function go(s){ state.step=s; scrollTo(0,0); render(); }
 
 function fase1(){
-  const done=state.f1.filter(o=>o.length===4).length;
+  const g=state.p1, grupo=GRUPOS[g], order=state.f1[g];
+  const completos=state.f1.filter(o=>o.length===4).length;
   const card=el("div",{class:"card"});
   card.appendChild(el("div",{class:"pill"},["Fase 1 de 3 · Ordenar"]));
-  card.appendChild(el("h2",{style:"margin-top:8px"},["O que mais combina com você"]));
-  card.appendChild(el("p",{class:"muted"},["Em cada grupo, toque nas palavras em ordem — 1ª = a que MAIS te descreve, até a 4ª. Toque de novo pra desmarcar."]));
-  card.appendChild(el("div",{class:"prog"},[el("div",{style:`width:${Math.round(done/GRUPOS.length*100)}%`})]));
-  card.appendChild(el("p",{class:"muted"},[`Grupos completos: ${done}/${GRUPOS.length}`]));
-  GRUPOS.forEach((grupo,g)=>{
-    const order=state.f1[g];
-    const gd=el("div",{class:"grupo"},[ el("div",{class:"gl"},[`Grupo ${g+1}`]) ]);
-    const grid=el("div",{class:"adjs"});
-    grupo.forEach((adj,ai)=>{
-      const pos=order.indexOf(ai);
-      const rank = pos>=0 ? el("div",{class:"rk"},[String(pos+1)]) : el("div",{class:"rk empty"},["·"]);
-      grid.appendChild(el("button",{class:"adj"+(pos>=0?" on":""), onclick:()=>{ const o=state.f1[g]; const k=o.indexOf(ai); if(k>=0)o.splice(k,1); else if(o.length<4)o.push(ai); render(); }},[ rank, el("span",{},[adj[0]]) ]));
-    });
-    gd.appendChild(grid); card.appendChild(gd);
+  card.appendChild(el("div",{class:"prog"},[el("div",{style:`width:${Math.round((g+(order.length===4?1:0))/GRUPOS.length*100)}%`})]));
+  card.appendChild(el("p",{class:"muted"},[`Grupo ${g+1} de ${GRUPOS.length} · completos: ${completos}/${GRUPOS.length}`]));
+  card.appendChild(el("h2",{style:"margin-top:6px"},["O que mais combina com você?"]));
+  card.appendChild(el("p",{class:"muted"},["Toque nas 4 palavras em ordem: 1ª = a que MAIS te descreve, 4ª = a que menos. Toque de novo pra desmarcar."]));
+  const grid=el("div",{class:"adjs",style:"grid-template-columns:1fr; margin-top:10px"});
+  grupo.forEach((adj,ai)=>{
+    const pos=order.indexOf(ai);
+    const rank = pos>=0 ? el("div",{class:"rk"},[String(pos+1)]) : el("div",{class:"rk empty"},["·"]);
+    grid.appendChild(el("button",{class:"adj"+(pos>=0?" on":""), onclick:()=>{ const o=state.f1[g]; const k=o.indexOf(ai); if(k>=0)o.splice(k,1); else if(o.length<4)o.push(ai); render(); }},[ rank, el("span",{},[adj[0]]) ]));
   });
-  card.appendChild(el("div",{class:"row noprint",style:"margin-top:16px; justify-content:space-between"},[
-    el("button",{class:"btn",onclick:()=>go("intro")},["Voltar"]),
-    el("button",{class:"btn primary",disabled:done<GRUPOS.length,onclick:()=>go("f2")},["Próxima fase"]),
+  card.appendChild(grid);
+  const ok=order.length===4;
+  card.appendChild(el("div",{class:"row noprint",style:"margin-top:18px; justify-content:space-between"},[
+    el("button",{class:"btn",onclick:()=>{ if(g>0){ state.p1=g-1; scrollTo(0,0); render(); } else go("intro"); }},["Voltar"]),
+    g<GRUPOS.length-1
+      ? el("button",{class:"btn primary",disabled:!ok,onclick:()=>{ state.p1=g+1; scrollTo(0,0); render(); }},["Próximo"])
+      : el("button",{class:"btn primary",disabled:completos<GRUPOS.length,onclick:()=>{ state.p2=0; go("f2"); }},["Próxima fase"]),
   ]));
   $app.appendChild(card);
 }
 
 function fase2(){
-  const done=state.f2.filter(v=>v!=null).length;
+  const page=state.p2, start=page*F2_POR_PAGINA, itens=AFIRM.slice(start,start+F2_POR_PAGINA);
   const card=el("div",{class:"card"});
   card.appendChild(el("div",{class:"pill"},["Fase 2 de 3 · Régua"]));
-  card.appendChild(el("h2",{style:"margin-top:8px"},["O quanto cada frase combina com você"]));
-  card.appendChild(el("p",{class:"muted"},["Arraste a régua: esquerda = não tem nada a ver · direita = tem tudo a ver."]));
-  card.appendChild(el("div",{class:"prog"},[el("div",{style:`width:${Math.round(done/AFIRM.length*100)}%`})]));
-  AFIRM.forEach((a,i)=>{
+  card.appendChild(el("div",{class:"prog"},[el("div",{style:`width:${Math.round((page+1)/F2_PAGINAS*100)}%`})]));
+  card.appendChild(el("p",{class:"muted"},[`Página ${page+1} de ${F2_PAGINAS}`]));
+  card.appendChild(el("h2",{style:"margin-top:6px"},["O quanto cada frase combina com você"]));
+  card.appendChild(el("p",{class:"muted"},["Arraste: esquerda = não tem nada a ver · direita = tem tudo a ver."]));
+  itens.forEach((a,idx)=>{ const i=start+idx;
     const af=el("div",{class:"afirm"},[ el("div",{class:"q"},[a[0]]) ]);
     const r=el("input",{type:"range",min:"0",max:"100",value:String(state.f2[i]==null?50:state.f2[i])});
     r.addEventListener("input",e=>{ state.f2[i]=parseInt(e.target.value,10); });
@@ -202,10 +205,12 @@ function fase2(){
     af.appendChild(el("div",{class:"ends"},[ el("span",{},["Não tem nada a ver"]), el("span",{},["Tem tudo a ver"]) ]));
     card.appendChild(af);
   });
-  // marca como respondidas as que ficaram no default ao avançar
-  card.appendChild(el("div",{class:"row noprint",style:"margin-top:16px; justify-content:space-between"},[
-    el("button",{class:"btn",onclick:()=>go("f1")},["Voltar"]),
-    el("button",{class:"btn primary",onclick:()=>{ state.f2=state.f2.map(v=>v==null?50:v); go("f3"); }},["Próxima fase"]),
+  const fixar=()=>{ itens.forEach((a,idx)=>{ const i=start+idx; if(state.f2[i]==null)state.f2[i]=50; }); };
+  card.appendChild(el("div",{class:"row noprint",style:"margin-top:18px; justify-content:space-between"},[
+    el("button",{class:"btn",onclick:()=>{ if(page>0){ state.p2=page-1; scrollTo(0,0); render(); } else { state.p1=GRUPOS.length-1; go("f1"); } }},["Voltar"]),
+    page<F2_PAGINAS-1
+      ? el("button",{class:"btn primary",onclick:()=>{ fixar(); state.p2=page+1; scrollTo(0,0); render(); }},["Próxima"])
+      : el("button",{class:"btn primary",onclick:()=>{ state.f2=state.f2.map(v=>v==null?50:v); go("f3"); }},["Próxima fase"]),
   ]));
   $app.appendChild(card);
 }
@@ -224,7 +229,7 @@ function fase3(){
   MENOS.forEach((m,i)=>{ c2.appendChild(el("button",{class:"chip"+(state.f3menos.has(i)?" sel":""),onclick:()=>{ state.f3menos.has(i)?state.f3menos.delete(i):state.f3menos.add(i); render(); }},[m])); });
   card.appendChild(c2);
   card.appendChild(el("div",{class:"row noprint",style:"margin-top:16px; justify-content:space-between"},[
-    el("button",{class:"btn",onclick:()=>go("f2")},["Voltar"]),
+    el("button",{class:"btn",onclick:()=>{ state.p2=F2_PAGINAS-1; go("f2"); }},["Voltar"]),
     el("button",{class:"btn primary",onclick:()=>go("result")},["Ver relatório"]),
   ]));
   $app.appendChild(card);
@@ -270,7 +275,7 @@ function result(){
   // Leitura do consultor
   $app.appendChild(el("div",{class:"card"},[ el("h3",{},[`Leitura do consultor — perfil ${FATOR[r.primary].nome}`]), el("p",{},[COND[r.primary]]), el("p",{class:"muted"},["Isto é estilo (não muda). A evolução em 6 meses é medida pela Régua da Postura de Dono."]) ]));
   // Ações
-  $app.appendChild(el("div",{class:"card noprint"},[ el("div",{class:"row"},[ el("button",{class:"btn primary",onclick:()=>copiar(r,perfil)},["Copiar relatório"]), el("button",{class:"btn",onclick:()=>window.print()},["Imprimir / Salvar PDF"]), el("button",{class:"btn",onclick:()=>{ state.f1=GRUPOS.map(()=>[]); state.f2=AFIRM.map(()=>null); state.f3mais=new Set(); state.f3menos=new Set(); go("intro"); }},["Refazer"]) ]) ]));
+  $app.appendChild(el("div",{class:"card noprint"},[ el("div",{class:"row"},[ el("button",{class:"btn primary",onclick:()=>copiar(r,perfil)},["Copiar relatório"]), el("button",{class:"btn",onclick:()=>window.print()},["Imprimir / Salvar PDF"]), el("button",{class:"btn",onclick:()=>{ state.f1=GRUPOS.map(()=>[]); state.f2=AFIRM.map(()=>null); state.f3mais=new Set(); state.f3menos=new Set(); state.p1=0; state.p2=0; go("intro"); }},["Refazer"]) ]) ]));
 }
 
 function copiar(r,perfil){
