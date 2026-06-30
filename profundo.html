@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="Perfil Empreendedor Eixo — avaliação comportamental profunda (24 comportamentos) dos clientes da consultoria. Uso interno." />
+<meta name="description" content="Perfil Empreendedor Eixo — avaliação comportamental profunda em 3 fases (ordenar, régua, desenvolver). Uso interno." />
 <title>Perfil Empreendedor Eixo — Avaliação Profunda</title>
 <style>
-  :root{ --verde:#0F3D3A; --verde2:#15514c; --off:#F3EFE8; --ambar:#C78F2C; --tinta:#1d2522; --cinza:#7c8a85; --linha:#e3ddd1; --vermelho:#b4452f; }
+  :root{ --verde:#0F3D3A; --off:#F3EFE8; --ambar:#C78F2C; --tinta:#1d2522; --cinza:#7c8a85; --linha:#e3ddd1; --vermelho:#b4452f; }
   *{ box-sizing:border-box; }
   body{ margin:0; background:var(--off); color:var(--tinta); font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif; line-height:1.45; }
-  .wrap{ max-width:820px; margin:0 auto; padding:22px 18px 60px; }
+  .wrap{ max-width:840px; margin:0 auto; padding:22px 18px 64px; }
   header.top{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
   header.top .b{ width:10px; height:34px; background:var(--ambar); border-radius:3px; }
   header.top h1{ font-size:18px; margin:0; color:var(--verde); }
@@ -17,296 +17,276 @@
   .card{ background:#fff; border:1px solid var(--linha); border-radius:14px; padding:20px; margin-bottom:16px; }
   h2{ color:var(--verde); font-size:17px; margin:0 0 6px; }
   h3{ color:var(--verde); font-size:15px; margin:18px 0 8px; }
-  p{ margin:6px 0; }
-  .muted{ color:var(--cinza); font-size:13px; }
+  p{ margin:6px 0; } .muted{ color:var(--cinza); font-size:13px; }
   .btn{ border:1px solid var(--verde); background:#fff; color:var(--verde); border-radius:10px; padding:11px 16px; font-size:15px; cursor:pointer; font-weight:600; }
-  .btn.primary{ background:var(--verde); color:#fff; }
-  .btn:disabled{ opacity:.45; cursor:not-allowed; }
+  .btn.primary{ background:var(--verde); color:#fff; } .btn:disabled{ opacity:.45; cursor:not-allowed; }
   .row{ display:flex; gap:10px; flex-wrap:wrap; }
-  .prog{ height:8px; background:var(--linha); border-radius:6px; overflow:hidden; margin:8px 0 2px; }
-  .prog > div{ height:100%; background:var(--ambar); transition:width .2s; }
-  .item{ padding:12px 0; border-top:1px solid var(--linha); }
-  .item:first-child{ border-top:0; }
-  .item .q{ font-size:15px; margin-bottom:8px; }
-  .likert{ display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
-  .likert button{ border:1px solid var(--linha); background:#fff; border-radius:8px; padding:9px 0; cursor:pointer; font-weight:600; color:var(--cinza); }
-  .likert button.sel{ background:var(--verde); color:#fff; border-color:var(--verde); }
-  .scale-legend{ display:flex; justify-content:space-between; font-size:11px; color:var(--cinza); margin-top:4px; }
   .pill{ display:inline-block; background:var(--off); border:1px solid var(--linha); border-radius:999px; padding:3px 10px; font-size:12px; color:var(--verde); font-weight:600; }
-  table{ width:100%; border-collapse:collapse; font-size:13px; }
-  th,td{ text-align:left; padding:7px 8px; border-bottom:1px solid var(--linha); }
-  th{ color:var(--cinza); font-weight:600; font-size:12px; }
-  td.n{ text-align:center; font-variant-numeric:tabular-nums; }
-  .gap-pos{ color:var(--vermelho); font-weight:700; }
-  .gap-ok{ color:var(--verde); font-weight:700; }
-  .bar{ display:flex; align-items:center; gap:8px; margin:6px 0; }
-  .bar .lab{ width:120px; font-size:13px; font-weight:600; }
-  .bar .track{ flex:1; height:16px; background:var(--linha); border-radius:8px; position:relative; }
-  .bar .fill{ height:100%; background:var(--verde); border-radius:8px; }
-  .bar .ideal{ position:absolute; top:-3px; width:2px; height:22px; background:var(--ambar); }
-  .bar .pct{ width:80px; font-size:12px; color:var(--cinza); }
+  .prog{ height:8px; background:var(--linha); border-radius:6px; overflow:hidden; margin:8px 0 2px; } .prog>div{ height:100%; background:var(--ambar); transition:width .2s; }
+  /* Fase 1 */
+  .grupo{ border-top:1px solid var(--linha); padding:12px 0; } .grupo:first-of-type{ border-top:0; }
+  .grupo .gl{ font-size:12px; color:var(--cinza); margin-bottom:6px; }
+  .adjs{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .adj{ display:flex; align-items:center; gap:8px; border:1px solid var(--linha); background:#fff; border-radius:10px; padding:10px 12px; cursor:pointer; font-weight:600; text-align:left; }
+  .adj.on{ border-color:var(--verde); background:#f3f8f6; }
+  .adj .rk{ width:22px; height:22px; border-radius:50%; background:var(--verde); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center; flex:none; }
+  .adj .rk.empty{ background:var(--off); color:var(--cinza); border:1px dashed var(--linha); }
+  /* Fase 2 */
+  .afirm{ padding:14px 0; border-top:1px solid var(--linha); } .afirm:first-of-type{ border-top:0; }
+  .afirm .q{ font-size:15px; margin-bottom:8px; }
+  input[type=range]{ width:100%; accent-color:var(--verde); }
+  .ends{ display:flex; justify-content:space-between; font-size:11px; color:var(--cinza); }
+  /* Fase 3 */
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{ border:1px solid var(--linha); background:#fff; border-radius:999px; padding:8px 12px; cursor:pointer; font-size:13px; font-weight:600; color:var(--cinza); }
+  .chip.sel{ background:var(--verde); color:#fff; border-color:var(--verde); }
+  /* Relatório */
+  table{ width:100%; border-collapse:collapse; font-size:13px; } th,td{ text-align:left; padding:7px 8px; border-bottom:1px solid var(--linha); }
+  th{ color:var(--cinza); font-weight:600; font-size:12px; } td.n{ text-align:center; font-variant-numeric:tabular-nums; }
+  .bar{ display:flex; align-items:center; gap:8px; margin:6px 0; } .bar .lab{ width:130px; font-size:13px; font-weight:600; }
+  .bar .track{ flex:1; height:16px; background:var(--linha); border-radius:8px; position:relative; } .bar .fill{ height:100%; background:var(--verde); border-radius:8px; }
+  .bar .ideal{ position:absolute; top:-3px; width:2px; height:22px; background:var(--ambar); } .bar .pct{ width:84px; font-size:12px; color:var(--cinza); }
+  .tag{ font-size:11px; font-weight:700; padding:2px 7px; border-radius:999px; }
+  .tag.forca{ background:#e7f0ec; color:var(--verde); } .tag.dev{ background:#f7e9d2; color:#8a5a12; }
   ul{ margin:6px 0; padding-left:20px; } li{ margin:3px 0; }
   .foot{ text-align:center; font-size:12px; color:var(--cinza); margin-top:10px; }
-  @media print{ .noprint{ display:none !important; } body{ background:#fff; } .card{ break-inside:avoid; } }
+  @media print{ .noprint{ display:none!important; } body{ background:#fff; } .card{ break-inside:avoid; } }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header class="top">
-    <div class="b"></div>
-    <div><h1>Perfil Empreendedor Eixo</h1><span>Avaliação profunda — 24 comportamentos</span></div>
-  </header>
+  <header class="top"><div class="b"></div><div><h1>Perfil Empreendedor Eixo</h1><span>Avaliação profunda — 3 fases</span></div></header>
   <div id="app"></div>
   <div class="foot">Luiz Curti · Sua Empresa no Eixo · eixoempreendedor.com.br</div>
 </div>
-
 <script>
-// ===== DADOS (spec: PERFIL-EMPREENDEDOR-EIXO.md) =====
-const FATOR = {
-  D:{ nome:"Direto", desc:"decide, urgência, risco calculado" },
-  I:{ nome:"Comunicador", desc:"conecta, vende, mobiliza" },
-  S:{ nome:"Constante", desc:"sustenta, ritmo, lealdade" },
-  C:{ nome:"Analítico", desc:"dado, padrão, qualidade" },
-};
+// ===== DADOS =====
+const FATOR = { D:{nome:"Direto",desc:"decide, urgência, risco"}, I:{nome:"Comunicador",desc:"conecta, vende, mobiliza"}, S:{nome:"Constante",desc:"sustenta, ritmo, lealdade"}, C:{nome:"Analítico",desc:"dado, padrão, qualidade"} };
+const FATOR_ORDER = ["D","I","S","C"];
+const IDEAL = { D:82, I:70, S:69, C:83 }; // perfil do Dono Eixo ideal (média dos exig por fator)
 const COND = {
   D:"Vá direto ao número, sem rodeio. Traga decisões, não teoria. Feche com 1 próximo passo e prazo. Ele respeita objetividade e perde a paciência com enrolação.",
   I:"Comece pelo relacionamento (ele abre falando), mas ancore na Bússola/DRG — ele foge do número. Deixe tudo por escrito (esquece no entusiasmo). Celebre as vitórias.",
   S:"Dê segurança e passo a passo, sem mudança brusca. Valorize a constância. Cuidado: concorda com tudo e não muda — confirme por escrito e cobre na semana seguinte.",
   C:"Traga dado e critério (confia em número, não em opinião). Respeite o tempo de análise, mas force a decisão com prazo — senão trava no detalhe. A Bússola é o melhor aliado.",
 };
-const MOMENTO = {
-  "Senso de urgência":"M1 — vitória de caixa em 14 dias",
-  "Planejamento":"M1 e M5 — Meta + PMV",
-  "Disciplina":"M2 — DRG sem furo",
-  "Organização e controle":"M1 — Bússola/DRG",
-  "Racionalidade":"M2 — decidir pelo número",
-  "Prudência":"M3 — risco com informação",
-  "Ousadia (risco calculado)":"M2 — mover a alavanca",
-  "Comando e firmeza":"M4 — soltar e delegar",
-  "Persuasão":"M4 — mobilizar a equipe",
-  "Entusiasmo e motivação":"M3 — reunião de equipe",
-  "Persistência":"todo o programa — placar de execução",
-  "Flexibilidade com mudanças":"M2 — 3 Movimentos",
-};
-// trait: nome, fator, cce, exig (0-100), itens [2]
-const TRACOS = [
-  {n:"Comando e firmeza", f:"D", cce:"Comprometimento", e:85, it:["Assumo a decisão quando o time hesita, sem empurrar pro outro.","Dou direção clara e seguro a posição mesmo sob pressão."]},
-  {n:"Senso de urgência", f:"D", cce:"Iniciativa", e:85, it:["Quando algo trava o resultado, eu ajo no mesmo dia.","Me incomoda deixar pra depois o que move o caixa hoje."]},
-  {n:"Ousadia (risco calculado)", f:"D", cce:"Correr Riscos Calculados", e:80, it:["Tomo decisões de risco com o número na mão, sem travar.","Topo apostar em algo novo quando o ganho compensa a perda possível."]},
-  {n:"Independência", f:"D", cce:"Independência/Autoconfiança", e:75, it:["Confio na minha capacidade de virar o jogo sozinho quando preciso.","Não dependo de aprovação dos outros pra seguir com o que decidi."]},
-  {n:"Objetividade", f:"D", cce:"Estabelecimento de Metas", e:85, it:["Vou direto ao ponto: defino o resultado e cobro por ele.","Corto o que não funciona sem ficar segurando por apego."]},
-  {n:"Dinamismo", f:"D", cce:"Iniciativa", e:80, it:["Meu ritmo de trabalho é acelerado e puxo o time junto.","Faço várias frentes andarem ao mesmo tempo sem perder o fio."]},
-
-  {n:"Entusiasmo e motivação", f:"I", cce:"Persuasão e Rede", e:75, it:["Consigo animar a equipe em torno de uma meta.","Transmito energia que contagia quem trabalha comigo."]},
-  {n:"Persuasão", f:"I", cce:"Persuasão e Rede", e:80, it:["Convenço cliente e equipe com facilidade quando acredito na ideia.","Fecho negociações importantes na conversa, no olho no olho."]},
-  {n:"Carisma", f:"I", cce:"Persuasão e Rede", e:65, it:["As pessoas gostam de trabalhar e fazer negócio comigo.","Crio um clima bom no ambiente, mesmo em dia tenso."]},
-  {n:"Sociabilidade", f:"I", cce:"Rede de Contatos", e:65, it:["Faço e mantenho rede de contatos com naturalidade.","Me conecto rápido com gente nova (fornecedor, parceiro, cliente)."]},
-  {n:"Extroversão", f:"I", cce:"Rede de Contatos", e:60, it:["Gosto de estar à frente, falando e me expondo.","Tomo a iniciativa de puxar conversa e abrir portas."]},
-  {n:"Empatia", f:"I", cce:"Persuasão e Rede", e:75, it:["Percebo o que a outra pessoa está sentindo e ajusto meu jeito.","Escuto de verdade antes de responder ou cobrar."]},
-
-  {n:"Persistência", f:"S", cce:"Persistência", e:90, it:["Sigo em frente mesmo diante de dificuldade ou contratempo.","Termino o que começo, não largo no meio."]},
-  {n:"Estabilidade", f:"S", cce:"Persistência", e:60, it:["Mantenho a calma e o ritmo mesmo quando tudo aperta.","Sou previsível: o time sabe o que esperar de mim."]},
-  {n:"Paciência", f:"S", cce:"Planejamento e Monitoramento", e:60, it:["Espero o tempo certo em vez de forçar a barra.","Lido bem com processos que levam tempo pra dar resultado."]},
-  {n:"Conciliação", f:"S", cce:"Persuasão e Rede", e:55, it:["Busco acordo em vez de impor minha vontade.","Cedo quando vejo que não vale a briga."]},
-  {n:"Flexibilidade com mudanças", f:"S", cce:"Busca de Oportunidade", e:80, it:["Mudo de rota com facilidade quando o cenário muda.","Encaro mudança como oportunidade, não como ameaça."]},
-
-  {n:"Detalhismo", f:"C", cce:"Qualidade e Eficiência", e:75, it:["Reparo nos detalhes que os outros deixam passar.","Confiro antes de liberar, pra não sair com erro."]},
-  {n:"Disciplina", f:"C", cce:"Planejamento e Monitoramento", e:90, it:["Cumpro a rotina e os compromissos que assumo, sem furo.","Mantenho o hábito mesmo nos dias sem vontade."]},
-  {n:"Organização e controle", f:"C", cce:"Planejamento e Monitoramento", e:85, it:["Mantenho meus números e processos organizados e à mão.","Sei onde está cada coisa e cada informação do negócio."]},
-  {n:"Planejamento", f:"C", cce:"Planejamento e Monitoramento", e:90, it:["Defino o plano antes de agir, com passos e prazos.","Reviso o planejado contra o realizado toda semana."]},
-  {n:"Concentração e precisão", f:"C", cce:"Qualidade e Eficiência", e:75, it:["Mantenho o foco numa tarefa até concluir com qualidade.","Trabalho com precisão, evitando retrabalho."]},
-  {n:"Prudência", f:"C", cce:"Correr Riscos Calculados", e:75, it:["Busco informação antes de decidir algo importante.","Penso nas consequências antes de me comprometer."]},
-  {n:"Racionalidade", f:"C", cce:"Busca de Informações", e:85, it:["Decido pelo dado e pelo número, não pela emoção do momento.","Separo o que é fato do que é achismo na hora de decidir."]},
+// Fase 1 — 10 grupos de 4 adjetivos (1 por fator). Ordenar por toque.
+const GRUPOS = [
+  [["Direto","D"],["Comunicativo","I"],["Paciente","S"],["Detalhista","C"]],
+  [["Decidido","D"],["Animado","I"],["Constante","S"],["Organizado","C"]],
+  [["Ousado","D"],["Persuasivo","I"],["Conciliador","S"],["Planejador","C"]],
+  [["Rápido","D"],["Carismático","I"],["Calmo","S"],["Criterioso","C"]],
+  [["Firme","D"],["Sociável","I"],["Leal","S"],["Preciso","C"]],
+  [["Competitivo","D"],["Entusiasmado","I"],["Estável","S"],["Prudente","C"]],
+  [["Independente","D"],["Expressivo","I"],["Compreensivo","S"],["Disciplinado","C"]],
+  [["Objetivo","D"],["Otimista","I"],["Tolerante","S"],["Racional","C"]],
+  [["Enérgico","D"],["Divertido","I"],["Persistente","S"],["Cauteloso","C"]],
+  [["Comandante","D"],["Inspirador","I"],["Tranquilo","S"],["Metódico","C"]],
 ];
-const FATOR_ORDER = ["D","I","S","C"];
+// Fase 2 — 12 afirmativas (3 por fator), slider 0-100.
+const AFIRM = [
+  ["Gosto de comandar, decidir rápido e ir pra cima dos desafios.","D"],
+  ["Quando algo trava o resultado, eu ajo na hora.","D"],
+  ["Tomo decisões sozinho e assumo o risco.","D"],
+  ["Tenho facilidade pra convencer, animar e mobilizar pessoas.","I"],
+  ["Gosto de interagir, me expor e fazer rede de contatos.","I"],
+  ["Sou otimista e contagio o ambiente ao meu redor.","I"],
+  ["Tenho calma e paciência pra lidar com as pessoas.","S"],
+  ["Prefiro estabilidade e rotina, e sigo os planos até o fim.","S"],
+  ["Evito conflito e busco o acordo em vez de impor.","S"],
+  ["Sou minucioso e gosto de entregar com precisão.","C"],
+  ["Sigo procedimentos, organização e controle.","C"],
+  ["Decido pelo dado e penso nas consequências antes.","C"],
+];
+// Os 24 comportamentos (fator, CCE, rótulo "MAIS" da Fase 3, momento no programa)
+const TRACOS = [
+  {n:"Comando e firmeza",f:"D",cce:"Comprometimento",mais:"MAIS firme e comandante",mom:"M4 — soltar e delegar"},
+  {n:"Senso de urgência",f:"D",cce:"Iniciativa",mais:"MAIS atento aos prazos",mom:"M1 — vitória de caixa"},
+  {n:"Ousadia (risco calculado)",f:"D",cce:"Correr Riscos Calculados",mais:"MAIS ousado",mom:"M2 — mover a alavanca"},
+  {n:"Independência",f:"D",cce:"Independência/Autoconfiança",mais:"MAIS independente",mom:"M6 — autonomia"},
+  {n:"Objetividade",f:"D",cce:"Estabelecimento de Metas",mais:"MAIS objetivo",mom:"M1 — Meta dos 6 meses"},
+  {n:"Dinamismo",f:"D",cce:"Iniciativa",mais:"MAIS dinâmico",mom:"M2 — 3 Movimentos"},
+  {n:"Entusiasmo e motivação",f:"I",cce:"Persuasão e Rede",mais:"MAIS entusiasmado e motivado",mom:"M3 — reunião de equipe"},
+  {n:"Persuasão",f:"I",cce:"Persuasão e Rede",mais:"MAIS persuasivo",mom:"M4 — mobilizar a equipe"},
+  {n:"Carisma",f:"I",cce:"Persuasão e Rede",mais:"MAIS carismático",mom:"acompanhamento"},
+  {n:"Sociabilidade",f:"I",cce:"Rede de Contatos",mais:"MAIS sociável",mom:"M5 — rede/parcerias"},
+  {n:"Extroversão",f:"I",cce:"Rede de Contatos",mais:"MAIS extrovertido",mom:"acompanhamento"},
+  {n:"Empatia",f:"I",cce:"Persuasão e Rede",mais:"MAIS empático",mom:"M4 — JOIA/DRENA"},
+  {n:"Persistência",f:"S",cce:"Persistência",mais:"MAIS persistente",mom:"todo o programa"},
+  {n:"Estabilidade",f:"S",cce:"Persistência",mais:"MAIS equilibrado",mom:"acompanhamento"},
+  {n:"Paciência",f:"S",cce:"Planejamento e Monitoramento",mais:"MAIS paciente",mom:"M3 — ritmo"},
+  {n:"Conciliação",f:"S",cce:"Persuasão e Rede",mais:"MAIS conciliador",mom:"M4 — relações"},
+  {n:"Flexibilidade com mudanças",f:"S",cce:"Busca de Oportunidade",mais:"MAIS flexível",mom:"M2 — oportunidades"},
+  {n:"Detalhismo",f:"C",cce:"Qualidade e Eficiência",mais:"MAIS detalhista",mom:"M5 — padronizar"},
+  {n:"Disciplina",f:"C",cce:"Planejamento e Monitoramento",mais:"MAIS disciplinado",mom:"M2 — DRG sem furo"},
+  {n:"Organização e controle",f:"C",cce:"Planejamento e Monitoramento",mais:"MAIS organizado",mom:"M1 — Bússola/DRG"},
+  {n:"Planejamento",f:"C",cce:"Planejamento e Monitoramento",mais:"MAIS planejador",mom:"M1 e M5"},
+  {n:"Concentração e precisão",f:"C",cce:"Qualidade e Eficiência",mais:"MAIS concentrado e preciso",mom:"M5 — processos"},
+  {n:"Prudência",f:"C",cce:"Correr Riscos Calculados",mais:"MAIS prudente",mom:"M3 — risco com info"},
+  {n:"Racionalidade",f:"C",cce:"Busca de Informações",mais:"MAIS racional",mom:"M2 — decidir pelo número"},
+];
+const MENOS = ["MENOS autoritário","MENOS precipitado","MENOS centralizador","MENOS impaciente","MENOS disperso","MENOS esquecido","MENOS acomodado","MENOS lento pra mudar","MENOS evita-conflito","MENOS perfeccionista","MENOS rígido","MENOS travado pra decidir"];
 
 // ===== helpers =====
-function el(tag, attrs, kids){
-  const e=document.createElement(tag); attrs=attrs||{};
-  for(const k in attrs){ const v=attrs[k];
-    if(k==="class") e.className=v;
-    else if(k==="html") e.innerHTML=v;
-    else if(k.slice(0,2)==="on"&&typeof v==="function") e.addEventListener(k.slice(2),v);
-    else if(v!=null) e.setAttribute(k,v);
-  }
-  (kids||[]).forEach(c=>{ if(c==null)return; e.appendChild(typeof c==="string"?document.createTextNode(c):c); });
-  return e;
-}
-const $app = document.getElementById("app");
+function el(t,a,k){ const e=document.createElement(t); a=a||{}; for(const x in a){ const v=a[x]; if(x==="class")e.className=v; else if(x==="html")e.innerHTML=v; else if(x.slice(0,2)==="on"&&typeof v==="function")e.addEventListener(x.slice(2),v); else if(v!=null)e.setAttribute(x,v); } (k||[]).forEach(c=>{ if(c==null)return; e.appendChild(typeof c==="string"?document.createTextNode(c):c); }); return e; }
+const $app=document.getElementById("app");
+const state={ step:"intro", f1:GRUPOS.map(()=>[]), f2:AFIRM.map(()=>null), f3mais:new Set(), f3menos:new Set(), id:{cliente:"",empresa:"",data:""} };
 
-const state = {
-  step:"intro",            // "intro" | 0..3 (página por fator) | "result"
-  ans: TRACOS.map(()=>[null,null]),  // [traço][item] = 1..5
-  id:{ cliente:"", empresa:"", data:"" },
-};
-
-function answeredCount(){ let c=0; state.ans.forEach(a=>a.forEach(v=>{ if(v) c++; })); return c; }
-const TOTAL_ITENS = TRACOS.length*2;
-
+// ===== scoring =====
 function compute(){
-  const traco = TRACOS.map((t,i)=>{
-    const a=state.ans[i].filter(v=>v); const media=a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
-    const score=Math.round(media*20); // 0-100
-    return { ...t, score, gap:t.e-score };
-  });
-  const fat={}; FATOR_ORDER.forEach(f=>{ const ts=traco.filter(x=>x.f===f); fat[f]=Math.round(ts.reduce((a,b)=>a+b.score,0)/ts.length); });
-  const fatExig={}; FATOR_ORDER.forEach(f=>{ const ts=TRACOS.filter(x=>x.f===f); fatExig[f]=Math.round(ts.reduce((a,b)=>a+b.e,0)/ts.length); });
-  const ordem=FATOR_ORDER.slice().sort((a,b)=>fat[b]-fat[a]);
-  return { traco, fat, fatExig, primary:ordem[0], secondary:ordem[1], ordem };
+  const pts={D:0,I:0,S:0,C:0};
+  // pontos Fase 1: 1ª posição = +4 ... 4ª = +1
+  GRUPOS.forEach((grupo,g)=>{ const order=state.f1[g]; order.forEach((adjIdx,pos)=>{ pts[grupo[adjIdx][1]] += (4-pos); }); });
+  const f1={}; FATOR_ORDER.forEach(f=> f1[f]=Math.round(((pts[f]-10)/30)*100) ); // 10..40 -> 0..100
+  // Fase 2 médias
+  const f2={}; FATOR_ORDER.forEach(f=>{ const arr=AFIRM.map((a,i)=>({a,i})).filter(x=>x.a[1]===f).map(x=>state.f2[x.i]).filter(v=>v!=null); f2[f]=arr.length?Math.round(arr.reduce((x,y)=>x+y,0)/arr.length):50; });
+  const comb={}; FATOR_ORDER.forEach(f=> comb[f]=Math.round((f1[f]+f2[f])/2) );
+  const ordem=FATOR_ORDER.slice().sort((a,b)=>comb[b]-comb[a]);
+  return { f1, f2, comb, ordem, primary:ordem[0], secondary:ordem[1] };
 }
 
 // ===== render =====
-function render(){
-  $app.innerHTML="";
-  if(state.step==="intro") return renderIntro();
-  if(state.step==="result") return renderResult();
-  return renderFatorPage(state.step);
-}
+function render(){ $app.innerHTML=""; const s=state.step;
+  if(s==="intro")return intro(); if(s==="f1")return fase1(); if(s==="f2")return fase2(); if(s==="f3")return fase3(); return result(); }
 
-function renderIntro(){
+function intro(){
   $app.appendChild(el("div",{class:"card"},[
-    el("h2",{},["Avaliação comportamental do dono"]),
-    el("p",{},["São 48 frases (uns 8–10 minutos). Pra cada uma, marque o quanto combina com o que você ", el("b",{},["faz"]), " — não com o que acha que deveria fazer."]),
-    el("p",{class:"muted"},["No final sai o relatório: seu perfil, os 24 comportamentos um a um, a distância pro perfil do dono que faz a empresa crescer, e as prioridades de desenvolvimento."]),
-    el("div",{class:"row noprint", style:"margin-top:14px"},[
-      el("button",{class:"btn primary", onclick:()=>{ state.step=0; scrollTo(0,0); render(); }},["Começar avaliação"]),
-    ]),
+    el("h2",{},["Avaliação comportamental do dono — 3 fases"]),
+    el("p",{},["Responda pensando em como você ", el("b",{},["é e age de verdade"]), ", não no que acha que deveria."]),
+    el("ul",{},[ el("li",{},["Fase 1: ordenar palavras pelo quanto combinam com você."]), el("li",{},["Fase 2: ajustar uma régua em cada frase."]), el("li",{},["Fase 3: marcar o que você acha que precisa desenvolver."]) ]),
+    el("p",{class:"muted"},["No final: seu perfil, a distância pro perfil do dono que faz a empresa crescer, e as prioridades de desenvolvimento ligadas ao programa."]),
+    el("div",{class:"row noprint",style:"margin-top:12px"},[ el("button",{class:"btn primary",onclick:()=>go("f1")},["Começar"]) ]),
   ]));
 }
 
-function renderFatorPage(pi){
-  const f=FATOR_ORDER[pi];
-  const trasi = TRACOS.map((t,i)=>({t,i})).filter(x=>x.t.f===f);
-  const done=answeredCount();
+function go(s){ state.step=s; scrollTo(0,0); render(); }
 
+function fase1(){
+  const done=state.f1.filter(o=>o.length===4).length;
   const card=el("div",{class:"card"});
-  card.appendChild(el("div",{class:"pill"},[`Bloco ${pi+1} de 4 · ${FATOR[f].nome}`]));
-  card.appendChild(el("h2",{style:"margin-top:8px"},[`${FATOR[f].nome}`, el("span",{class:"muted"},[`  — ${FATOR[f].desc}`])]));
-  card.appendChild(el("div",{class:"prog"},[ el("div",{style:`width:${Math.round(done/TOTAL_ITENS*100)}%`}) ]));
-  card.appendChild(el("p",{class:"muted"},[`Respondidas: ${done}/${TOTAL_ITENS}`]));
-
-  trasi.forEach(({t,i})=>{
-    t.it.forEach((frase,j)=>{
-      const item=el("div",{class:"item"});
-      item.appendChild(el("div",{class:"q"},[frase]));
-      const lk=el("div",{class:"likert"});
-      for(let v=1; v<=5; v++){
-        lk.appendChild(el("button",{ class: state.ans[i][j]===v?"sel":"", onclick:()=>{ state.ans[i][j]=v; render(); } },[String(v)]));
-      }
-      item.appendChild(lk);
-      item.appendChild(el("div",{class:"scale-legend"},[ el("span",{},["Discordo"]), el("span",{},["Concordo"]) ]));
-      card.appendChild(item);
+  card.appendChild(el("div",{class:"pill"},["Fase 1 de 3 · Ordenar"]));
+  card.appendChild(el("h2",{style:"margin-top:8px"},["O que mais combina com você"]));
+  card.appendChild(el("p",{class:"muted"},["Em cada grupo, toque nas palavras em ordem — 1ª = a que MAIS te descreve, até a 4ª. Toque de novo pra desmarcar."]));
+  card.appendChild(el("div",{class:"prog"},[el("div",{style:`width:${Math.round(done/GRUPOS.length*100)}%`})]));
+  card.appendChild(el("p",{class:"muted"},[`Grupos completos: ${done}/${GRUPOS.length}`]));
+  GRUPOS.forEach((grupo,g)=>{
+    const order=state.f1[g];
+    const gd=el("div",{class:"grupo"},[ el("div",{class:"gl"},[`Grupo ${g+1}`]) ]);
+    const grid=el("div",{class:"adjs"});
+    grupo.forEach((adj,ai)=>{
+      const pos=order.indexOf(ai);
+      const rank = pos>=0 ? el("div",{class:"rk"},[String(pos+1)]) : el("div",{class:"rk empty"},["·"]);
+      grid.appendChild(el("button",{class:"adj"+(pos>=0?" on":""), onclick:()=>{ const o=state.f1[g]; const k=o.indexOf(ai); if(k>=0)o.splice(k,1); else if(o.length<4)o.push(ai); render(); }},[ rank, el("span",{},[adj[0]]) ]));
     });
+    gd.appendChild(grid); card.appendChild(gd);
   });
-
-  const blocoOk = trasi.every(({i})=> state.ans[i][0] && state.ans[i][1]);
-  const nav=el("div",{class:"row noprint", style:"margin-top:16px; justify-content:space-between"},[
-    el("button",{class:"btn", onclick:()=>{ state.step = pi>0?pi-1:"intro"; scrollTo(0,0); render(); }},["Voltar"]),
-    pi<3
-      ? el("button",{class:"btn primary", disabled: !blocoOk, onclick:()=>{ state.step=pi+1; scrollTo(0,0); render(); }},["Próximo bloco"])
-      : el("button",{class:"btn primary", disabled: answeredCount()<TOTAL_ITENS, onclick:()=>{ state.step="result"; scrollTo(0,0); render(); }},["Ver relatório"]),
-  ]);
-  card.appendChild(nav);
+  card.appendChild(el("div",{class:"row noprint",style:"margin-top:16px; justify-content:space-between"},[
+    el("button",{class:"btn",onclick:()=>go("intro")},["Voltar"]),
+    el("button",{class:"btn primary",disabled:done<GRUPOS.length,onclick:()=>go("f2")},["Próxima fase"]),
+  ]));
   $app.appendChild(card);
 }
 
-function gapCell(gap){
-  const cls = gap>0 ? "gap-pos" : "gap-ok";
-  const txt = gap>0 ? `+${gap}` : `${gap}`;
-  return el("td",{class:"n "+cls},[txt]);
+function fase2(){
+  const done=state.f2.filter(v=>v!=null).length;
+  const card=el("div",{class:"card"});
+  card.appendChild(el("div",{class:"pill"},["Fase 2 de 3 · Régua"]));
+  card.appendChild(el("h2",{style:"margin-top:8px"},["O quanto cada frase combina com você"]));
+  card.appendChild(el("p",{class:"muted"},["Arraste a régua: esquerda = não tem nada a ver · direita = tem tudo a ver."]));
+  card.appendChild(el("div",{class:"prog"},[el("div",{style:`width:${Math.round(done/AFIRM.length*100)}%`})]));
+  AFIRM.forEach((a,i)=>{
+    const af=el("div",{class:"afirm"},[ el("div",{class:"q"},[a[0]]) ]);
+    const r=el("input",{type:"range",min:"0",max:"100",value:String(state.f2[i]==null?50:state.f2[i])});
+    r.addEventListener("input",e=>{ state.f2[i]=parseInt(e.target.value,10); });
+    af.appendChild(r);
+    af.appendChild(el("div",{class:"ends"},[ el("span",{},["Não tem nada a ver"]), el("span",{},["Tem tudo a ver"]) ]));
+    card.appendChild(af);
+  });
+  // marca como respondidas as que ficaram no default ao avançar
+  card.appendChild(el("div",{class:"row noprint",style:"margin-top:16px; justify-content:space-between"},[
+    el("button",{class:"btn",onclick:()=>go("f1")},["Voltar"]),
+    el("button",{class:"btn primary",onclick:()=>{ state.f2=state.f2.map(v=>v==null?50:v); go("f3"); }},["Próxima fase"]),
+  ]));
+  $app.appendChild(card);
 }
 
-function renderResult(){
+function fase3(){
+  const card=el("div",{class:"card"});
+  card.appendChild(el("div",{class:"pill"},["Fase 3 de 3 · Desenvolver"]));
+  card.appendChild(el("h2",{style:"margin-top:8px"},["O que você acredita que precisa desenvolver"]));
+  card.appendChild(el("p",{class:"muted"},["Opcional. Marque o que você gostaria de ser MAIS — e, embaixo, os excessos que gostaria de ser MENOS."]));
+  card.appendChild(el("h3",{},["Eu gostaria de ser MAIS…"]));
+  const c1=el("div",{class:"chips"});
+  TRACOS.forEach((t,i)=>{ c1.appendChild(el("button",{class:"chip"+(state.f3mais.has(i)?" sel":""),onclick:()=>{ state.f3mais.has(i)?state.f3mais.delete(i):state.f3mais.add(i); render(); }},[t.mais])); });
+  card.appendChild(c1);
+  card.appendChild(el("h3",{},["E gostaria de ser MENOS…"]));
+  const c2=el("div",{class:"chips"});
+  MENOS.forEach((m,i)=>{ c2.appendChild(el("button",{class:"chip"+(state.f3menos.has(i)?" sel":""),onclick:()=>{ state.f3menos.has(i)?state.f3menos.delete(i):state.f3menos.add(i); render(); }},[m])); });
+  card.appendChild(c2);
+  card.appendChild(el("div",{class:"row noprint",style:"margin-top:16px; justify-content:space-between"},[
+    el("button",{class:"btn",onclick:()=>go("f2")},["Voltar"]),
+    el("button",{class:"btn primary",onclick:()=>go("result")},["Ver relatório"]),
+  ]));
+  $app.appendChild(card);
+}
+
+function idInput(key,label){ return el("div",{style:"flex:1; min-width:140px"},[ el("div",{class:"muted"},[label]), el("input",{value:state.id[key],style:"width:100%; padding:8px; border:1px solid var(--linha); border-radius:8px",oninput:e=>{state.id[key]=e.target.value;}}) ]); }
+
+function result(){
   const r=compute();
-  const perfil = `${FATOR[r.primary].nome} ${FATOR[r.secondary].nome}`;
-
-  // Capa + identificação
-  const c1=el("div",{class:"card"});
-  c1.appendChild(el("h2",{},["Relatório — Perfil Empreendedor Eixo"]));
-  c1.appendChild(el("p",{},[ el("b",{},["Perfil: "]), perfil, ` (${r.primary}/${r.secondary})` ]));
-  c1.appendChild(el("div",{class:"row", style:"margin-top:8px"},[
-    idInput("cliente","Cliente"), idInput("empresa","Empresa"), idInput("data","Data"),
+  const perfil=`${FATOR[r.primary].nome} ${FATOR[r.secondary].nome}`;
+  // Capa
+  $app.appendChild(el("div",{class:"card"},[
+    el("h2",{},["Relatório — Perfil Empreendedor Eixo"]),
+    el("p",{},[ el("b",{},["Perfil: "]), perfil, ` (${r.primary}/${r.secondary})` ]),
+    el("div",{class:"row",style:"margin-top:8px"},[ idInput("cliente","Cliente"), idInput("empresa","Empresa"), idInput("data","Data") ]),
   ]));
-  $app.appendChild(c1);
-
   // Mapa de fatores
-  const c2=el("div",{class:"card"});
-  c2.appendChild(el("h2",{},["Mapa de fatores"]));
-  c2.appendChild(el("p",{class:"muted"},["Barra verde = você. Marca âmbar = nível do dono que cresce."]));
-  FATOR_ORDER.forEach(f=>{
-    c2.appendChild(el("div",{class:"bar"},[
-      el("div",{class:"lab"},[`${FATOR[f].nome} (${f})`]),
-      el("div",{class:"track"},[ el("div",{class:"fill", style:`width:${r.fat[f]}%`}), el("div",{class:"ideal", style:`left:${r.fatExig[f]}%`}) ]),
-      el("div",{class:"pct"},[`${r.fat[f]} / ${r.fatExig[f]}`]),
-    ]));
-  });
+  const c2=el("div",{class:"card"}); c2.appendChild(el("h2",{},["Mapa de fatores"]));
+  c2.appendChild(el("p",{class:"muted"},["Barra verde = você. Marca âmbar = nível do dono que faz a empresa crescer."]));
+  FATOR_ORDER.forEach(f=>{ c2.appendChild(el("div",{class:"bar"},[ el("div",{class:"lab"},[`${FATOR[f].nome} (${f})`]), el("div",{class:"track"},[ el("div",{class:"fill",style:`width:${r.comb[f]}%`}), el("div",{class:"ideal",style:`left:${IDEAL[f]}%`}) ]), el("div",{class:"pct"},[`${r.comb[f]} / ${IDEAL[f]}`]) ])); });
   $app.appendChild(c2);
-
-  // Tabela traço a traço (ordenada por gap)
-  const c3=el("div",{class:"card"});
-  c3.appendChild(el("h2",{},["Os 24 comportamentos"]));
-  c3.appendChild(el("p",{class:"muted"},["Ordenado pela maior carência. Gap = quanto falta pro perfil do dono ideal."]));
-  const tb=el("table",{},[ el("tr",{},[ el("th",{},["Comportamento"]), el("th",{},["Fator"]), el("th",{},["Ideal"]), el("th",{},["Você"]), el("th",{},["Gap"]) ]) ]);
-  r.traco.slice().sort((a,b)=>b.gap-a.gap).forEach(t=>{
-    tb.appendChild(el("tr",{},[ el("td",{},[t.n]), el("td",{class:"n"},[t.f]), el("td",{class:"n"},[String(t.e)]), el("td",{class:"n"},[String(t.score)]), gapCell(t.gap) ]));
+  // 24 comportamentos por fator
+  const c3=el("div",{class:"card"}); c3.appendChild(el("h2",{},["Os 24 comportamentos"]));
+  c3.appendChild(el("p",{class:"muted"},["Força = fator no nível do ideal e não marcado. Desenvolver = você marcou OU o fator está abaixo do ideal."]));
+  FATOR_ORDER.forEach(f=>{
+    c3.appendChild(el("h3",{},[`${FATOR[f].nome} — você ${r.comb[f]} / ideal ${IDEAL[f]}`]));
+    const ul=el("ul");
+    TRACOS.forEach((t,i)=>{ if(t.f!==f)return; const marcado=state.f3mais.has(i); const baixo=r.comb[f] < IDEAL[f]-10; const dev = marcado||baixo;
+      ul.appendChild(el("li",{},[ t.n, " ", el("span",{class:"tag "+(dev?"dev":"forca")},[dev?"desenvolver":"força"]), marcado?el("span",{class:"muted"},["  · você marcou"]):null ])); });
+    c3.appendChild(ul);
   });
-  c3.appendChild(tb);
   $app.appendChild(c3);
-
-  // Forças + Prioridades
-  const fortes=r.traco.slice().sort((a,b)=>b.score-a.score).slice(0,5);
-  const prior=r.traco.slice().filter(t=>t.gap>0).sort((a,b)=>b.gap-a.gap).slice(0,5);
-  const c4=el("div",{class:"card"});
-  c4.appendChild(el("h3",{},["Top 5 forças — onde concentrar"]));
-  c4.appendChild(el("ul",{}, fortes.map(t=>el("li",{},[ el("b",{},[t.n]), ` (${t.score}) — ${t.cce}` ]))));
-  c4.appendChild(el("h3",{},["Top 5 prioridades de desenvolvimento"]));
-  c4.appendChild(el("ul",{}, prior.length?prior.map(t=>el("li",{},[ el("b",{},[t.n]), ` (gap +${t.gap}) — CCE: ${t.cce}`, el("span",{class:"muted"},[`  ·  trabalha em: ${MOMENTO[t.n]||"no acompanhamento"}`]) ])):[el("li",{},["Sem gaps relevantes — perfil já alinhado ao dono ideal."])]));
+  // Prioridades de desenvolvimento
+  const prioMarc = TRACOS.map((t,i)=>({t,i})).filter(x=>state.f3mais.has(x.i));
+  const fatBaixos = FATOR_ORDER.filter(f=> r.comb[f] < IDEAL[f]-10).sort((a,b)=>(IDEAL[b]-r.comb[b])-(IDEAL[a]-r.comb[a]));
+  const c4=el("div",{class:"card"}); c4.appendChild(el("h2",{},["Prioridades de desenvolvimento"]));
+  if(prioMarc.length){ c4.appendChild(el("p",{class:"muted"},["O que o próprio dono reconheceu (Fase 3):"]));
+    c4.appendChild(el("ul",{}, prioMarc.map(x=>el("li",{},[ el("b",{},[x.t.n]), ` — CCE: ${x.t.cce}`, el("span",{class:"muted"},[`  ·  trabalha em: ${x.t.mom}`]) ])))); }
+  else c4.appendChild(el("p",{class:"muted"},["O dono não marcou prioridades na Fase 3 — use os fatores abaixo do ideal:"]));
+  if(fatBaixos.length) c4.appendChild(el("p",{},[ "Fatores abaixo do ideal: ", fatBaixos.map(f=>`${FATOR[f].nome} (${r.comb[f]} vs ${IDEAL[f]})`).join(" · ") ]));
+  if(state.f3menos.size) c4.appendChild(el("p",{class:"muted"},[ "A moderar (Fase 3): ", [...state.f3menos].map(i=>MENOS[i].replace("MENOS ","")).join(", ") ]));
   $app.appendChild(c4);
-
   // Leitura do consultor
-  const c5=el("div",{class:"card"});
-  c5.appendChild(el("h3",{},[`Leitura do consultor — como conduzir um perfil ${FATOR[r.primary].nome}`]));
-  c5.appendChild(el("p",{},[COND[r.primary]]));
-  c5.appendChild(el("p",{class:"muted"},["Lembre: isto é estilo (não muda). A evolução em 6 meses é medida pela Régua da Postura de Dono."]));
-  $app.appendChild(c5);
-
+  $app.appendChild(el("div",{class:"card"},[ el("h3",{},[`Leitura do consultor — perfil ${FATOR[r.primary].nome}`]), el("p",{},[COND[r.primary]]), el("p",{class:"muted"},["Isto é estilo (não muda). A evolução em 6 meses é medida pela Régua da Postura de Dono."]) ]));
   // Ações
-  $app.appendChild(el("div",{class:"card noprint"},[
-    el("div",{class:"row"},[
-      el("button",{class:"btn primary", onclick:()=>copiar(r,perfil)},["Copiar relatório"]),
-      el("button",{class:"btn", onclick:()=>window.print()},["Imprimir / Salvar PDF"]),
-      el("button",{class:"btn", onclick:()=>{ state.step="intro"; scrollTo(0,0); render(); }},["Refazer"]),
-    ]),
-  ]));
-}
-
-function idInput(key,label){
-  return el("div",{style:"flex:1; min-width:140px"},[
-    el("div",{class:"muted"},[label]),
-    el("input",{ value:state.id[key], style:"width:100%; padding:8px; border:1px solid var(--linha); border-radius:8px", oninput:(e)=>{ state.id[key]=e.target.value; } }),
-  ]);
+  $app.appendChild(el("div",{class:"card noprint"},[ el("div",{class:"row"},[ el("button",{class:"btn primary",onclick:()=>copiar(r,perfil)},["Copiar relatório"]), el("button",{class:"btn",onclick:()=>window.print()},["Imprimir / Salvar PDF"]), el("button",{class:"btn",onclick:()=>{ state.f1=GRUPOS.map(()=>[]); state.f2=AFIRM.map(()=>null); state.f3mais=new Set(); state.f3menos=new Set(); go("intro"); }},["Refazer"]) ]) ]));
 }
 
 function copiar(r,perfil){
   const id=state.id;
-  const prior=r.traco.slice().filter(t=>t.gap>0).sort((a,b)=>b.gap-a.gap).slice(0,5);
-  const fortes=r.traco.slice().sort((a,b)=>b.score-a.score).slice(0,5);
-  const linhas=r.traco.slice().sort((a,b)=>b.gap-a.gap).map(t=>`  ${t.n} (${t.f}) — ideal ${t.e} | você ${t.score} | gap ${t.gap>0?"+":""}${t.gap}`).join("\n");
-  const txt=
-`PERFIL EMPREENDEDOR EIXO — Relatório
+  const marc=TRACOS.map((t,i)=>({t,i})).filter(x=>state.f3mais.has(x.i)).map(x=>`${x.t.n} (${x.t.cce}, ${x.t.mom})`);
+  const txt=`PERFIL EMPREENDEDOR EIXO — Relatório
 Cliente: ${id.cliente||"—"}   Empresa: ${id.empresa||"—"}   Data: ${id.data||"—"}
 
 Perfil: ${perfil} (${r.primary}/${r.secondary})
-Fatores (você / ideal): D ${r.fat.D}/${r.fatExig.D} · I ${r.fat.I}/${r.fatExig.I} · S ${r.fat.S}/${r.fatExig.S} · C ${r.fat.C}/${r.fatExig.C}
+Fatores (você / ideal): D ${r.comb.D}/${IDEAL.D} · I ${r.comb.I}/${IDEAL.I} · S ${r.comb.S}/${IDEAL.S} · C ${r.comb.C}/${IDEAL.C}
 
-OS 24 COMPORTAMENTOS:
-${linhas}
-
-TOP 5 FORÇAS: ${fortes.map(t=>`${t.n} (${t.score})`).join("; ")}
-TOP 5 PRIORIDADES: ${prior.map(t=>`${t.n} (gap +${t.gap}, ${MOMENTO[t.n]||"acompanhamento"})`).join("; ")}
+PRIORIDADES (marcadas pelo dono): ${marc.length?marc.join("; "):"—"}
+A MODERAR: ${state.f3menos.size?[...state.f3menos].map(i=>MENOS[i]).join("; "):"—"}
 
 LEITURA DO CONSULTOR (${FATOR[r.primary].nome}): ${COND[r.primary]}`;
-  navigator.clipboard.writeText(txt).then(()=>alert("Relatório copiado ✅")).catch(()=>alert("Não consegui copiar — selecione e copie manualmente."));
+  navigator.clipboard.writeText(txt).then(()=>alert("Relatório copiado ✅")).catch(()=>alert("Selecione e copie manualmente."));
 }
 
 render();
